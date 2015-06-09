@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Social Buttons CSS -->
+    <link href="../bower_components/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+
+    
+<!-- 		<link href="../css/bootstrap.min.css" rel="stylesheet"> -->
+		<link href="../css/menu.css" rel="stylesheet">
+    <style>
+    
+body{background : url('../img/bg.jpg') repeat-x;}
+        .social-text {
+            padding: 0 0 0 23px;
+        }
+				.fa {
+				    padding: 5px 0 0 0;
+				}
+				.li-div {
+				    position: absolure;
+				    margin: 0;
+				    pading: 0;
+				}
+				.fa-arrow-right:before {
+				    padding : 0 0 0 10px; 
+				}
+				.nav-pills li {
+				    border: 1px solid #e7e7e7;
+				}
+				#arrow-off {
+				    padding: 1px;
+				}
+			  #name {
+				      width: 280px; 
+				}
+ 				#scrollbar {
+				    width: 250px;
+				    margin:0;
+				    padding: 0;
+				}
+				.top {
+				    height : 100px;
+				}
+				.panel-body {
+            padding: 5px 5px 5px 15px;
+            width: 930;
+            align: right;
+        }
+        #side-menu  {
+            margin:  0 0 0 16px;
+        }
+        .navbar-brand {
+            padding: -100px;
+        }
+        .navbar-collapse {
+            padding-left: 169px;
+        }
+        .style-default {
+            height: 506px;
+        }
+        #page-wrapper {
+            height: 580px;
+        }
+        #wrapper {
+          margin-top: 15px;
+        }
+        .left {
+         text-align: left;
+       }
+        .imgsize {
+         width: 50px;
+         height: 40px;
+       }
+    </style>
+</head>
+
+<body id="wow">
+
+    <div id="wrapper">
+       <top>
+  <div class="top" align="center">
+   <div class="relative" style="margin: 0em 0em 0em 10px;">
+  &nbsp;  <a class="relative" href="./mainTable.html" style="float: left; margin: 1em 0em 0em 1em"> <img alt="No Img"src="../img/sub_logo.png"></a>
+   </div>
+   <nav style="margin: 1em 10em 0em 18em;">
+     <div class="margin center padding" style="padding-left: 1em;">
+       <div class="left">
+         <img class="relative zindex imgsize" alt="No Img" src="../img/copy.png"
+             onmouseover="this.src='../img/copy1.png';" onmouseout="this.src='../img/copy.png';" style="margin-right: 10px;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/paste.png"
+             onmouseover="this.src='../img/paste1.png';" onmouseout="this.src='../img/paste.png';" style="margin-right: 10px;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png"
+             onmouseover="this.src='../img/delete1.png';" onmouseout="this.src='../img/delete.png';" style="margin-right: 10px;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/down.png"
+             onmouseover="this.src='../img/down1.png';" onmouseout="this.src='../img/down.png';" style="margin-right: 10px;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png"
+             onmouseover="this.src='../img/upload1.png';" onmouseout="this.src='../img/upload.png';" style="margin-right: 10px;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/new.png"
+             onmouseover="this.src='../img/new1.png';" onmouseout="this.src='../img/new.png';" style="margin-right: 10px;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/re.png"
+             onmouseover="this.src='../img/re1.png';" onmouseout="this.src='../img/re.png';">
+				          
+<!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
+				            <div class="form-group">
+				              <input type="text" class="form-control radius" placeholder="Search">
+				            </div>
+				            <button type="submit" class="btn btn-default radius">검색</button>
+				          </form> -->
+				        </div>
+				      </div>
+				    </nav>
+				  </div>
+       </top>
+
+<!--             <ul class="nav navbar-top-links navbar-right">               
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    /.dropdown-user
+                </li>
+                /.dropdown
+            </ul>
+            /.navbar-top-links -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                <!--  -->
+                    <div id="scrollbar" class="scrollbar" >
+                    <ul class="nav" id="side-menu">  
+                        <li class="li-div"></li>   
+                        <li onclick="location.href='./facebook.html'">
+                            <a class="btn-block btn-social btn-facebook" ><i class="fa fa-facebook"></i>
+                            <span class="social-text">Facebook</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">사진</a>
+                                </li>
+                                <li>
+                                    <a href="#">동영상</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li onclick="location.href='./dropbox.html'">
+                            <a class="btn-block btn-social btn-dropbox"><i class="fa fa-dropbox"></i>
+                            <span class="social-text">Dropbox</span><span class="fa arrow"></span></a>
+                                                          <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">찌르레기</a>
+                                </li>
+                                <li>
+                                    <a href="#">지빠귀</a>
+                                </li>
+                                <li>
+                                    <a href="#">핫 야구영상 <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="">동영상1</a>
+                                        </li>
+                                        <li>
+                                            <a href="">동영상2</a>
+                                        </li>
+                                        <li>
+                                            <a href="">동영상3</a>
+                                        </li>
+                                        <li>
+                                            <a href="">동영상4</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li onclick="location.href='./google.html'">
+                            <a class="btn-block btn-social btn-google-plus"><i class="fa fa-google-plus"></i>
+                            <span class="social-text">Google</span><span class="fa arrow"></span></a>
+                                                          <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">찌르레기</a>
+                                </li>
+                                <li>
+                                    <a href="#">지빠귀</a>
+                                </li>
+                                <li>
+                                    <a href="#">핫 야구영상 <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="#">동영상1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">동영상2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">동영상3</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">동영상4</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li onclick="location.href='./instagram.html'">
+                            <a class="btn-block btn-social btn-instagram"><i class="fa fa-instagram"></i>
+                            <span class="social-text">Instagram</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="">내 폴더<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="">사진</a>
+                                            </li>
+                                            <li>
+                                                <a href="">동영상</a>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li>
+                                    <a href="">사진</a>
+                                </li>
+                                <li>
+                                    <a href="">지빠귀</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li onclick="location.href='./twitter.html'">
+                            <a class="btn-block btn-social btn-twitter"><i class="fa fa-twitter"></i>
+                            <span class="social-text">Twitter</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">찌르레기</a>
+                                </li>
+                                <li>
+                                    <a href="#">지빠귀</a>
+                                </li>
+                                <li>
+                                    <a href="#">핫 야구영상 <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="">동영상1</a>
+                                        </li>
+                                        <li>
+                                            <a href="">동영상2</a>
+                                        </li>
+                                        <li>
+                                            <a href="">동영상3</a>
+                                        </li>
+                                        <li>
+                                            <a href="">동영상4</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                          <a><span class="glyphicon glyphicon-plus"  aria-hidden="true" ><span></a>
+                        </li>
+                    </ul>
+                    <!-- side menu  -->
+                    </div>
+                    <!--  -->
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+
+        <div id="page-wrapper">
+            <div class="row">
+                <!--  -->
+                <div class="panel-body">
+                    <ul class="nav nav-pills">
+                        <li id="arrow-on"><a href="#home-pills" data-toggle="tab">instagram</a>
+                        </li>
+                    </ul>
+                  </div>
+                
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div >
+<!--                             DataTables Advanced Tables -->
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body scrollbar" id="style-default" style="height: 506px;">
+                            <div class="dataTable_wrapper">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th id="name">Name</th>
+                                            <th id="shared">Shared</th>
+                                            <th id="date">Modified Date</th>
+                                            <th id="size">Size</th>
+                                            <th id="type">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        <tr>
+                                            <td>내 폴더</td>
+                                            <td></td>
+                                            <td>2012-12-15 11:44</td>
+                                            <td class="center"></td>
+                                            <td class="center">folder</td>
+                                        </tr>
+                                        <tr>
+                                            <td>사진</td>
+                                            <td></td>
+                                            <td>2013-12-15 11:44</td>
+                                            <td class="center"></td>
+                                            <td class="center">folder</td>
+                                        </tr>
+                                        <tr>
+                                            <td>찌빠귀</td>
+                                            <td></td>
+                                            <td>2013-12-15 11:44</td>
+                                            <td class="center"></td>
+                                            <td class="center">folder</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+      <footer>
+			  <div class="width margin height">
+			    <div class="progress relative bar height radius" align="left"
+			      style="margin-bottom: 0px; margin-left: 50px;">
+			      <div class="progress-bar progress-bar-striped google lh"
+			        style="width: 8%">
+			        <span class="sr-only">8% Complete (success)</span> Google Drive(5G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped naver lh"
+			        style="width: 24%">
+			        <span class="sr-only">24% Complete (warning)</span> N Drive(15G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped one lh"
+			        style="width: 6%">
+			        <span class="sr-only">6% Complete (danger)</span> One Drive(4G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped drop lh"
+			        style="width: 8%">
+			        <span class="sr-only">8% Complete (danger)</span> Drop Box(5G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped face lh"
+			        style="width: 1%">
+			        <span class="sr-only">1% Complete (danger)</span> FaceBook(4G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped empty lh"
+			        style="width: 53%">
+			        <span class="sr-only">53% Complete (danger)</span> Userable Space (100 GB)
+			      </div>
+			    </div>
+			    <div class="button relrative" style="margin-right: 50px;">
+			      <button type="submit" class="btn relative center height radius" 
+			                     onclick="location.href='./duplication.html'">중복검사</button>
+			    </div>
+			  </div>
+      </footer>
+    </div>
+    <!-- /#wrapper -->
+     
+    <!-- jQuery -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+  
+    <script src="../js/move.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+                responsive: true
+        });
+    });
+    
+   $(document).ready(function() {
+        $("#name").width(280);
+    });
+   
+	  
+    </script>
+
+</body>
+
+</html>

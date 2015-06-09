@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>딸기 클라우드에 오신 것을 환영합니다.</title>
+<link rel="stylesheet" href="./css/join.css"></link>
+</head>
+<body>
+  <div id="wrapper">
+<h1>회원가입</h1>
+    <form action="join">
+      E-mail : <input type="email" name="email"><br>
+      Password : <input type="password" name="pwd"><br>
+      Name : <input type="text" name="name"><br>
+      Tel : <input type="text" name="tel"><br>
+      <button>등록</button><button>취소</button id="cancle"><br>
+    </form>
+    </div>
+</body>
+<script type="text/javascript">
+var canclebtn = document.getElementById('cancle');
+
+canclebtn.onclick = function(event) {
+  location.href = './index.html';
+}
+</script>
+</html>

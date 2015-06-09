@@ -1,0 +1,74 @@
+.google {
+  background-color: #fbce4f;
+}
+
+.naver {
+  background-color: #3675c7;
+}
+
+.one {
+  background-color: #094ab1;
+}
+
+.drop {
+  background-color: #1081de;
+}
+
+.face {
+  background-color: #47639e;
+}
+
+.empty {
+  background-color: gray;
+}
+
+.right {
+  text-align: right;
+}
+
+.height {
+  height: 40px;
+}
+
+.lh {
+  line-height: 40px;
+}
+
+.width {
+  width: 1200px;
+}
+
+.bar {
+  width: 970px;
+  float: left
+}
+
+.center {
+  text-align: center;
+}
+
+.margin {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.relative {
+  position: relative;
+}
+
+.radius {
+  border-radius: 20px;
+}
+
+.padding {
+  padding: 2em 0em 0em 10em;
+}
+
+.button {
+  width: 82px;
+  float: right;
+}
+
+.zindex {
+  z-index: 1;
+}
