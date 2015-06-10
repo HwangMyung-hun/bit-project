@@ -6,24 +6,24 @@ DROP TABLE "MY_SCHEMA"."cloudinfo";
 
 -- 회원정보2
 CREATE TABLE "MY_SCHEMA"."userInfo" (
-  "email" VARCHAR(40)  NOT NULL, -- 이메일
-  "pwd"   VARCHAR(255) NOT NULL, -- 비밀번호
-  "name"  VARCHAR(50)  NULL,     -- 이름
-  "tel"   VARCHAR(30)  NULL      -- 전화번호
+  "email" VARCHAR(40)  NOT NULL, 
+  "pwd"   VARCHAR(255) NOT NULL, 
+  "name"  VARCHAR(50)  NULL,     
+  "tel"   VARCHAR(30)  NULL      
 );
 
 -- 회원정보2 기본키
 CREATE UNIQUE INDEX "MY_SCHEMA"."PK_userInfo"
-  ON "MY_SCHEMA"."userInfo" ( -- 회원정보2
-    "email" ASC -- 이메일
+  ON "MY_SCHEMA"."userInfo" ( 
+    "email" ASC 
   );
 
 -- 회원정보2
 ALTER TABLE "MY_SCHEMA"."userInfo"
   ADD
-    CONSTRAINT "PK_userInfo" -- 회원정보2 기본키
+    CONSTRAINT "PK_userInfo" 
     PRIMARY KEY (
-      "email" -- 이메일
+      "email" 
     );
 
 -- 회원정보2
@@ -49,29 +49,29 @@ COMMENT ON CONSTRAINT "MY_SCHEMA"."userInfo"."PK_userInfo" IS '회원정보2 기
 
 -- 클라우드계정
 CREATE TABLE "MY_SCHEMA"."cloudinfo" (
-  "email"     VARCHAR(40)  NOT NULL, -- 이메일
-  "cloudtype" VARCHAR(50)  NOT NULL, -- 클라우드종류
-  "cloudid"   VARCHAR(40)  NOT NULL, -- 아이디
-  "token"     VARCHAR(255) NULL,     -- 토큰
-  "active"    VARCHAR(1)   NULL      -- 활성화
+  "email"     VARCHAR(40)  NOT NULL, 
+  "cloudtype" VARCHAR(50)  NOT NULL, 
+  "cloudid"   VARCHAR(40)  NOT NULL, 
+  "token"     VARCHAR(255) NULL,     
+  "active"    VARCHAR(1)   NULL      
 );
 
 -- 클라우드계정 기본키
 CREATE UNIQUE INDEX "MY_SCHEMA"."PK_cloudinfo"
-  ON "MY_SCHEMA"."cloudinfo" ( -- 클라우드계정
-    "email"     ASC, -- 이메일
-    "cloudtype" ASC, -- 클라우드종류
-    "cloudid"   ASC  -- 아이디
+  ON "MY_SCHEMA"."cloudinfo" ( 
+    "email"     ASC, 
+    "cloudtype" ASC, 
+    "cloudid"   ASC  
   );
 
 -- 클라우드계정
 ALTER TABLE "MY_SCHEMA"."cloudinfo"
   ADD
-    CONSTRAINT "PK_cloudinfo" -- 클라우드계정 기본키
+    CONSTRAINT "PK_cloudinfo" 
     PRIMARY KEY (
-      "email",     -- 이메일
-      "cloudtype", -- 클라우드종류
-      "cloudid"    -- 아이디
+      "email",     
+      "cloudtype", 
+      "cloudid"    
     );
 
 -- 클라우드계정
@@ -101,12 +101,12 @@ COMMENT ON CONSTRAINT "MY_SCHEMA"."cloudinfo"."PK_cloudinfo" IS '클라우드계
 -- 클라우드계정
 ALTER TABLE "MY_SCHEMA"."cloudinfo"
   ADD
-    CONSTRAINT "FK_userInfo_TO_cloudinfo" -- 회원정보 -> 클라우드계정
+    CONSTRAINT "FK_userInfo_TO_cloudinfo" 
     FOREIGN KEY (
-      "email" -- 이메일
+      "email" 
     )
-    REFERENCES "MY_SCHEMA"."userInfo" ( -- 회원정보2
-      "email" -- 이메일
+    REFERENCES "MY_SCHEMA"."userInfo" ( 
+      "email" 
     );
 
 -- 회원정보 -> 클라우드계정
