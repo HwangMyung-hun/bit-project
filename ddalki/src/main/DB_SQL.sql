@@ -26,26 +26,6 @@ ALTER TABLE userInfo
       email 
     );
 
--- 회원정보2
-COMMENT ON TABLE userInfo IS '회원정보2';
-
--- 이메일
-COMMENT ON COLUMN userInfo.email IS '이메일';
-
--- 비밀번호
-COMMENT ON COLUMN userInfo.pwd IS '비밀번호';
-
--- 이름
-COMMENT ON COLUMN userInfo.name IS '이름';
-
--- 전화번호
-COMMENT ON COLUMN userInfo.tel IS '전화번호';
-
--- 회원정보2 기본키
-COMMENT ON INDEX PK_userInfo IS '회원정보2 기본키';
-
--- 회원정보2 기본키
-COMMENT ON CONSTRAINT userInfo.PK_userInfo IS '회원정보2 기본키';
 
 -- 클라우드계정
 CREATE TABLE cloudinfo (
@@ -74,29 +54,6 @@ ALTER TABLE cloudinfo
       cloudid    
     );
 
--- 클라우드계정
-COMMENT ON TABLE cloudinfo IS '클라우드계정';
-
--- 이메일
-COMMENT ON COLUMN cloudinfo.email IS '이메일';
-
--- 클라우드종류
-COMMENT ON COLUMN cloudinfo.cloudtype IS '클라우드종류';
-
--- 아이디
-COMMENT ON COLUMN cloudinfo.cloudid IS '아이디';
-
--- 토큰
-COMMENT ON COLUMN cloudinfo.token IS '토큰';
-
--- 활성화
-COMMENT ON COLUMN cloudinfo.active IS '활성화';
-
--- 클라우드계정 기본키
-COMMENT ON INDEX PK_cloudinfo IS '클라우드계정 기본키';
-
--- 클라우드계정 기본키
-COMMENT ON CONSTRAINT cloudinfo.PK_cloudinfo IS '클라우드계정 기본키';
 
 -- 클라우드계정
 ALTER TABLE cloudinfo
@@ -109,5 +66,3 @@ ALTER TABLE cloudinfo
       email 
     );
 
--- 회원정보 -> 클라우드계정
-COMMENT ON CONSTRAINT cloudinfo.FK_userInfo_TO_cloudinfo IS '회원정보 -> 클라우드계정';
