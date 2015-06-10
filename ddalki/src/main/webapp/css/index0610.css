@@ -1,0 +1,23 @@
+*{margin: 0; padding: 0}
+body{width: 100%; background : url('../img/bg.jpg') repeat-x; text-align: center}
+#wrapper{width:1200px; margin: 0 auto; position: relative}
+#header{text-align: left}
+#header #logo{width: 1200px;margin-top: 20px; left: 30px}
+#content{}
+.login{padding-top:150px; z-index: 2;display: inline-block}
+.join{padding-top:10px; z-index: 2;display: none}
+#footer {margin-top: 50px;}
+#icons {z-index: 1;}
+#facebook, #dropbox, #evernote, #icloud, #ndrive, #onedrive, #ucloud {position: absolute; opacity: 0 ; top:300px;left:550px}
+#btns{z-index: 5}
+#inputBox{position: absolute; top:373px;left:430px;border:1px solid #red;z-index: 300}
+#inputBox_j{position: absolute; top:225px;left:430px;border:1px solid #red;z-index: 300}
+
+#inputBox input{margin-top: 26px;border:none; border-radius: 20px ;background-color:transparent;text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
+
+#inputBox_j input{margin-top: 20px;border:none; border-radius: 20px ;background-color:transparent;text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
+
+::-webkit-input-placeholder {color: #fff; font-size: 14px}
+:-moz-placeholder {color: #fff; font-size: 14px}
+::-moz-placeholder {color: #fff; font-size: 14px}
+:-ms-input-placeholder {color: #fff; font-size: 14px}
