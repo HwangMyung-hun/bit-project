@@ -1,1 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.totalCloud.DDalki.dao.UserDao">
+
+  <resultMap type="UserVo" id="UserVoMap">
+    <id     column="email"    property="email" />
+    <result column="pwd"    property="pwd" />
+    <result column="name"  property="name" />
+    <result column="tel" property="tel" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="UserVo">
+      INSERT INTO userinfo (email,pwd,name,tel) 
+      VALUES (#{email},#{pwd},#{name},#{tel})
+  </insert>
+  
+</mapper>

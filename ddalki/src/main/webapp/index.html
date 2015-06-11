@@ -29,20 +29,20 @@
             </div>
             <img id="center" src="./img/intro_center.png" alt="">
             <div id="button">
-                <img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><a href="#"><img id="joinbtn" src="./img/intro_join.jpg" alt="회원가입"></a>
+                <img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img id="joinbtn" src="./img/intro_join.jpg" alt="회원가입">
             </div>
         </div>
         <div class="join">
             <div id="inputBox_j">
-               <p><input type="email" name="email" placeholder="이메일을 입력해주세요" size="30"></p>
-               <p><input type="password" name="password" placeholder="비밀번호를 입력해주세요" size="30"></p>
-               <p><input type="password" name="password2" placeholder="비밀번호를 한번 더 입력해주세요" size="30"></p>
-               <p><input type="text" name="name" placeholder="이름을 입력해주세요" size="30"></p>
-               <p><input type="text" name="tel" placeholder="전화번호를 입력해주세요" size="30"></p>
+               <p><input id="email" type="email" name="email" placeholder="이메일을 입력해주세요" size="30"></p>
+               <p><input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요" size="30"></p>
+               <p><input id="password2" type="password" name="password2" placeholder="비밀번호를 한번 더 입력해주세요" size="30"></p>
+               <p><input id="name" type="text" name="name" placeholder="이름을 입력해주세요" size="30"></p>
+               <p><input id="tel" type="text" name="tel" placeholder="전화번호를 입력해주세요" size="30"></p>
             </div>
             <img src="./img/join_center.png" alt="">
             <div id="button">
-                <a href=""><img src="./img/join_cancel.jpg" alt="등록 취소" id="canclebtn"></a><a href=""><img src="./img/join_join.jpg" alt="회원 등록" id="enterbtn"></a>
+                <a href=""><img src="./img/join_cancel.jpg" alt="등록 취소" id="canclebtn"></a><img src="./img/join_join.jpg" alt="회원 등록" id="enterbtn">
             </div>
         </div>
     </div><!--//content-->
@@ -59,8 +59,35 @@
        </div>
    </div>
 </body>
+<script type="text/javascript" src="./js/jquery-1.11.2.js"></script>
 <script
   src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="./js/move.js"></script>
 <script src="./js/intro.js"></script>
+<script type="text/javascript">
+
+var ip = 'localhost:9999';
+
+$('#enterbtn').click(function(event) {
+	  $.ajax('http://' + ip + '/ddalki/add.do', {
+	    method: 'POST',
+	    dataType: 'json',
+	    data: {
+				 alert($('#email').val());
+	      email: $('#email').val(),
+	      password: $('#password').val(),
+	      name: $('#name').val(),
+	      tel: $('#tel').val()
+	    },
+	    success: function(result) {
+	    	tomainform();
+	    },
+	    error: function(xhr, textStatus, errorThrown) {
+	      alert('작업을 완료할 수 없습니다.\n' + 
+	          '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+	    }
+	  });
+	});
+</script>
 </html>
