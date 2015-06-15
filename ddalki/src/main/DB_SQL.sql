@@ -1,11 +1,11 @@
 -- 회원정보2
-DROP TABLE userInfo;
+DROP TABLE userinfo;
 
 -- 클라우드계정
 DROP TABLE cloudinfo;
 
 -- 회원정보2
-CREATE TABLE userInfo (
+CREATE TABLE userinfo (
   email VARCHAR(40)  NOT NULL, 
   pwd   VARCHAR(255) NOT NULL, 
   name  VARCHAR(50)  NULL,     
@@ -13,15 +13,15 @@ CREATE TABLE userInfo (
 );
 
 -- 회원정보2 기본키
-CREATE UNIQUE INDEX PK_userInfo
-  ON userInfo ( 
+CREATE UNIQUE INDEX PK_userinfo
+  ON userinfo ( 
     email ASC 
   );
 
 -- 회원정보2
-ALTER TABLE userInfo
+ALTER TABLE userinfo
   ADD
-    CONSTRAINT PK_userInfo 
+    CONSTRAINT PK_userinfo 
     PRIMARY KEY (
       email 
     );
@@ -62,7 +62,7 @@ ALTER TABLE cloudinfo
     FOREIGN KEY (
       email 
     )
-    REFERENCES userInfo ( 
+    REFERENCES userinfo ( 
       email 
     );
 
