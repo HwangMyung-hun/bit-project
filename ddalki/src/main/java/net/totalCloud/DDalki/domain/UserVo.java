@@ -6,7 +6,7 @@ public class UserVo implements Serializable{
   private static final long serialVersionUID = 1L;
   
   protected String      email;
-  protected String      password;  
+  protected String      pwd;  
   protected String      name;
   protected String      tel;
   
@@ -17,11 +17,11 @@ public class UserVo implements Serializable{
   public void setEmail(String email) {
     this.email = email;
   }
-  public String getPassword() {
-    return password;
+  public String getPwd() {
+    return pwd;
   }
-  public void setPassword(String password) {
-    this.password = password;
+  public void setPwd(String pwd) {
+    this.pwd = pwd;
   }
   public String getName() {
     return name;
@@ -35,6 +35,7 @@ public class UserVo implements Serializable{
   public void setTel(String tel) {
     this.tel = tel;
   }
+  
   
   
 }
