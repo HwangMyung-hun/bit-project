@@ -407,7 +407,14 @@ body{background : url('../img/bg.jpg') repeat-x;}
     <script src="../dist/js/sb-admin-2.js"></script>
   
     <script src="../js/move.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/jquery.session.js"></script>
     <script>
+ 
+    console.log($.cookie('cooke'));
+    $.session.set('a','asd');
+    console.log($.session.get('a'));
+    
     $(document).ready(function() {
         $('#dataTables-example').DataTable({
                 responsive: true
