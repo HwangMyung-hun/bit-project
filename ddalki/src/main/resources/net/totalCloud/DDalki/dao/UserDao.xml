@@ -17,4 +17,16 @@
       VALUES (#{email},#{pwd},#{name},#{tel})
   </insert>
   
+  <select id="duplication" parameterType="string" resultType="string">
+      SELECT email
+      FROM userinfo
+      WHERE email=#{email}
+  </select>
+  
+  <select id="selectOne" parameterType="Map" resultType="UserVo">
+      SELECT email, pwd, name, tel 
+      FROM userinfo 
+      WHERE email=#{email} and pwd=#{pwd}
+  </select>
+  
 </mapper>
