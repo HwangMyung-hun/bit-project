@@ -25,6 +25,7 @@ $("#enterbtn").mouseout(function(){
 
 
 
+
 var btn = document.getElementById('loginbtn');
 var joinbtn = document.getElementById('joinbtn');
 
@@ -179,94 +180,131 @@ move('#onedrive')
 face();
 
 btn.onclick = function(event) {
+	$.ajax('http://' + ip + directoryLocation + '/login.do', {
+	    method: 'POST',
+	    dataType: 'json',
+	    data: {
+	    	loginemail: $('#loginemail').val(),
+	    	loginpwd: $('#loginpwd').val()
+	    },
+	    success: function(result) {
+	    	if (result.idcheck == "yes") {
+	    		
+	    		console.log(result.data);
+	    		console.log(result.data.pwd);
+	    		console.log(result.data.email);
+	    		
+	    		alert(result.data.email + '님 환영합니다.');
+	    		
+	    		move.select = function(selector){
+	    		      return $(selector).get(0);
+	    		    };
+	    		    
 
-    move.select = function(selector){
-      return $(selector).get(0);
-    };
-    
+	    		    move('#facebook')
+	    		      .x(0)
+	    		      .scale(.3)
+	    		      .duration(1000)
+	    		      .set('opacity', 0)
+	    		      .delay(400)
+	    		      .end();
+	    		    
+	    		    move('#icloud')
+	    		      .x(0)
+	    		      .scale(.3)
+	    		      .set('opacity', 0)
+	    		      .duration(1000)
+	    		      .delay(400)
+	    		      .end();
 
-    move('#facebook')
-      .x(0)
-      .scale(.3)
-      .duration(1000)
-      .set('opacity', 0)
-      .delay(400)
-      .end();
-    
-    move('#icloud')
-      .x(0)
-      .scale(.3)
-      .set('opacity', 0)
-      .duration(1000)
-      .delay(400)
-      .end();
+	    		    move('#ndrive')
+	    		      .x(0)
+	    		      .scale(.3)
+	    		      .set('opacity', 0)
+	    		      .duration(1200)
+	    		      .delay(400)
+	    		      .end();
+	    		    
+	    		    move('#dropbox')
+	    		    .x(0)
+	    		    .scale(.3)
+	    		    .set('opacity', 0)
+	    		    .duration(1200)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    move('#ucloud')
+	    		    .x(0)
+	    		    .scale(.3)
+	    		    .set('opacity', 0)
+	    		    .duration(1200)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    move('#onedrive')
+	    		    .x(0)
+	    		    .scale(.3)
+	    		    .set('opacity', 0)
+	    		    .duration(1200)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    move('#header')
+	    		    .translate(10, 400)
+	    		    .scale(.3)
+	    		    .set('opacity', 0)
+	    		    .duration(1200)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    move('#button')
+	    		    .translate(10, -200)
+	    		    .scale(.3)
+	    		    .rotate(-360)
+	    		    .set('opacity', 0)
+	    		    .duration(1200)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    move('#footer')
+	    		    .translate(10, -400)
+	    		    .scale(.3)
+	    		    .set('opacity', 0)
+	    		    .duration(1200)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    move('#center')
+	    		    .scale(20)
+	    		    .duration(1500)
+	    		    .set('opacity', 0)
+	    		    .delay(1500)
+	    		    .scale(.002)
+	    		    .end();
+	    		    
+	    		    move('#inputBox')
+	    		    .translate(10, 50)
+	    		    .scale(.3)
+	    		    .rotate(-360)
+	    		    .set('opacity', 0)
+	    		    .duration(1000)
+	    		    .delay(400)
+	    		    .end();
+	    		    
+	    		    setTimeout("gomain()",2800);
+	    	} else {
+	    		alert("아이디와 비밀번호가 일치하지 않습니다.")
+	    	}
+	    	console.log(result.idcheck);
+	    },
+	    error: function(xhr, textStatus, errorThrown) {
+	      alert('작업을 완료할 수 없습니다.\n' + 
+	          '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+	    }
+	  });
 
-    move('#ndrive')
-      .x(0)
-      .scale(.3)
-      .set('opacity', 0)
-      .duration(1200)
-      .delay(400)
-      .end();
     
-    move('#dropbox')
-    .x(0)
-    .scale(.3)
-    .set('opacity', 0)
-    .duration(1200)
-    .delay(400)
-    .end();
-    
-    move('#ucloud')
-    .x(0)
-    .scale(.3)
-    .set('opacity', 0)
-    .duration(1200)
-    .delay(400)
-    .end();
-    
-    move('#onedrive')
-    .x(0)
-    .scale(.3)
-    .set('opacity', 0)
-    .duration(1200)
-    .delay(400)
-    .end();
-    
-    move('#header')
-    .translate(10, 400)
-    .scale(.3)
-    .set('opacity', 0)
-    .duration(1200)
-    .delay(400)
-    .end();
-    
-    move('#button')
-    .translate(10, -200)
-    .scale(.3)
-    .rotate(-360)
-    .set('opacity', 0)
-    .duration(1200)
-    .delay(400)
-    .end();
-    
-    move('#footer')
-    .translate(10, -400)
-    .scale(.3)
-    .set('opacity', 0)
-    .duration(1200)
-    .delay(400)
-    .end();
-    
-    move('#center')
-    .scale(20)
-    .duration(1500)
-    .set('opacity', 0)
-    .delay(1500)
-    .scale(.002)
-    .end();
-    
-    setTimeout("gomain()",2800);
     
 };
 
