@@ -38,7 +38,7 @@ $.ajax('http://' + ip + directoryLocation + '/add.do', {
     email: $('#email').val(),
     pwd: $('#pwd').val(),
     name: $('#name').val(),
-    tel: $('tel').val()
+    tel: $('#tel').val()
   },
   success: function(result) {
     alert('회원가입을 완료하였습니다.\n');
