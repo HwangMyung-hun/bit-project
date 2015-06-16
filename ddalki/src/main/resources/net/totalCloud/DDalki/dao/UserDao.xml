@@ -34,4 +34,10 @@
       FROM userinfo
       WHERE name=#{name} and tel=#{tel}
   </select>
+  
+  <update id="pwdUpdate" parameterType="Map">
+      UPDATE userinfo
+      SET pwd=#{pwd}
+      WHERE email=#{email}
+  </update>
 </mapper>

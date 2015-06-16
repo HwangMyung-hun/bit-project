@@ -32,7 +32,7 @@
                 <img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img id="joinbtn" src="./img/intro_join.jpg" alt="회원가입">
             </div>
             <div>
-                <button onclick="location.href='./Find.html'">id찾기</button> <button>비밀번호찾기</button>                
+                <button onclick="location.href='./Find.html'">id찾기</button> <button id="pwdfind">비밀번호찾기</button>                
             </div>
             <!-- 
             <div id="fb-root"></div>
@@ -44,11 +44,12 @@
         </div>
         <div class="join">
             <div id="inputBox_j">
-               <p><input id="email" type="email" name="email" placeholder="이메일을 입력해주세요" size="30"></p>
+               <p><input id="email" type="email" name="email" placeholder="이메일을 입력해주세요" size="30" onkeyup="ajaxSend()"></p>
                <p><input id="pwd" type="password" name="pwd" placeholder="비밀번호를 입력해주세요" size="30"></p>
                <p><input id="pwd2" type="password" name="pwd2" placeholder="비밀번호를 한번 더 입력해주세요" size="30"></p>
                <p><input id="name" type="text" name="name" placeholder="이름을 입력해주세요" size="30"></p>
                <p><input id="tel" type="text" name="tel" placeholder="전화번호를 입력해주세요" size="30"></p>
+               <p id="results" style="color: white; font-weight: bold; margin-top: 20px;"></p>
             </div>
             <img src="./img/join_center.png" alt="">
             <div id="button">
@@ -79,7 +80,74 @@ var directoryLocation = '/cloud';
 <script src="./js/join.js"></script>
 <script src="./js/move.js"></script>
 <script src="./js/intro.js"></script>
+<script type="text/javascript">
+
+	function ajaxSend() {
+
+		var email = $("#email").val();
+		if (email != '') {
+			$.ajax('http://' + ip + directoryLocation + '/duplication.do', {
+				type : 'POST',
+				dataType : 'json',
+				data : {
+					email: email
+				},
+				success : function(result) {
+					if (result.duplication == "ok") {
+						var email=$('#email').val();
+						var regex=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;   
+						  
+						if(regex.test(email) === false) {  
+							document.getElementById('results').innerHTML =
+	                              '이메일형식이 올바르지 않습니다.';
+						} else {  
+							document.getElementById('results').innerHTML =
+	                              '사용가능한 아이디입니다.';
+						}
+					
+					} else {
+						document.getElementById('results').innerHTML =
+	                        '이미 사용중인 아이디 입니다.';
+					}
+				},
+				error : function(e) {
+					console.log('error:' + e.status);
+				}
+			});
+		} else {
+			$("#results").html("");
+		}
+
+	}
+</script>
 <script>
+$('#pwdfind').click(function() {
+$.ajax({
+	  type: 'POST',
+	  url: 'https://mandrillapp.com/api/1.0/messages/send.json',
+	  data: {
+	    key : 'WRa1tdxZVCZI6b94cA_pGQ',
+	    message: {
+	      from_email: 'ujbj84@gmail.com',
+	      to: [
+	          {
+	            email: $('#loginemail').val(),
+	            name: 'hello',
+	            type: 'to'
+	          }
+	        ],
+	      autotext: 'true',
+	      subject: 'sima',
+	      html: '<form action="http://192.168.103.65:9999/ddalki/cloud/pwdupdate.do" method="POST" name="pwdupdate"><input type="hidden" value="' + $('#loginemail').val() + '" name ="email"><br> 비밀번호 :  <input type="text" name="pwd"><br><button>변경</button></form>'
+	    	       
+	    }
+	  }
+	 }).done(function(response) {
+	   console.log(response); // if you're into that sorta thing
+	 });
+	 
+});
+	 
 /*(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;

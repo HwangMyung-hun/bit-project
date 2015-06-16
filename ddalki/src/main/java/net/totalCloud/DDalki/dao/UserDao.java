@@ -14,5 +14,7 @@ public interface UserDao {
   UserVo selectOne(HashMap<String, Object> sqlParams);
 
   String idfind(HashMap<String, Object> sqlParams);
+
+  void pwdUpdate(HashMap<String, Object> sqlParams);
   
 }

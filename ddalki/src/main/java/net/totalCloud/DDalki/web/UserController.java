@@ -88,4 +88,20 @@ public class UserController {
     return responseData;
     
   }
+  
+  @RequestMapping("/pwdupdate")
+  public Object pwdUpdate(String email, String pwd) throws Exception{
+    
+    HashMap<String,Object> sqlParams = new HashMap<String,Object>();
+    sqlParams.put("email", email);
+    sqlParams.put("pwd", pwd);
+    userDao.pwdUpdate(sqlParams);
+    
+    
+    HashMap<String,Object> responseData = new HashMap<String,Object>();
+    responseData.put("status", "success");
+    
+    return responseData;
+    
+  }
 }
