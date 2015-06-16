@@ -115,19 +115,19 @@ body{background : url('../img/bg.jpg') repeat-x;}
      <div class="margin center padding" style="padding-left: 1em;">
        <div class="left">
          <img class="relative zindex imgsize" alt="No Img" src="../img/copy.png"
-             onmouseover="this.src='../img/copy1.png';" onmouseout="this.src='../img/copy.png';" style="margin-right: 10px;">
+             onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/paste.png"
-             onmouseover="this.src='../img/paste1.png';" onmouseout="this.src='../img/paste.png';" style="margin-right: 10px;">
+             onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png"
-             onmouseover="this.src='../img/delete1.png';" onmouseout="this.src='../img/delete.png';" style="margin-right: 10px;">
+             onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/down.png"
-             onmouseover="this.src='../img/down1.png';" onmouseout="this.src='../img/down.png';" style="margin-right: 10px;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png"
-             onmouseover="this.src='../img/upload1.png';" onmouseout="this.src='../img/upload.png';" style="margin-right: 10px;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/new.png"
-             onmouseover="this.src='../img/new1.png';" onmouseout="this.src='../img/new.png';" style="margin-right: 10px;">
+             onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png "
+             onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex imgsize" alt="No Img" src="../img/new.png "
+             onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/re.png"
-             onmouseover="this.src='../img/re1.png';" onmouseout="this.src='../img/re.png';">
+             onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
 				          
 <!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
 				            <div class="form-group">
@@ -441,6 +441,50 @@ body{background : url('../img/bg.jpg') repeat-x;}
 	  }
 	  
 	  setTimeout("readygo()",300);
+	  
+	  
+	  function MouseOverCopy(MyImage) {
+	        MyImage.src = "../img/copy1.png";
+	    }
+      function MouseOutCopy(MyImage) {
+	        MyImage.src = "../img/copy.png";
+	    }
+      function MouseOverPaste(MyImage) {
+		        MyImage.src = "../img/paste1.png";
+	    }
+      function MouseOutPaste(MyImage) {
+		        MyImage.src = "../img/paste.png";
+	    }
+      function MouseOverDelete(MyImage) {
+	        MyImage.src = "../img/delete1.png";
+	    }
+      function MouseOutDelete(MyImage) {
+	        MyImage.src = "../img/delete.png";
+	    }
+      function MouseOverDown(MyImage) {
+		        MyImage.src = "../img/down1.png";
+	    }
+      function MouseOutDown(MyImage) {
+		        MyImage.src = "../img/down.png";
+	    }
+      function MouseOverUpload(MyImage) {
+		        MyImage.src = "../img/upload1.png";
+	    }
+      function MouseOutUpload(MyImage) {
+		        MyImage.src = "../img/upload.png";
+	    }
+      function MouseOverNew(MyImage) {
+	        MyImage.src = "../img/new1.png";
+		}
+	  function MouseOutNew(MyImage) {
+	        MyImage.src = "../img/new.png";
+  		}	
+	  function MouseOverRe(MyImage) {
+		    MyImage.src = "../img/re1.png";
+		}
+	  function MouseOutRe(MyImage) {
+	  		MyImage.src = "../img/re.png";
+		}
     </script>
 
 </body>
