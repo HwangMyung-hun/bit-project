@@ -2,10 +2,6 @@
   background-color: #fbce4f;
 }
 
-.naver {
-  background-color: #3675c7;
-}
-
 .one {
   background-color: #094ab1;
 }
@@ -71,4 +67,77 @@
 
 .zindex {
   z-index: 1;
+}
+
+body {
+  background: url('../img/bg.jpg') repeat-x;
+}
+.social-text {
+  padding: 0 0 0 23px;
+}
+.fa {
+  padding: 5px 0 0 0;
+}
+.li-div {
+  position: absolure;
+  margin: 0;
+  pading: 0;
+}
+.fa-arrow-right:before {
+  padding: 0 0 0 10px;
+}
+.nav-pills li {
+  border: 1px solid #e7e7e7;
+}
+#arrow-off {
+  padding: 1px;
+}
+#name {
+  width: 280px;
+}
+#scrollbar {
+  width: 250px;
+  margin: 0;
+  padding: 0;
+}
+.top {
+  height: 100px;
+}
+.panel-body {
+  padding: 5px 5px 5px 15px;
+  width: 930;
+  align: right;
+}
+#side-menu {
+  margin: 0 0 0 16px;
+}
+
+.navbar-brand {
+  padding: -100px;
+}
+
+.navbar-collapse {
+  padding-left: 169px;
+}
+
+.style-default {
+  height: 506px;
+}
+
+#page-wrapper {
+  height: 580px;
+}
+
+#wrapper {
+  opacity: 0;
+  margin-top: 15px;
+}
+
+.left {
+  text-align: left;
+}
+
+.imgsize {
+  width: 50px;
+  height: 40px;
 }
