@@ -12,4 +12,7 @@ public interface UserDao {
   String duplication(String user);
   
   UserVo selectOne(HashMap<String, Object> sqlParams);
+
+  String idfind(HashMap<String, Object> sqlParams);
+  
 }

@@ -73,4 +73,19 @@ public class UserController {
     
     return responseData;
   }
+  
+  @RequestMapping("/idfind")
+  public Object idfind(String name, String tel) throws Exception{
+    
+    HashMap<String,Object> sqlParams = new HashMap<String,Object>();
+    sqlParams.put("name", name);
+    sqlParams.put("tel", tel);
+    
+    HashMap<String,Object> responseData = new HashMap<String,Object>();
+    responseData.put("status", "success");
+    responseData.put("idfind", userDao.idfind(sqlParams));
+    
+    return responseData;
+    
+  }
 }

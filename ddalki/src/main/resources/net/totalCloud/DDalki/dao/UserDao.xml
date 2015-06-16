@@ -29,4 +29,9 @@
       WHERE email=#{email} and pwd=#{pwd}
   </select>
   
+  <select id="idfind" parameterType="Map" resultType="string">
+      SELECT email
+      FROM userinfo
+      WHERE name=#{name} and tel=#{tel}
+  </select>
 </mapper>

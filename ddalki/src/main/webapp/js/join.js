@@ -1,25 +1,25 @@
 
 $('#enterbtn').click(function(event) {
-if (beanBox()) {
-  $.ajax('http://' + ip + directoryLocation + '/duplication.do', {
-    method: 'POST',
-    dataType: 'json',
-    data: {
-      email: $('#email').val()
-    },
-    success: function(result) {
-      DataIntegrity(result);
-    },
-    error: function(xhr, textStatus, errorThrown) {
-      alert('작업을 완료할 수 없습니다.\n' + 
-                '잠시 후 다시 시도하세요.\n' +
-                '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
-      $('#email').val("");
-      $('#pwd').val("");
-      $('#pwd2').val("");
-    }
-  });
-}
+	if (beanBox()) {
+		$.ajax('http://' + ip + directoryLocation + '/duplication.do', {
+			method: 'POST',
+			dataType: 'json',
+			data: {
+				email: $('#email').val()
+			},
+			success: function(result) {
+				DataIntegrity(result);
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				alert('작업을 완료할 수 없습니다.\n' + 
+						'잠시 후 다시 시도하세요.\n' +
+				'계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+				$('#email').val("");
+				$('#pwd').val("");
+				$('#pwd2').val("");
+			}
+		});
+	}
 });
 
 function passwordAble() {

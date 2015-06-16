@@ -6,86 +6,6 @@
     <link rel="stylesheet" href="./css/index.css"></link>
 </head>
 <body>
-<div
-  class="fb-like"
-  data-share="true"
-  data-width="450"
-  data-show-faces="true">
-</div>
-<div id="fb-root"></div>
-<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true">
-</div>
-<script>
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.3&appId=1850145288544328";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-window.fbAsyncInit = function() {
-	  FB.init({
-	    appId      : '1850145288544328',
-	    cookie     : true,  // enable cookies to allow the server to access 
-	    status     : true,                    // the session
-	    xfbml      : true,  // parse social plugins on this page
-	    version    : 'v2.3' // use version 2.2
-	  });
-	  
-	  FB.api(
-			    "/me",
-			    function (response) {
-			      if (response && !response.error) {
-			        console.log("success");
-			      } else {
-			    	  console.log(response.error);
-			      }
-			    }
-			);
-	  
-	  
-	  FB.getLoginStatus(function(response) {
-		  if (response.status === 'connected') {
-			  var uid = response.authResponse.userID;
-			  var accessToken = response.authResponse.accessToken;
-			  testAPI(response.authResponse.userID);
-			  
-			  FB.api('/me', function(response) {
-			        console.log(JSON.stringify(response));
-			    });
-			  
-			  FB.api('/me/photos', 'post', {
-				    message:'photo description',
-				    url: "http://img.etoday.co.kr/pto_db/2014/09/20140906013513_505507_510_906.jpg"   
-				}, function(response){
-
-				    if (!response || response.error) {
-				        console.log(response.error);
-				    } else {
-				        alert('Post ID: ' + response.id);
-				    }
-
-				});
-		  } else if (response.status === 'not_authorized') {
-		    console.log('can not connect');  
-			  
-		  } else {
-		    console.log('can not connect');  
-			  
-		  }
-		});
-	  
-	  function testAPI(uid) {
-		  FB.api('/v2.3/'+uid, function(response) {
-			  console.log(response);
-		  });
-	  }
-	  
-	  
-}
-
-</script>
    <div id="wrapper">       
     <div id="header">
         <div id="logo">
@@ -111,6 +31,16 @@ window.fbAsyncInit = function() {
             <div id="button">
                 <img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img id="joinbtn" src="./img/intro_join.jpg" alt="회원가입">
             </div>
+            <div>
+                <button onclick="location.href='./Find.html'">id찾기</button> <button>비밀번호찾기</button>                
+            </div>
+            <!-- 
+            <div id="fb-root"></div>
+							<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true">
+							</div>
+							<fb:login-button scope="publish_actions" onlogin="checkLoginState();">
+						</fb:login-button>
+						 -->
         </div>
         <div class="join">
             <div id="inputBox_j">
@@ -149,4 +79,98 @@ var directoryLocation = '/cloud';
 <script src="./js/join.js"></script>
 <script src="./js/move.js"></script>
 <script src="./js/intro.js"></script>
+<script>
+/*(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.3&appId=1850145288544328";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+function statusChangeCallback(response) {
+	
+    if (response.status === 'connected') {
+    	
+    } else if (response.status === 'not_authorized') {
+    	
+    } else {
+    	
+    }
+  }
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1850145288544328',
+      cookie     : true,  // enable cookies to allow the server to access 
+      status     : true,                    // the session
+      xfbml      : true,  // parse social plugins on this page
+      version    : 'v2.3' // use version 2.2
+    });
+    
+    FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+
+}*/
+    
+/*    FB.login(function(response) {
+      }, {
+         scope: 'publish_actions', 
+         return_scopes: true
+       });
+    
+    
+    
+    FB.getLoginStatus(function(response) {
+      if (response.status === 'connected') {
+        var uid = response.authResponse.userID;
+        var accessToken = response.authResponse.accessToken;
+        testAPI(response.authResponse.userID);
+        console.log(response.authResponse.accessToken);
+       
+      
+        FB.api('/me', function(response) {
+              console.log(JSON.stringify(response));
+          });
+        
+        
+        /* FB.api('/me/photos', 'post', {
+            message:'photo description',
+            url: "http://ojsfile.ohmynews.com/MEM_ETC/00074927.jpg"   
+        }, function(response){
+
+            if (!response || response.error) {
+                console.log('permission');
+                console.log(response.error);
+            } else {
+                console.log('error');
+            }
+
+        }); 
+        
+      } else if (response.status === 'not_authorized') {
+        console.log('can not connect');  
+        
+      } else {
+        console.log('can not connect');  
+        
+      }
+    });
+    
+    function testAPI(uid) {
+      FB.api('/v2.3/'+uid, function(response) {
+        console.log(response);
+      });
+    }
+    
+} */
+
+</script>
+
 </html>
