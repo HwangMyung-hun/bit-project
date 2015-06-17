@@ -100,14 +100,17 @@ var directoryLocation = '/cloud';
 						if(regex.test(email) === false) {  
 							document.getElementById('results').innerHTML =
 	                              '이메일형식이 올바르지 않습니다.';
+							document.getElementById('results').style.color="yellow";
 						} else {  
 							document.getElementById('results').innerHTML =
-	                              '사용가능한 아이디입니다.';
+	                              '사용가능한 이메일입니다.';
+							document.getElementById('results').style.color="white";
 						}
 					
 					} else {
 						document.getElementById('results').innerHTML =
-	                        '이미 사용중인 아이디 입니다.';
+	                        '이미 사용중인 이메일 입니다.';
+						document.getElementById('results').style.color="yellow";
 					}
 				},
 				error : function(e) {
@@ -143,7 +146,7 @@ $.ajax({
 	    }
 	  }
 	 }).done(function(response) {
-	   console.log(response); // if you're into that sorta thing
+	   console.log(response); 
 	 });
 	 
 });
