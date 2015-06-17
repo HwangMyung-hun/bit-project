@@ -8,16 +8,28 @@ body{width: 100%; background : url('../img/bg.jpg') repeat-x; text-align: center
 .join{padding-top:10px; z-index: 2;display: none}
 #footer {margin-top: 50px;}
 #icons {z-index: 1;}
-#facebook, #dropbox, #evernote, #icloud, #ndrive, #onedrive, #ucloud {position: absolute; opacity: 0 ; top:300px;left:550px}
+#facebook, #dropbox, #evernote, #icloud, #ndrive, #onedrive, #ucloud 
+{position: absolute;opacity: 0 ; top:300px;left:550px}
 #btns{z-index: 5}
-#inputBox{position: absolute; top:373px;left:430px;border:1px solid #red;z-index: 300}
-#inputBox_j{position: absolute; top:225px;left:430px;border:1px solid #red;z-index: 300}
+#inputBox{position: absolute; top:373px;left:430px;z-index: 300}
+#inputBox_j{position: absolute; top:225px;left:430px;z-index: 300}
 
-#inputBox input{margin-top: 26px;border:none; border-radius: 20px ;background-color:transparent;text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
+#inputBox input{margin-top: 26px;border:none; border-radius: 20px ;background-color:transparent;
+text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
 
-#inputBox_j input{margin-top: 20px;border:none; border-radius: 20px ;background-color:transparent;text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
+#inputBox_j input{margin-top: 20px;border:none; border-radius: 20px ;background-color:transparent;
+text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
 
 ::-webkit-input-placeholder {color: #fff; font-size: 14px}
 :-moz-placeholder {color: #fff; font-size: 14px}
 ::-moz-placeholder {color: #fff; font-size: 14px}
 :-ms-input-placeholder {color: #fff; font-size: 14px}
+
+#popupLayer {background-color:#fff;opacity: 0.95;filter: alpha(opacity=95); /* For IE8 and earlier */
+border-radius: 15px; box-shadow: 1px 15px 15px;padding-top:30px;
+position:absolute; top:100px; left:380px; width:400px;height:250px; text-align: center;}
+#popupLayer input {margin-bottom:15px;background-color: #aaa; height: 25px;
+width:300px;text-align: center;}
+#foundid{font-size:16px;color: #666;margin:20px 10px;}
+#popupLayer button{font-size:16px;color: #666;cursor:pointer; background-color: #fff; padding:5px;border-radius: 5px ;}
+#popupLayer h1 {font-size:26px;margin-bottom:20px;color: #666;}
