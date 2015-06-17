@@ -13,7 +13,7 @@ $('#enterbtn').click(function(event) {
 			error: function(xhr, textStatus, errorThrown) {
 				alert('작업을 완료할 수 없습니다.\n' + 
 						'잠시 후 다시 시도하세요.\n' +
-				'계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+				'계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
 				$('#email').val("");
 				$('#pwd').val("");
 				$('#pwd2').val("");
@@ -48,7 +48,7 @@ $.ajax('http://' + ip + directoryLocation + '/add.do', {
   error: function(xhr, textStatus, errorThrown) {
     alert('작업을 완료할 수 없습니다.\n' + 
         '잠시 후 다시 시도하세요.\n' +
-        '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+        '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1)');
   }
 });
 }
@@ -60,9 +60,10 @@ for (var i = 0; $('#pwd').val()[i]; i++) {
   else {
     if ('0' <= $('#pwd').val()[i] && $('#pwd').val()[i] <= '9') {}
     else {
-      if ($('#pwd').val()[i] == '!' ||  $('#pwd').val()[i] == '*'
-            || $('#pwd').val()[i] == '?' || $('#pwd').val()[i] == '#'
-            || $('#pwd').val()[i] == '$') {}
+      if ($('#pwd').val()[i] == '!' ||  $('#pwd').val()[i] == '@'
+            || $('#pwd').val()[i] == '$' || $('#pwd').val()[i] == '#'
+            || $('#pwd').val()[i] == '%' || $('#pwd').val()[i] == '^'
+            || $('#pwd').val()[i] == '&') {}
       else {
         return false;
       }
@@ -74,9 +75,10 @@ for (var i = 0; $('#pwd2').val()[i]; i++) {
   else {
     if ('0' <= $('#pwd2').val()[i] && $('#pwd2').val()[i] <= '9') {}
     else {
-      if ($('#pwd2').val()[i] == '!' ||  $('#pwd2').val()[i] == '*'
-          || $('#pwd2').val()[i] == '?' || $('#pwd2').val()[i] == '#'
-          || $('#pwd2').val()[i] == '$') {}
+      if ($('#pwd2').val()[i] == '!' ||  $('#pwd2').val()[i] == '@'
+          || $('#pwd2').val()[i] == '$' || $('#pwd2').val()[i] == '#'
+          || $('#pwd2').val()[i] == '%' || $('#pwd2').val()[i] == '^'
+          || $('#pwd2').val()[i] == '&') {}
       else {
         return false;
       }
