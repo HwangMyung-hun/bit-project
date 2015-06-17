@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>딸기 클라우드에 오신 것을 환영합니다?.</title>
+<link rel="stylesheet" href="./css/index.css"></link>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<div id="logo">
+				<a href="/"><img src="./img/top_logo.png" alt="딸기 소프트"></a>
+			</div>
+		</div>
+		<!--//header-->
+		<div id="icons">
+			<img src="./img/introicon_facebook.png" alt="" id="facebook"> <img
+				src="./img/introicon_dropbox.png" alt="" id="dropbox"> <img
+				src="./img/introicon_evernote.png" alt="" id="evernote"> <img
+				src="./img/introicon_icloud.png" alt="" id="icloud"> <img
+				src="./img/introicon_ndrive.png" alt="" id="ndrive"> <img
+				src="./img/introicon_onedrive.png" alt="" id="onedrive"> <img
+				src="./img/introicon_ucloud.png" alt="" id="ucloud">
+		</div>
+		<!--//icons-->
+		<div id="content">
+			<div class="login">
+				<div id="inputBox">
+					<p>
+						<input id="loginemail" type="email" name="email"
+							placeholder="이메일을 입력해주세요" size="30">
+					</p>
+					<p>
+						<input id="loginpwd" type="password" name="password"
+							placeholder="비밀번호를 입력해주세요" size="30">
+					</p>
+				</div>
+				<img id="center" src="./img/intro_center.png" alt="">
+				
+				<div id="button">
+					<img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img
+						id="joinbtn" src="./img/intro_join.jpg" alt="회원가입"><img src="./img/intro_idfind.jpg" alt="아이디 찾기"><img src="./img/intro_pwfind.jpg" alt="비밀번호 찾기">
+				</div>
+                <!--
+				<div>
+					<button onclick="location.href='./Find.html'">id찾기</button>
+					<button>비밀번호찾기</button>
+				</div>
+				
+            <div id="fb-root"></div>
+							<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true">
+							</div>
+							<fb:login-button scope="publish_actions" onlogin="checkLoginState();">
+						</fb:login-button>
+						 -->
+			</div>
+			<div class="join">
+				<div id="inputBox_j">
+					<p>
+						<input id="email" type="email" name="email"
+							placeholder="이메일을 입력해주세요" size="30">
+					</p>
+					<p>
+						<input id="pwd" type="password" name="pwd"
+							placeholder="비밀번호를 입력해주세요" size="30">
+					</p>
+					<p>
+						<input id="pwd2" type="password" name="pwd2"
+							placeholder="비밀번호를 한번 더 입력해주세요" size="30">
+					</p>
+					<p>
+						<input id="name" type="text" name="name" placeholder="이름을 입력해주세요"
+							size="30">
+					</p>
+					<p>
+						<input id="tel" type="text" name="tel" placeholder="전화번호를 입력해주세요"
+							size="30">
+					</p>
+				</div>
+				<img src="./img/join_center.png" alt="">
+				<div id="button">
+					<a href=""><img src="./img/join_cancel.jpg" alt="등록 취소"
+						id="canclebtn"></a><img src="./img/join_join.jpg" alt="회원 등록"
+						id="enterbtn">
+				</div>
+			</div>
+		</div>
+		<!--//content-->
+		<div id="footer">
+			<img src="./img/intro_content.png" alt="" usemap="#intro_content"
+				style="border: 0;" />
+			<map name="intro_content">
+				<area shape="rect" coords="30,74,142,187" href="" target="" alt="" />
+				<area shape="rect" coords="188,73,338,124" href="" target="" alt="" />
+				<area shape="rect" coords="188,136,338,188" href="" target="" alt="" />
+				<area shape="rect" coords="497,106,540,149" href="" target="" alt="" />
+				<area shape="rect" coords="563,106,607,150" href="" target="" alt="" />
+				<area shape="rect" coords="629,106,673,150" href="" target="" alt="" />
+			</map>
+		</div>
+		
+		<!-- 아이디 확인 팝업 -->
+		<form>
+		<div id="popupLayer">
+			<h1>아이디 확인</h1>
+			<input id="name" placeholder="이름을 입력해주세요">
+      <input id="tel" 	placeholder="전화번호를 입력해주세요">
+			<div>
+				<button id="idfind">아이디 확인</button>
+				<button id="closepop" onclick="document.getElementById('popupLayer').style.display='none'">닫기</button>
+			</div>
+			<div id="foundid">회원님의 아이디는 ung78987333333333333@hanmail.net 입니다.</div>
+		</div>
+		</form>
+		<!-- //아이디 확인 팝업 -->
+		
+	</div>
+</body>
+<script type="text/javascript">
+  var ip = 'localhost:9999/ddalki';
+  var directoryLocation = '/cloud';
+</script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="./js/jquery-1.11.2.js"></script>
+<script src="./js/join.js"></script>
+<script src="./js/move.js"></script>
+<script src="./js/intro.js"></script>
+<script>
+  /*(function(d, s, id) {
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) return;
+   js = d.createElement(s); js.id = id;
+   js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.3&appId=1850145288544328";
+   fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+   function checkLoginState() {
+   FB.getLoginStatus(function(response) {
+   statusChangeCallback(response);
+   });
+   }
+
+   function statusChangeCallback(response) {
+  
+   if (response.status === 'connected') {
+  
+   } else if (response.status === 'not_authorized') {
+  
+   } else {
+  
+   }
+   }
+   window.fbAsyncInit = function() {
+   FB.init({
+   appId      : '1850145288544328',
+   cookie     : true,  // enable cookies to allow the server to access 
+   status     : true,                    // the session
+   xfbml      : true,  // parse social plugins on this page
+   version    : 'v2.3' // use version 2.2
+   });
+  
+   FB.getLoginStatus(function(response) {
+   statusChangeCallback(response);
+   });
+
+   }*/
+
+  /*    FB.login(function(response) {
+   }, {
+   scope: 'publish_actions', 
+   return_scopes: true
+   });
+  
+  
+  
+   FB.getLoginStatus(function(response) {
+   if (response.status === 'connected') {
+   var uid = response.authResponse.userID;
+   var accessToken = response.authResponse.accessToken;
+   testAPI(response.authResponse.userID);
+   console.log(response.authResponse.accessToken);
+  
+  
+   FB.api('/me', function(response) {
+   console.log(JSON.stringify(response));
+   });
+  
+  
+   /* FB.api('/me/photos', 'post', {
+   message:'photo description',
+   url: "http://ojsfile.ohmynews.com/MEM_ETC/00074927.jpg"   
+   }, function(response){
+
+   if (!response || response.error) {
+   console.log('permission');
+   console.log(response.error);
+   } else {
+   console.log('error');
+   }
+
+   }); 
+  
+   } else if (response.status === 'not_authorized') {
+   console.log('can not connect');  
+  
+   } else {
+   console.log('can not connect');  
+  
+   }
+   });
+  
+   function testAPI(uid) {
+   FB.api('/v2.3/'+uid, function(response) {
+   console.log(response);
+   });
+   }
+  
+   } */
+</script>
+<script type="text/javascript">
+var ip = 'localhost:9999/ddalki';
+var directoryLocation = '/cloud';
+$('#idfind').click(function(event) {
+      $.ajax('http://' + ip + directoryLocation + '/idfind.do', {
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          name: $('#name').val(),
+          tel: $('#tel').val()
+        },
+        success: function(result) {
+           if (result.idfind == null) {
+            document.getElementById('foundid').innerHTML =
+                    '입력하신 이메일이 존재하지 않습니다.';
+          } else {
+          document.getElementById('foundid').innerHTML =
+                '회원님의 아이디는 ' + result.idfind + ' 입니다.';
+          } 
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert('작업을 완료할 수 없습니다.\n' + 
+              '잠시 후 다시 시도하세요.\n' +
+          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+        }
+      });
+  });
+</script>
+</html>
