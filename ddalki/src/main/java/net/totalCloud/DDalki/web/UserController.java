@@ -2,22 +2,19 @@ package net.totalCloud.DDalki.web;
 
 import java.util.HashMap;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.totalCloud.DDalki.dao.ChangePwdDao;
 import net.totalCloud.DDalki.dao.UserDao;
+import net.totalCloud.DDalki.domain.ChangePwdVo;
 import net.totalCloud.DDalki.domain.UserVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.google.gson.Gson;
 
 @Controller("/ddalki")
 @RequestMapping("/cloud")
@@ -25,6 +22,9 @@ public class UserController {
   
   @Autowired
   UserDao userDao;
+  
+  @Autowired
+  ChangePwdDao changePwdDao;
   
   @RequestMapping("/add")
   public Object add(UserVo user) throws Exception {
@@ -103,5 +103,28 @@ public class UserController {
     
     return responseData;
     
+  }
+  
+  @RequestMapping("/mypwdupdate")
+  public Object mypwdupdate(String email, String allowcode, HttpServletRequest request) throws Exception {
+    System.out.println(changePwdDao.allowCodeSelect(email));
+    if (Integer.parseInt(allowcode) == changePwdDao.allowCodeSelect(email)) {
+      request.setAttribute("email", email);
+      changePwdDao.deletedo(email);
+      return "changepwd";
+    } else {
+      return "pwdMatchingFail";
+    }
+  }
+  
+  @RequestMapping("/allowcode")
+  public void allowcode(String email, String allowcode) throws Exception {
+    ChangePwdVo pwd = new ChangePwdVo();
+    pwd.setEmail(email);
+    pwd.setAllowcode(Integer.parseInt(allowcode));
+    System.out.println(allowcode);
+    System.out.println(email);
+    changePwdDao.deletedo(email);
+    changePwdDao.addition(pwd);
   }
 }

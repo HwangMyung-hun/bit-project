@@ -29,12 +29,12 @@
             </div>
             <img id="center" src="./img/intro_center.png" alt="">
             <div id="button">
-                <img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img id="joinbtn" src="./img/intro_join.jpg" alt="회원가입">
+                <img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img id="joinbtn" src="./img/intro_join.jpg" alt="회원가입"><img src="./img/intro_idfind.jpg" alt="아이디 찾기" id="findidbtn"><img src="./img/intro_pwfind.jpg" id="pwdfind" alt="비밀번호 찾기">
             </div>
+            <!-- 
             <div>
                 <button onclick="location.href='./Find.html'">id찾기</button> <button id="pwdfind">비밀번호찾기</button>                
             </div>
-            <!-- 
             <div id="fb-root"></div>
 							<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true">
 							</div>
@@ -44,9 +44,9 @@
         </div>
         <div class="join">
             <div id="inputBox_j">
-               <p><input id="email" type="email" name="email" placeholder="이메일을 입력해주세요" size="30" onkeyup="ajaxSend()"></p>
-               <p><input id="pwd" type="password" name="pwd" placeholder="비밀번호를 입력해주세요" size="30"></p>
-               <p><input id="pwd2" type="password" name="pwd2" placeholder="비밀번호를 한번 더 입력해주세요" size="30"></p>
+               <p><input id="email" type="email" name="email" placeholder="이메일을 입력해주세요" size="30" onkeyup="ajaxSendID()"></p>
+               <p><input id="pwd" type="password" name="pwd" placeholder="비밀번호를 입력해주세요" size="30" onkeyup="ajaxSendPWD()"></p>
+               <p><input id="pwd2" type="password" name="pwd2" placeholder="비밀번호를 한번 더 입력해주세요" size="30" onkeyup="ajaxSendPWD2()"></p>
                <p><input id="name" type="text" name="name" placeholder="이름을 입력해주세요" size="30"></p>
                <p><input id="tel" type="text" name="tel" placeholder="전화번호를 입력해주세요" size="30"></p>
                <p id="results" style="color: white; font-weight: bold; margin-top: 20px;"></p>
@@ -68,6 +68,31 @@
             <area shape="rect" coords="629,106,673,150" href="" target="" alt="" />
         </map>
        </div>
+       
+       <!-- 아이디 확인 팝업 -->
+    <div id="popupLayer">
+      <h1>아이디 확인</h1>
+      <input id="findname" placeholder="이름을 입력해주세요">
+      <input id="findtel"   placeholder="전화번호를 입력해주세요">
+      <div>
+        <button id="idfind">아이디 확인</button>
+        <button id="closepop">닫기</button>
+      </div>
+      <div id="foundid"> 이름과 전화번호를 입력하세요.</div>
+    </div>
+    <!-- //아이디 확인 팝업 -->
+    
+    <!-- 비밀번호 찾기 팝업 -->   
+    <div id="popupLayer2">
+      <h1>비밀번호 찾기</h1>
+      <input id="findemail" placeholder="가입시 입력하신 이메일을 입력해주세요">
+      <div>
+        <button id="findpw">비밀번호 찾기</button>
+        <button id="closepop2">닫기</button>
+      </div>
+      <div id="foundpw">※ 입력하신 이메일로 비밀번호 초기화 링크가 발송됩니다.</div>
+    </div>    
+    <!-- //비밀번호 찾기 팝업 -->
    </div>
 </body>
 <script type="text/javascript">
@@ -82,7 +107,7 @@ var directoryLocation = '/cloud';
 <script src="./js/intro.js"></script>
 <script type="text/javascript">
 
-	function ajaxSend() {
+	function ajaxSendID() {
 
 		var email = $("#email").val();
 		if (email != '') {
@@ -122,34 +147,36 @@ var directoryLocation = '/cloud';
 		}
 
 	}
+	
+	function ajaxSendPWD() {
+		  var pwd = $('#pwd').val();
+		  var reg_pwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&]).*$/;
+		  if(reg_pwd.test(pwd) === false){
+			   document.getElementById('results').innerHTML =
+                  '비밀번호 보안이 취약하여 사용할 수 없습니다.';
+			   document.getElementById('results').style.color="yellow";
+		  } else {
+			  document.getElementById('results').innerHTML =
+                  '사용 가능한 비밀번호 입니다.';
+         document.getElementById('results').style.color="white";
+		  }
+
+	  }
+	
+	function ajaxSendPWD2() {
+	      if ($('#pwd2').val() != $('#pwd').val()) {
+	         document.getElementById('results').innerHTML =
+	                  '비밀번호가 서로 다릅니다.';
+	         document.getElementById('results').style.color="yellow";
+	      } else {
+	        document.getElementById('results').innerHTML =
+	                  '일치한 비밀번호 입니다.';
+	         document.getElementById('results').style.color="white";
+	      }
+
+	    }
 </script>
 <script>
-$('#pwdfind').click(function() {
-$.ajax({
-	  type: 'POST',
-	  url: 'https://mandrillapp.com/api/1.0/messages/send.json',
-	  data: {
-	    key : 'WRa1tdxZVCZI6b94cA_pGQ',
-	    message: {
-	      from_email: 'ujbj84@gmail.com',
-	      to: [
-	          {
-	            email: $('#loginemail').val(),
-	            name: 'hello',
-	            type: 'to'
-	          }
-	        ],
-	      autotext: 'true',
-	      subject: 'sima',
-	      html: '<form action="http://192.168.103.65:9999/ddalki/cloud/pwdupdate.do" method="POST" name="pwdupdate"><input type="hidden" value="' + $('#loginemail').val() + '" name ="email"><br> 비밀번호 :  <input type="text" name="pwd"><br><button>변경</button></form>'
-	    	       
-	    }
-	  }
-	 }).done(function(response) {
-	   console.log(response); 
-	 });
-	 
-});
 	 
 /*(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];

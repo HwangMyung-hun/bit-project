@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.totalCloud.DDalki.dao.ChangePwdDao">
+
+  <resultMap type="ChangePwdVo" id="ChangePwdVoMap">
+    <id     column="email"        property="email" />
+    <result column="allowcode"    property="allowcode" />
+  </resultMap>
+  
+  <insert id="addition" parameterType="ChangePwdVo">
+      INSERT INTO changepwd (email, allowcode) 
+      VALUES (#{email}, #{allowcode})
+  </insert>
+  
+  <delete id="deletedo" parameterType="string">
+      DELETE FROM changepwd
+      WHERE email=#{email}
+  </delete>
+  
+  <select id="allowCodeSelect" parameterType="String" resultType="int">
+      select allowcode 
+      FROM changepwd
+      WHERE email=#{email}
+  </select>
+  
+</mapper>

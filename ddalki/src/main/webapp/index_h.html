@@ -39,7 +39,7 @@
 				
 				<div id="button">
 					<img src="./img/intro_login.jpg" alt="로그인" id="loginbtn"><img
-						id="joinbtn" src="./img/intro_join.jpg" alt="회원가입"><img src="./img/intro_idfind.jpg" alt="아이디 찾기"><img src="./img/intro_pwfind.jpg" alt="비밀번호 찾기">
+						id="joinbtn" src="./img/intro_join.jpg" alt="회원가입"><img src="./img/intro_idfind.jpg" alt="아이디 찾기" id="findidbtn"><img src="./img/intro_pwfind.jpg" alt="비밀번호 찾기">
 				</div>
                 <!--
 				<div>
@@ -100,18 +100,16 @@
 		</div>
 		
 		<!-- 아이디 확인 팝업 -->
-		<form>
 		<div id="popupLayer">
 			<h1>아이디 확인</h1>
-			<input id="name" placeholder="이름을 입력해주세요">
-      <input id="tel" 	placeholder="전화번호를 입력해주세요">
+			<input id="findname" placeholder="이름을 입력해주세요">
+      <input id="findtel" 	placeholder="전화번호를 입력해주세요">
 			<div>
 				<button id="idfind">아이디 확인</button>
-				<button id="closepop" onclick="document.getElementById('popupLayer').style.display='none'">닫기</button>
+				<button id="closepop">닫기</button>
 			</div>
-			<div id="foundid">회원님의 아이디는 ung78987333333333333@hanmail.net 입니다.</div>
+			<div id="foundid"> 이름과 전화번호를 입력하세요.</div>
 		</div>
-		</form>
 		<!-- //아이디 확인 팝업 -->
 		
 	</div>
@@ -217,33 +215,5 @@
    }
   
    } */
-</script>
-<script type="text/javascript">
-var ip = 'localhost:9999/ddalki';
-var directoryLocation = '/cloud';
-$('#idfind').click(function(event) {
-      $.ajax('http://' + ip + directoryLocation + '/idfind.do', {
-        method: 'POST',
-        dataType: 'json',
-        data: {
-          name: $('#name').val(),
-          tel: $('#tel').val()
-        },
-        success: function(result) {
-           if (result.idfind == null) {
-            document.getElementById('foundid').innerHTML =
-                    '입력하신 이메일이 존재하지 않습니다.';
-          } else {
-          document.getElementById('foundid').innerHTML =
-                '회원님의 아이디는 ' + result.idfind + ' 입니다.';
-          } 
-        },
-        error: function(xhr, textStatus, errorThrown) {
-          alert('작업을 완료할 수 없습니다.\n' + 
-              '잠시 후 다시 시도하세요.\n' +
-          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
-        }
-      });
-  });
 </script>
 </html>
