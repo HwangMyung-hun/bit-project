@@ -192,6 +192,7 @@ move('#onedrive')
 face();
 
 btn.onclick = function(event) {
+	
 	$.ajax('http://' + ip + directoryLocation + '/login.do', {
 	    method: 'POST',
 	    dataType: 'json',
@@ -202,6 +203,9 @@ btn.onclick = function(event) {
 	    success: function(result) {
 	    	if (result.idcheck == "yes") {
 	    		
+	    		$.session.set('useremail', result.data.email);
+	    		$.session.set('username', result.data.name);
+	    		$.session.set('usertel', result.data.tel);
 	    		console.log(result.data);
 	    		console.log(result.data.pwd);
 	    		console.log(result.data.email);

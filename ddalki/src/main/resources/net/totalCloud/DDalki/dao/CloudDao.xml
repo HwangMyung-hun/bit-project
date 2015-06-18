@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.totalCloud.DDalki.dao.CloudDao">
+
+  <resultMap type="CloudVo" id="CloudVoMap">
+    <id     column="email"    property="email" />
+    <result column="cloudtype"    property="cloudtype" />
+    <result column="cloudid"  property="cloudid" />
+    <result column="token" property="token" />
+    <result column="active" property="active" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="CloudVo">
+      INSERT INTO cloudinfo (email,cloudtype,cloudid,token,active) 
+      VALUES (#{email},#{cloudtype},#{cloudid},#{token},#{active})
+  </insert>
+  
+</mapper>
