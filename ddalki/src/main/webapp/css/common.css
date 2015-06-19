@@ -1,12 +1,11 @@
 @charset "UTF-8";
 
+html,body {margin:0; height:100%}
+input{ outline-style:none;} 
+textarea{ outline-style:none;}
 
 
 /* 하늘 배경 시작 */    
-html,body {
-      margin:0;
-      height:100%
-    }
     
     .sky {
       height:1000px;
