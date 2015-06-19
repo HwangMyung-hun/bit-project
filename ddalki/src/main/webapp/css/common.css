@@ -11,7 +11,7 @@ textarea{ outline-style:none;}
       height:1000px;
       background:#007fd5;
       position:relative;
-      overflow:hidden;
+      /* overflow:hidden; */
       -webkit-animation:sky_background 50s ease-out infinite;
       -moz-animation:sky_background 50s ease-out infinite;
       -o-animation:sky_background 50s ease-out infinite;
