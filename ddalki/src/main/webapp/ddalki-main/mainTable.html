@@ -324,6 +324,7 @@
 			                     onclick="location.href='./duplication.html'">중복검사</button>
 			    </div>
 			  </div>
+			  <button id="logout">로그아웃</button>
       </footer>
     </div>
     <!-- /#wrapper -->
@@ -349,9 +350,14 @@
     <script src="../js/jquery.session.js"></script>
     <script>
  
-    console.log($.cookie('cooke'));
-    $.session.set('a','asd');
-    console.log($.session.get('a'));
+    console.log($.session.get('useremail'));
+    console.log($.session.get('username'));
+    console.log($.session.get('usertel'));
+    
+    $('#logout').click(function(event) {
+    	$.session.clear();
+    	location.href = 'http://192.168.103.65:9999/ddalki/';
+    })
     
     $(document).ready(function() {
         $('#dataTables-example').DataTable({

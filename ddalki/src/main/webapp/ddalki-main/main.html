@@ -239,6 +239,7 @@
     var ip = '192.168.103.65:9999/ddalki';
     var directoryLocation = '/cloud';
     
+    
     $('#logout').click(function(event) {
         $.session.clear();
         location.href = 'http://192.168.103.65:9999/ddalki/';
@@ -274,7 +275,6 @@ window.fbAsyncInit = function() {
 		var cloudid;
 		var newul = document.getElementById("facebooklist");
 		var newLI = document.createElement("LI");
-		var no = 1;
 		
 			if (response.status === 'connected') {
 				token = response.authResponse.accessToken;
@@ -310,15 +310,64 @@ window.fbAsyncInit = function() {
 		    });
 		    
 		    FB.api('me/albums', function(response) {
-		    	console.log(response.data.length);
-			    for (i = 0; i < response.data.length; i++) {
-			    	li = newul.appendChild(document.createElement("LI"));
-			    	li.innerHTML = response.data[i].name;
-			    	li.id = "fbfolderlist" + no;
-			      no++; 
-			    } 
-			    
-		    }); 
+		        console.log(response);
+		        var newul2 = document.getElementById("facebooklist");
+		        var newtr = document.getElementById("tbody");
+		        
+		        for (i = 0; i < response.data.length; i++) {
+		                li = newul2.appendChild(document.createElement("LI")).appendChild(document.createElement("a"));
+		                li.innerHTML = response.data[i].name;
+		                li.id = "fbfolderlist" + i;
+		                
+		                (function(m) {
+		                  $('#fbfolderlist' + m).click(function(event) {
+		                    $('#tbody>tr').remove();
+		                    FB.api(response.data[m].id + '/photos', function(response2) {
+		                      for(j = 0; j < response2.data.length ; j++) {
+		                        var regExp = /\/([\da-z\._]*)\?/;
+		                        var str = response2.data[j].picture;
+		                        var result = str.match(regExp);
+		 
+		                        var createtr = newtr.appendChild(document.createElement("TR"));
+		                        createtr.id = "fbimagelist" + j;
+		                        
+		                        document.getElementById("fbimagelist" + j).style.cursor = "hand";
+		                        
+		                        td1 = createtr.appendChild(document.createElement("TD"));
+		                        td1.innerHTML = result[1];
+		                        
+		                        td2 = createtr.appendChild(document.createElement("Td"));
+		                        
+		                        td3 = createtr.appendChild(document.createElement("Td"));
+		                        var regExp2 = /^([0-9-]*)T/;
+		                        var str2 = response2.data[j].updated_time;
+		                        var result2 = str2.match(regExp2);
+		                        var regExp3 = /T([0-9:]*)\+/;
+		                        var str3 = response2.data[j].updated_time;
+		                        var result3 = str3.match(regExp3);
+		                        td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+		                        
+		                        td4 = createtr.appendChild(document.createElement("Td"));
+		                        
+		                        td4 = createtr.appendChild(document.createElement("Td"));
+		                        var regExp4 = /\.([\da-z\._]*)\?/;
+		                        var str4 = response2.data[j].picture;
+		                        var result4 = str.match(regExp4);
+		                        td4.innerHTML = result4[1];
+		     
+		                        console.log(response2);
+		                        
+		                        (function(z) {
+		                          $('#fbimagelist' + z).click(function(event) {
+		                            window.open(response2.data[z].source, "사진", "width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes" );
+		                          });
+		                        })(j);
+		                      }
+		                    });
+		                  });
+		                })(i);
+		              } 
+		      });
 		    
 		    } else if (response.status === 'not_authorized') {
 		    	  
@@ -350,32 +399,65 @@ window.fbAsyncInit = function() {
 			
 			FB.api('me/albums', function(response) {
 				console.log(response);
+				var newul2 = document.getElementById("facebooklist");
+				var newtr = document.getElementById("tbody");
 				
-				album3 = response.data[3].id;
-				FB.api(album3 + '/photos', function(response) {
-					console.log(response);
-				});
+				for (i = 0; i < response.data.length; i++) {
+		            li = newul2.appendChild(document.createElement("LI")).appendChild(document.createElement("a"));
+		            li.innerHTML = response.data[i].name;
+		            li.id = "fbfolderlist" + i;
+		            
+		            (function(m) {
+			            $('#fbfolderlist' + m).click(function(event) {
+			            	$('#tbody>tr').remove();
+			            	FB.api(response.data[m].id + '/photos', function(response2) {
+				            	for(j = 0; j < response2.data.length ; j++) {
+				            		var regExp = /\/([\da-z\._]*)\?/;
+		                    var str = response2.data[j].picture;
+		                    var result = str.match(regExp);
+ 
+		                    var createtr = newtr.appendChild(document.createElement("TR"));
+		                    createtr.id = "fbimagelist" + j;
+		                    
+		                    document.getElementById("fbimagelist" + j).style.cursor = "hand";
+		                    
+		                    td1 = createtr.appendChild(document.createElement("TD"));
+				                td1.innerHTML = result[1];
+				                
+				                td2 = createtr.appendChild(document.createElement("Td"));
+				                
+				                td3 = createtr.appendChild(document.createElement("Td"));
+				                var regExp2 = /^([0-9-]*)T/;
+				                var str2 = response2.data[j].updated_time;
+				                var result2 = str2.match(regExp2);
+				                var regExp3 = /T([0-9:]*)\+/;
+				                var str3 = response2.data[j].updated_time;
+				                var result3 = str3.match(regExp3);
+				                td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+				                
+				                td4 = createtr.appendChild(document.createElement("Td"));
+				                
+				                td4 = createtr.appendChild(document.createElement("Td"));
+				                var regExp4 = /\.([\da-z\._]*)\?/;
+                        var str4 = response2.data[j].picture;
+                        var result4 = str.match(regExp4);
+                        td4.innerHTML = result4[1];
+		 
+				                console.log(response2);
+				                
+				                (function(z) {
+					                $('#fbimagelist' + z).click(function(event) {
+					                	window.open(response2.data[z].source, "사진", "width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes" );
+					                });
+				                })(j);
+				            	}
+			            	});
+		              });
+		            })(i);
+		          } 
 			});
-			
 
-//			<ul id="myUL">
-//			</ul>
-//			<script>
-//
-//			function func()
-//			{
-//			var ul = document.getElementById("myUL");
-//			var newLI = document.createElement("LI");
-//			ul.appendChild(newLI);
-//			newLI.innerHTML = "The content of the li element here";
-//			}
-//			func();
 
-       /*  var no = 1;
-			  for() {
-				  li.id = "my" + no;
-				  no++;
-			  } */
 			testAPI(response.authResponse.userID);
 			
 		} else if (response.status === 'not_authorized') {
@@ -395,9 +477,10 @@ window.fbAsyncInit = function() {
 	
 	
 	
+ 
+	
 </script>
     <script>
- 
     console.log($.session.get('useremail'));
     console.log($.session.get('username'));
     console.log($.session.get('usertel'));
@@ -472,6 +555,10 @@ window.fbAsyncInit = function() {
 	  function MouseOutRe(MyImage) {
 	  		MyImage.src = "../img/re.png";
 		}
+	  
+
+      
+    
     </script>
 
 </body>
