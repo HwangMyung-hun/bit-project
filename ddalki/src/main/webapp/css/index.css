@@ -1,5 +1,5 @@
 *{margin: 0; padding: 0}
-body{width: 100%;  text-align: center; /*background : url('../img/bg.jpg') repeat-x;*/}
+body{width: 100%;  text-align: center; background : url('http://www.waldegraves.co.uk/wp-content/themes/waldegraves/images/sky-bg.jpg') repeat-x;}
 #wrapper{width:1200px; margin: 0 auto; position: relative}
 #header{text-align: left}
 #header #logo{position:absolute;top: 20px; left: 20px}
