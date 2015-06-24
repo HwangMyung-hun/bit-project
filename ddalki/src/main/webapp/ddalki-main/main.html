@@ -113,6 +113,25 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a class="btn-block btn-social btn-instagram" ><i class="fa fa-instagram"></i>
+                            <span class="social-text">Tcloud</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level" id="Tcloudlist">
+                                <li>
+                                    <a id="tcloudimages">images</a>
+                                </li>
+                                <li>
+                                    <a id="tcloudmovies">movies</a>
+                                </li>
+                                <li>
+                                    <a id="tcloudmusic">music</a>
+                                </li>
+                                <li>
+                                    <a id="tclouddocuments">documents</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                           <a id="addcloud"><span class="glyphicon glyphicon-plus"  aria-hidden="true" ><span></a>
                         </li>
                     </ul>
@@ -167,6 +186,9 @@
                             <div id="fb-root">
                             <img src="../img/introicon_facebook.png" id="facebooklogin">
                             </div>
+                            <img src="../img/introicon_evernote.png" id="tcloudlogin" onclick="PlanetX.login()">
+                            <button onclick="PlanetX.logout()">tcloud로그아웃</button>
+                            <img src="../img/introicon_ucloud.png" id="ucloudlogin" >
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -235,7 +257,9 @@
     <script src="../js/move.js"></script>
     <script src="../js/jquery.cookie.js"></script>
     <script src="../js/jquery.session.js"></script>
+    <script type="text/javascript" src="../js/planetxsdk.js"></script>
     <script type="text/javascript">
+    //var ip = 'localhost:9999/ddalki';
     var ip = '192.168.103.65:9999/ddalki';
     var directoryLocation = '/cloud';
     
@@ -245,6 +269,227 @@
         location.href = 'http://192.168.103.65:9999/ddalki/';
       })
     </script>
+<script type="text/javascript">
+/* $(function (){
+	$.ajax('http://' + ip + directoryLocation + '/ucloudok.do', {
+        method: 'POST',
+        dataType: 'JSON',
+        
+        success: function(result) {
+           if (result.ucloud == "ok") {
+	           console.log(result.ucloud);
+	           $.ajax('http://' + ip + directoryLocation + '/ucloudfolderlist.do', {
+	               method: 'GET',
+	               dataType: 'JSON',
+	               
+	               success: function(result) {
+	                  console.log(result.data);
+	               },
+	               error: function(xhr, textStatus, errorThrown) {
+	                 alert('문제잇음');
+	               }
+	          }); 
+           }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert('문제잇음');
+        }
+   }); 
+});  */
+
+$(function (){
+    PlanetX.init({
+    	  appkey : "a9e7c01c-2062-37fc-b8ad-56eddcce4063" ,   // 본인의 appkey 정보 입력
+        client_id : "4b11f26b-424a-332d-b331-103ee34178d0", // 본인의 client id 정보 입력
+        redirect_uri : "http://192.168.103.65:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
+        scope : "tcloud,user",
+        // if true, token is saved cookie or localstorage
+        savingToken : true
+    });
+    
+    var status = PlanetX.getLoginStatus();
+    console.log(status);
+    
+    if (status) {
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_images );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/music","JSON", { "version" :1 }, tcloud_music );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/movies","JSON", { "version" :1 }, tcloud_movies );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/documents","JSON", { "version" :1 }, tcloud_documents );
+    }
+   // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
+    
+   	//PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
+    	     
+});
+var newtr = document.getElementById("tbody");
+function tcloud_images (response) {
+	$('#tcloudimages').click(function(event) {
+		$('#tbody>tr').remove();
+		for(j = 0; j < response.meta.images.image.length ; j++) {
+			var createtr = newtr.appendChild(document.createElement("TR"));
+			createtr.id = "tcloudlist" + j ;
+			var td1 = createtr.appendChild(document.createElement("TD"));
+			td1.innerHTML = response.meta.images.image[j].name;
+			
+			var td2 = createtr.appendChild(document.createElement("TD"));
+			
+			var td3 = createtr.appendChild(document.createElement("TD"));
+			   var regExp2 = /^([0-9-]*)T/;
+	       var str2 = response.meta.images.image[j].modifiedDate;
+	       var result2 = str2.match(regExp2);
+	       var regExp3 = /T([0-9:]*)\+/;
+	       var str3 = response.meta.images.image[j].modifiedDate;
+	       var result3 = str3.match(regExp3);
+	       td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+	       
+			var td4 = createtr.appendChild(document.createElement("TD"));
+			  td4.innerHTML = response.meta.images.image[j].size + "byte";
+			
+			var td5 = createtr.appendChild(document.createElement("TD"));
+			   var regExp4 = /\.([\da-z\._]*)\?/;
+        var str4 = response.meta.images.image[j].downloadUrl;
+        var result4 = str4.match(regExp4);
+        td5.innerHTML = result4[1];
+		}
+		console.log(response.meta.images);
+	});
+}
+function tcloud_music (response) {
+	$('#tcloudmusic').click(function(event) {
+	    $('#tbody>tr').remove();
+	    for(j = 0; j < response.meta.music.music.length ; j++) {
+	      var createtr = newtr.appendChild(document.createElement("TR"));
+	      var td1 = createtr.appendChild(document.createElement("TD"));
+	      td1.innerHTML = response.meta.music.music[j].name;
+	      
+	      var td2 = createtr.appendChild(document.createElement("TD"));
+	      
+	      var td3 = createtr.appendChild(document.createElement("TD"));
+	         var regExp2 = /^([0-9-]*)T/;
+	         var str2 = response.meta.music.music[j].modifiedDate;
+	         var result2 = str2.match(regExp2);
+	         var regExp3 = /T([0-9:]*)\+/;
+	         var str3 = response.meta.music.music[j].modifiedDate;
+	         var result3 = str3.match(regExp3);
+	         td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+	         
+	      var td4 = createtr.appendChild(document.createElement("TD"));
+	        td4.innerHTML = response.meta.music.music[j].size + "byte";
+	        
+	      var td5 = createtr.appendChild(document.createElement("TD"));
+	         var regExp4 = /\.([\da-z\._]*)\?/;
+	        var str4 = response.meta.music.music[j].downloadUrl;
+	        var result4 = str4.match(regExp4);
+	        td5.innerHTML = result4[1];
+	    }
+	  });
+	console.log(response.meta.music);
+}
+function tcloud_movies (response) {
+	$('#tcloudmovies').click(function(event) {
+	      $('#tbody>tr').remove();
+	      for(j = 0; j < response.meta.movies.movie.length ; j++) {
+	        var createtr = newtr.appendChild(document.createElement("TR"));
+	        var td1 = createtr.appendChild(document.createElement("TD"));
+	        td1.innerHTML = response.meta.movies.movie[j].name;
+	        
+	        var td2 = createtr.appendChild(document.createElement("TD"));
+	        
+	        var td3 = createtr.appendChild(document.createElement("TD"));
+	           var regExp2 = /^([0-9-]*)T/;
+	           var str2 = response.meta.movies.movie[j].modifiedDate;
+	           var result2 = str2.match(regExp2);
+	           var regExp3 = /T([0-9:]*)\+/;
+	           var str3 = response.meta.movies.movie[j].modifiedDate;
+	           var result3 = str3.match(regExp3);
+	           td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+	           
+	        var td4 = createtr.appendChild(document.createElement("TD"));
+	           td4.innerHTML = response.meta.movies.movie[j].size + "byte";
+	        
+	        var td5 = createtr.appendChild(document.createElement("TD"));
+	           var regExp4 = /\.([\da-z\._]*)\?/;
+	          var str4 = response.meta.movies.movie[j].downloadUrl;
+	          var result4 = str4.match(regExp4);
+	          td5.innerHTML = result4[1];
+	      }
+	    });
+	console.log(response.meta.movies);
+}
+function tcloud_documents (response) {
+	$('#tclouddocuments').click(function(event) {
+        $('#tbody>tr').remove();
+        for(j = 0; j < response.meta.documents.document.length ; j++) {
+          var createtr = newtr.appendChild(document.createElement("TR"));
+          var td1 = createtr.appendChild(document.createElement("TD"));
+          td1.innerHTML = response.meta.documents.document[j].name;
+          
+          var td2 = createtr.appendChild(document.createElement("TD"));
+          
+          var td3 = createtr.appendChild(document.createElement("TD"));
+             var regExp2 = /^([0-9-]*)T/;
+             var str2 = response.meta.documents.document[j].modifiedDate;
+             var result2 = str2.match(regExp2);
+             var regExp3 = /T([0-9:]*)\+/;
+             var str3 = response.meta.documents.document[j].modifiedDate;
+             var result3 = str3.match(regExp3);
+             td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+             
+          var td4 = createtr.appendChild(document.createElement("TD"));
+            td4.innerHTML = response.meta.documents.document[j].size + "byte";  
+          
+          var td5 = createtr.appendChild(document.createElement("TD"));
+             var regExp4 = /\.([\da-z\._]*)\?/;
+            var str4 = response.meta.documents.document[j].downloadUrl;
+            var result4 = str4.match(regExp4);
+            td5.innerHTML = result4[1];
+        }
+      });
+	console.log(response.meta.documents);
+}
+	
+function userProfile_callback( data ) {
+	console.log(data);
+    /* var resultMessage, resultDivision = $("#result1"); 
+    resultMessage = "<h2> userProfile success </h2>" ;
+             
+    for ( var property in data.profile ) {
+        resultMessage +=  (property + " : " + data.profile[property] + "<br>") ;
+    }
+             
+    resultDivision.html( resultMessage );        */
+  }
+
+
+/* $('#tcloudlogin').click(function(event) {
+	
+	PlanetX.login(); 
+	
+});  */
+</script>
+<script>
+	$('#ucloudlogin').click(function(event) {
+	    location.href = 'http://' + ip + directoryLocation + '/ucloudlogin.do';
+	    
+      /* $.ajax('http://' + ip + directoryLocation + '/ucloudlogin.do', {
+            method: 'POST',
+            dataType: 'text',
+            
+            success: function(result) {
+               alert('ucloud 등록이 완료되었습니다.');
+               console.log(result.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              alert('자걱.\n' + 
+                  '잠시 후 다시 시도하세요.\n' +
+              '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+            }
+       });  */
+  });
+	
+ 
+
+</script>
 <script>
 (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -321,7 +566,7 @@ window.fbAsyncInit = function() {
 		                
 		                (function(m) {
 		                  $('#fbfolderlist' + m).click(function(event) {
-		                    $('#tbody>tr').remove();
+		                     $('#tbody>tr').remove(); 
 		                    FB.api(response.data[m].id + '/photos', function(response2) {
 		                      for(j = 0; j < response2.data.length ; j++) {
 		                        var regExp = /\/([\da-z\._]*)\?/;
@@ -331,7 +576,7 @@ window.fbAsyncInit = function() {
 		                        var createtr = newtr.appendChild(document.createElement("TR"));
 		                        createtr.id = "fbimagelist" + j;
 		                        
-		                        document.getElementById("fbimagelist" + j).style.cursor = "hand";
+		                        document.getElementById("fbimagelist" + j).style.cursor = "pointer";
 		                        
 		                        td1 = createtr.appendChild(document.createElement("TD"));
 		                        td1.innerHTML = result[1];
@@ -349,11 +594,11 @@ window.fbAsyncInit = function() {
 		                        
 		                        td4 = createtr.appendChild(document.createElement("Td"));
 		                        
-		                        td4 = createtr.appendChild(document.createElement("Td"));
+		                        td5 = createtr.appendChild(document.createElement("Td"));
 		                        var regExp4 = /\.([\da-z\._]*)\?/;
 		                        var str4 = response2.data[j].picture;
 		                        var result4 = str.match(regExp4);
-		                        td4.innerHTML = result4[1];
+		                        td5.innerHTML = result4[1];
 		     
 		                        console.log(response2);
 		                        
@@ -419,7 +664,7 @@ window.fbAsyncInit = function() {
 		                    var createtr = newtr.appendChild(document.createElement("TR"));
 		                    createtr.id = "fbimagelist" + j;
 		                    
-		                    document.getElementById("fbimagelist" + j).style.cursor = "hand";
+		                    document.getElementById("fbimagelist" + j).style.cursor = "pointer";
 		                    
 		                    td1 = createtr.appendChild(document.createElement("TD"));
 				                td1.innerHTML = result[1];
