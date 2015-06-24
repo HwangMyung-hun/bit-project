@@ -36,7 +36,10 @@
 <!-- 		<link href="../css/bootstrap.min.css" rel="stylesheet"> -->
 		<link href="../css/menu.css" rel="stylesheet">
     <style>
-    
+    #image1 {
+      width : 30px;
+      height : 30px;
+    }
 
     </style>
 </head>
@@ -56,7 +59,7 @@
              onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/paste.png"
              onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png"
+           <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png" id="deletebtn"
              onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/down.png"
              onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
@@ -164,6 +167,7 @@
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox"></th>
                                             <th id="name">Name</th>
                                             <th id="shared">Shared</th>
                                             <th id="date">Modified Date</th>
@@ -173,6 +177,7 @@
                                     </thead>
                                     <tbody id="tbody">
                                         <tr>
+                                            <td><input type="checkbox"></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -301,7 +306,7 @@ $(function (){
     PlanetX.init({
     	  appkey : "a9e7c01c-2062-37fc-b8ad-56eddcce4063" ,   // 본인의 appkey 정보 입력
         client_id : "4b11f26b-424a-332d-b331-103ee34178d0", // 본인의 client id 정보 입력
-        redirect_uri : "http://192.168.103.65:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
+        redirect_uri : "http://cloud.ddalki.com:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
         scope : "tcloud,user",
         // if true, token is saved cookie or localstorage
         savingToken : true
@@ -321,6 +326,11 @@ $(function (){
    	//PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     	     
 });
+
+function tcloud_delete (response) {
+	console.log(response);
+}
+
 var newtr = document.getElementById("tbody");
 function tcloud_images (response) {
 	$('#tcloudimages').click(function(event) {
@@ -328,8 +338,30 @@ function tcloud_images (response) {
 		for(j = 0; j < response.meta.images.image.length ; j++) {
 			var createtr = newtr.appendChild(document.createElement("TR"));
 			createtr.id = "tcloudlist" + j ;
+			
+			var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
+			td.type = 'checkbox';
+			td.id = 'tcheck' + j;
+			
+			(function(m) {
+				var check = document.getElementById('tcheck' + m);
+				console.log(check);
+				$('#deletebtn').click(function(event) {
+			        if(check.checked == true) {
+			          var imgID = response.meta.images.image[m].objectId;
+			          console.log(imgID);
+			          PlanetX.api( "delete", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId ,"JSON", {"version" :1} , tcloud_delete );
+			        }
+			      });
+			})(j);
+			
 			var td1 = createtr.appendChild(document.createElement("TD"));
+			var view = new Image();
+			view.src = response.meta.images.image[j].thumbnailUrl;
 			td1.innerHTML = response.meta.images.image[j].name;
+			img1 = td1.appendChild(view);
+			img1.id = "image1";
+			//document.getElementById("image1").style = "width : 50px;";
 			
 			var td2 = createtr.appendChild(document.createElement("TD"));
 			
@@ -350,8 +382,10 @@ function tcloud_images (response) {
         var str4 = response.meta.images.image[j].downloadUrl;
         var result4 = str4.match(regExp4);
         td5.innerHTML = result4[1];
+        
+      
 		}
-		console.log(response.meta.images);
+		console.log(response.meta.images.image[0].thumbnailUrl);
 	});
 }
 function tcloud_music (response) {
@@ -359,6 +393,11 @@ function tcloud_music (response) {
 	    $('#tbody>tr').remove();
 	    for(j = 0; j < response.meta.music.music.length ; j++) {
 	      var createtr = newtr.appendChild(document.createElement("TR"));
+	      createtr.id = "tcloudlist" + j ;
+	      
+	      var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
+	      td.type = 'checkbox';
+	      
 	      var td1 = createtr.appendChild(document.createElement("TD"));
 	      td1.innerHTML = response.meta.music.music[j].name;
 	      
@@ -390,6 +429,11 @@ function tcloud_movies (response) {
 	      $('#tbody>tr').remove();
 	      for(j = 0; j < response.meta.movies.movie.length ; j++) {
 	        var createtr = newtr.appendChild(document.createElement("TR"));
+	        createtr.id = "tcloudlist" + j ;
+	        
+	        var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
+	        td.type = 'checkbox';
+	        
 	        var td1 = createtr.appendChild(document.createElement("TD"));
 	        td1.innerHTML = response.meta.movies.movie[j].name;
 	        
@@ -421,6 +465,11 @@ function tcloud_documents (response) {
         $('#tbody>tr').remove();
         for(j = 0; j < response.meta.documents.document.length ; j++) {
           var createtr = newtr.appendChild(document.createElement("TR"));
+          createtr.id = "tcloudlist" + j ;
+          
+          var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
+          td.type = 'checkbox';
+          
           var td1 = createtr.appendChild(document.createElement("TD"));
           td1.innerHTML = response.meta.documents.document[j].name;
           
@@ -575,6 +624,9 @@ window.fbAsyncInit = function() {
 		 
 		                        var createtr = newtr.appendChild(document.createElement("TR"));
 		                        createtr.id = "fbimagelist" + j;
+		                        
+		                        td = createtr.appendChild(document.createElement("TD"));
+		                        //tdd.type = 'checkbox';
 		                        
 		                        document.getElementById("fbimagelist" + j).style.cursor = "pointer";
 		                        
