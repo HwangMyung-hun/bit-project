@@ -25,7 +25,7 @@ text-align: center; color: #666; font-size: 14px; height:23px; width: 320px}
 ::-moz-placeholder {color: #fff; font-size: 14px}
 :-ms-input-placeholder {color: #fff; font-size: 14px}
 
-/*아이디 확인 팝업*/
+/*레이어 팝업1-아이디 찾기*/
 #popupLayer {display:none; background-color:#fff;opacity: 0.95;filter: alpha(opacity=95); /* For IE8 and earlier */
 border-radius: 15px; box-shadow: 1px 15px 15px;padding-top:30px;
 position:absolute; top:100px; left:380px; width:400px;height:250px; text-align: center;}
@@ -34,7 +34,7 @@ position:absolute; top:100px; left:380px; width:400px;height:250px; text-align: 
 #popupLayer button{font-size:16px;color: #666;cursor:pointer; background-color: #fff; padding:5px;border-radius: 5px ;}
 #popupLayer h1 {font-size:26px;margin-bottom:20px;color: #666;}
 
-/*비밀번호 찾기 팝업*/
+/*레이어 팝업2-비밀번호 찾기*/
 #popupLayer2 {display:none; background-color:#fff;opacity: 0.95;filter: alpha(opacity=95); /* For IE8 and earlier */
 border-radius: 15px; box-shadow: 1px 15px 15px;padding-top:30px;
 position:absolute; top:100px; left:380px; width:400px;height:190px; text-align:center;}
@@ -42,3 +42,5 @@ position:absolute; top:100px; left:380px; width:400px;height:190px; text-align:c
 #foundpw{font-size:16px;color: darkred;margin:20px 10px;}
 #popupLayer2 button{font-size:16px;color: #666;cursor:pointer; background-color: #fff; padding:5px;border-radius: 5px ;}
 #popupLayer2 h1 {font-size:26px;margin-bottom:20px;color: #666;}
+
+
