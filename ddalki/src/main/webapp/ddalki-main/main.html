@@ -40,6 +40,10 @@
       width : 30px;
       height : 30px;
     }
+    #upload {
+      display: none;
+      border : 1px solid red;
+    }
 
     </style>
 </head>
@@ -61,9 +65,9 @@
              onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png" id="deletebtn"
              onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/down.png"
+           <img class="relative zindex imgsize" alt="No Img" src="../img/down.png" id="downloadbtn"
              onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png "
+           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png " id="uploadbtn"
              onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex imgsize" alt="No Img" src="../img/new.png "
              onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
@@ -186,6 +190,12 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div id="upload">
+	                            <form id="upurl" action="" name="upload" method="post" enctype="multipart/form-data">
+	                               <input type="file" name="upload">
+	                               <button>입력</button>
+	                            </form>
                             </div>
                             <!-- /.table-responsive -->
                             <div id="fb-root">
@@ -326,9 +336,29 @@ $(function (){
    	//PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     	     
 });
-
 function tcloud_delete (response) {
 	console.log(response);
+}
+
+function tcloud_update (response) {
+	console.log(response.storage.token);
+	document.getElementById('upurl').action = response.storage.token;
+	document.getElementById('upload').style.display = "block";
+	
+	$('#upurl')
+	
+	/* $.ajax(response.storage.token, {
+        method: 'POST',
+        name: 'upload',
+        enctype: 'multipart/form-data',
+        
+        success: function(result) {
+           console.log(result.data);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert('문제잇음');
+        }
+   });  */
 }
 
 var newtr = document.getElementById("tbody");
@@ -347,12 +377,28 @@ function tcloud_images (response) {
 				var check = document.getElementById('tcheck' + m);
 				console.log(check);
 				$('#deletebtn').click(function(event) {
-			        if(check.checked == true) {
-			          var imgID = response.meta.images.image[m].objectId;
-			          console.log(imgID);
-			          PlanetX.api( "delete", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId ,"JSON", {"version" :1} , tcloud_delete );
-			        }
-			      });
+		        if(check.checked == true) {
+		          var imgID = response.meta.images.image[m].objectId;
+		          console.log(imgID);
+		          PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" ,
+		        		          "JSON", {"version" :1} , tcloud_delete);
+		        }
+	      });
+				$('#downloadbtn').click(function(event) {
+					if(check.checked == true) {
+						var downloadURL = response.meta.images.image[m].downloadUrl;
+						console.log(downloadURL);
+						$.ajax(response.meta.images.image[m].downloadUrl, {
+					        method: 'GET',
+					        success: function(result) {
+					           console.log(result.data);
+					        },
+					        error: function(xhr, textStatus, errorThrown) {
+					          alert('문제잇음');
+					        }
+					   });
+					}
+				});
 			})(j);
 			
 			var td1 = createtr.appendChild(document.createElement("TD"));
@@ -361,6 +407,7 @@ function tcloud_images (response) {
 			td1.innerHTML = response.meta.images.image[j].name;
 			img1 = td1.appendChild(view);
 			img1.id = "image1";
+			
 			//document.getElementById("image1").style = "width : 50px;";
 			
 			var td2 = createtr.appendChild(document.createElement("TD"));
@@ -385,13 +432,14 @@ function tcloud_images (response) {
         
       
 		}
-		console.log(response.meta.images.image[0].thumbnailUrl);
+		console.log(response.meta.images.image[0]);
 	});
 }
 function tcloud_music (response) {
 	$('#tcloudmusic').click(function(event) {
 	    $('#tbody>tr').remove();
 	    for(j = 0; j < response.meta.music.music.length ; j++) {
+	      
 	      var createtr = newtr.appendChild(document.createElement("TR"));
 	      createtr.id = "tcloudlist" + j ;
 	      
@@ -400,6 +448,18 @@ function tcloud_music (response) {
 	      
 	      var td1 = createtr.appendChild(document.createElement("TD"));
 	      td1.innerHTML = response.meta.music.music[j].name;
+	      var regExpicon = /\.([\da-z\._]*)\?/;
+        var stricon = response.meta.music.music[j].downloadUrl;
+        var resulticon = stricon.match(regExp4);
+	      if (resulticon[1] == "mp3") {
+	    	  var view = new Image();
+          view.src = "../img/fileicon_mp3.png";
+          td1.appendChild(view);
+	      } else {
+	    	  var view = new Image();
+	        view.src = "../img/fileicon_wav.png";
+	        td1.appendChild(view);
+	      }
 	      
 	      var td2 = createtr.appendChild(document.createElement("TD"));
 	      
@@ -433,9 +493,26 @@ function tcloud_movies (response) {
 	        
 	        var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
 	        td.type = 'checkbox';
+	        td.id = 'tcheck' + j;
+	        
+	        (function(m) {
+	            var check = document.getElementById('tcheck' + m);
+	            console.log(check);
+	            $('#uploadbtn').click(function(event) {
+	                  if(check.checked == true) {
+	                    /* var imgID = response.meta.images.image[m].objectId;
+	                    console.log(imgID); */
+	                    PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/token","JSON", {"version" :1} , tcloud_update );
+	                  }
+	                });
+	          })(j);
 	        
 	        var td1 = createtr.appendChild(document.createElement("TD"));
+	        var view = new Image();
+	        view.src = response.meta.movies.movie[j].thumbnailUrl;
 	        td1.innerHTML = response.meta.movies.movie[j].name;
+	        img1 = td1.appendChild(view);
+	        img1.id = "image1";
 	        
 	        var td2 = createtr.appendChild(document.createElement("TD"));
 	        
@@ -472,6 +549,22 @@ function tcloud_documents (response) {
           
           var td1 = createtr.appendChild(document.createElement("TD"));
           td1.innerHTML = response.meta.documents.document[j].name;
+          var regExpicon = /\.([\da-z\._]*)\?/;
+          var stricon = response.meta.documents.document[j].downloadUrl;
+          var resulticon = stricon.match(regExp4);
+          if (resulticon[1] == "pdf") {
+            var view = new Image();
+            view.src = "../img/fileicon_pdf.png";
+            td1.appendChild(view);
+          } else if (resulticon[1] == "pptx" || resulticon[1] == "ppt") {
+        	  var view = new Image();
+            view.src = "../img/fileicon_ppt.png";
+            td1.appendChild(view);
+          } else {
+        	  var view = new Image();
+              view.src = "../img/fileicon_text.png";
+              td1.appendChild(view);
+          }
           
           var td2 = createtr.appendChild(document.createElement("TD"));
           
@@ -625,40 +718,43 @@ window.fbAsyncInit = function() {
 		                        var createtr = newtr.appendChild(document.createElement("TR"));
 		                        createtr.id = "fbimagelist" + j;
 		                        
-		                        td = createtr.appendChild(document.createElement("TD"));
-		                        //tdd.type = 'checkbox';
-		                        
-		                        document.getElementById("fbimagelist" + j).style.cursor = "pointer";
-		                        
 		                        td1 = createtr.appendChild(document.createElement("TD"));
-		                        td1.innerHTML = result[1];
+		                        //td1.type = 'checkbox';
 		                        
-		                        td2 = createtr.appendChild(document.createElement("Td"));
+		                        td2 = createtr.appendChild(document.createElement("TD"));
+		                        td2.innerHTML = result[1];
+		                        var view2 = new Image();
+		                        view2.src = response2.data[j].picture;
+		                        img1 = td2.appendChild(view2);
+		                        console.log(response2.data[j].picture);
+		                        img1.id = "image1";
 		                        
 		                        td3 = createtr.appendChild(document.createElement("Td"));
+		                        
+		                        td4 = createtr.appendChild(document.createElement("Td"));
 		                        var regExp2 = /^([0-9-]*)T/;
 		                        var str2 = response2.data[j].updated_time;
 		                        var result2 = str2.match(regExp2);
 		                        var regExp3 = /T([0-9:]*)\+/;
 		                        var str3 = response2.data[j].updated_time;
 		                        var result3 = str3.match(regExp3);
-		                        td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
-		                        
-		                        td4 = createtr.appendChild(document.createElement("Td"));
+		                        td4.innerHTML = result2[1] + " " + " / " + " " + result3[1];
 		                        
 		                        td5 = createtr.appendChild(document.createElement("Td"));
+		                        
+		                        td6 = createtr.appendChild(document.createElement("Td"));
 		                        var regExp4 = /\.([\da-z\._]*)\?/;
 		                        var str4 = response2.data[j].picture;
 		                        var result4 = str.match(regExp4);
-		                        td5.innerHTML = result4[1];
+		                        td6.innerHTML = result4 [1];
 		     
 		                        console.log(response2);
-		                        
-		                        (function(z) {
+		                        document.getElementById("fbimagelist" + j).style.cursor = "pointer";
+		                        /* (function(z) {
 		                          $('#fbimagelist' + z).click(function(event) {
 		                            window.open(response2.data[z].source, "사진", "width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes" );
 		                          });
-		                        })(j);
+		                        })(j); */
 		                      }
 		                    });
 		                  });
@@ -710,43 +806,71 @@ window.fbAsyncInit = function() {
 			            	FB.api(response.data[m].id + '/photos', function(response2) {
 				            	for(j = 0; j < response2.data.length ; j++) {
 				            		var regExp = /\/([\da-z\._]*)\?/;
-		                    var str = response2.data[j].picture;
-		                    var result = str.match(regExp);
+                        var str = response2.data[j].picture;
+                        var result = str.match(regExp);
  
-		                    var createtr = newtr.appendChild(document.createElement("TR"));
-		                    createtr.id = "fbimagelist" + j;
-		                    
-		                    document.getElementById("fbimagelist" + j).style.cursor = "pointer";
-		                    
-		                    td1 = createtr.appendChild(document.createElement("TD"));
-				                td1.innerHTML = result[1];
-				                
-				                td2 = createtr.appendChild(document.createElement("Td"));
-				                
-				                td3 = createtr.appendChild(document.createElement("Td"));
-				                var regExp2 = /^([0-9-]*)T/;
-				                var str2 = response2.data[j].updated_time;
-				                var result2 = str2.match(regExp2);
-				                var regExp3 = /T([0-9:]*)\+/;
-				                var str3 = response2.data[j].updated_time;
-				                var result3 = str3.match(regExp3);
-				                td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
-				                
-				                td4 = createtr.appendChild(document.createElement("Td"));
-				                
-				                td4 = createtr.appendChild(document.createElement("Td"));
-				                var regExp4 = /\.([\da-z\._]*)\?/;
+                        var createtr = newtr.appendChild(document.createElement("TR"));
+                        createtr.id = "fbimagelist" + j;
+                        
+                        td1 = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
+                        td1.type = 'checkbox';
+                        td1.id = 'tcheck' + j;
+                        
+                        (function(k) {
+                            var check = document.getElementById('tcheck' + k);
+                            $('#uploadbtn').click(function(event) {
+                                  if(check.checked == true) {
+                                    console.log(response.data[m].name);
+                                    /* FB.api('/me/photos', 'post', {
+                                        message:'photo description',
+                                        url: "http://ojsfile.ohmynews.com/MEM_ETC/00074927.jpg"   
+                                    }, function(response){
+
+                                        if (!response || response.error) {
+                                            console.log('permission');
+                                            console.log(response.error);
+                                        } else {
+                                            console.log('error');
+                                        }
+                                    });  */
+                                  }
+                                });
+                          })(j);
+                        
+                        td2 = createtr.appendChild(document.createElement("TD"));
+                        td2.innerHTML = result[1];
+                        var view2 = new Image();
+                        view2.src = response2.data[j].picture;
+                        img1 = td2.appendChild(view2);
+                        console.log(response2.data[j].picture);
+                        img1.id = "image1";
+                        
+                        td3 = createtr.appendChild(document.createElement("Td"));
+                        
+                        td4 = createtr.appendChild(document.createElement("Td"));
+                        var regExp2 = /^([0-9-]*)T/;
+                        var str2 = response2.data[j].updated_time;
+                        var result2 = str2.match(regExp2);
+                        var regExp3 = /T([0-9:]*)\+/;
+                        var str3 = response2.data[j].updated_time;
+                        var result3 = str3.match(regExp3);
+                        td4.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+                        
+                        td5 = createtr.appendChild(document.createElement("Td"));
+                        
+                        td6 = createtr.appendChild(document.createElement("Td"));
+                        var regExp4 = /\.([\da-z\._]*)\?/;
                         var str4 = response2.data[j].picture;
                         var result4 = str.match(regExp4);
-                        td4.innerHTML = result4[1];
+                        td6.innerHTML = result4 [1];
 		 
 				                console.log(response2);
 				                
-				                (function(z) {
+				                /* (function(z) {
 					                $('#fbimagelist' + z).click(function(event) {
 					                	window.open(response2.data[z].source, "사진", "width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes" );
 					                });
-				                })(j);
+				                })(j); */
 				            	}
 			            	});
 		              });
