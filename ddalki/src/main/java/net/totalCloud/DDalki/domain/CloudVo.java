@@ -10,8 +10,46 @@ public class CloudVo implements Serializable{
   protected String      cloudid;
   protected String      token;
   protected String      active;
+  protected String      name;
+  protected String      shared;
+  protected String      modifiedDate;
+  protected String      size;
+  protected String      type;
   
   
+  public String getName() {
+    return name;
+  }
+  public void setName(String name) {
+    this.name = name;
+  }
+  public String getShared() {
+    return shared;
+  }
+  public void setShared(String shared) {
+    this.shared = shared;
+  }
+  public String getModifiedDate() {
+    return modifiedDate;
+  }
+  public void setModifiedDate(String modifiedDate) {
+    this.modifiedDate = modifiedDate;
+  }
+  public String getSize() {
+    return size;
+  }
+  public void setSize(String size) {
+    this.size = size;
+  }
+  public String getType() {
+    return type;
+  }
+  public void setType(String type) {
+    this.type = type;
+  }
+  public static long getSerialversionuid() {
+    return serialVersionUID;
+  }
   public String getEmail() {
     return email;
   }
