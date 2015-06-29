@@ -40,7 +40,6 @@ public class CloudController {
     return responseData;
   }
   
-<<<<<<< .mine
   @RequestMapping("/active")
   public Object idfind(String email) throws Exception{
     
@@ -55,7 +54,7 @@ public class CloudController {
     return responseData;
     
   }
-=======
+
   @RequestMapping("/getDbxFolder")
   public ResponseEntity<String> getDropboxFolder()  {
     HashMap<String, Object> dropObj = new HashMap<String, Object>();
