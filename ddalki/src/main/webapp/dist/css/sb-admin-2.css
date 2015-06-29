@@ -149,6 +149,34 @@ body {
     padding-left: 52px;
 }
 
+.sidebar .nav-fourth-level li a {
+    padding-left: 67px;
+}
+
+.sidebar .nav-fifth-level li a {
+    padding-left: 82px;
+}
+
+.sidebar .nav-sixth-level li a {
+    padding-left: 97px;
+}
+
+.sidebar .nav-seventh-level li a {
+    padding-left: 112px;
+}
+
+.sidebar .nav-eighth-level li a {
+    padding-left: 127px;
+}
+
+.sidebar .nav-ninth-level li a {
+    padding-left: 142px;
+}
+
+.sidebar .nav-tenth-level li a {
+    padding-left: 157px;
+}
+
 @media(min-width:568px) {
     .sidebar {
         z-index: 1;
