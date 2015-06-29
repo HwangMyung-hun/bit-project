@@ -40,6 +40,22 @@ public class CloudController {
     return responseData;
   }
   
+<<<<<<< .mine
+  @RequestMapping("/active")
+  public Object idfind(String email) throws Exception{
+    
+    HashMap<String,Object> sqlParams = new HashMap<String,Object>();
+    sqlParams.put("email", email);
+    sqlParams.put("active", "Y");
+    
+    HashMap<String,Object> responseData = new HashMap<String,Object>();
+    responseData.put("status", "success");
+    responseData.put("idfind", cloudDao.activefind(sqlParams));
+    
+    return responseData;
+    
+  }
+=======
   @RequestMapping("/getDbxFolder")
   public ResponseEntity<String> getDropboxFolder()  {
     HashMap<String, Object> dropObj = new HashMap<String, Object>();
