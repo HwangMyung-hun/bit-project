@@ -156,7 +156,6 @@ window.fbAsyncInit = function() {
 			FB.api('me/albums', function(response) {
 				var newul2 = document.getElementById("facebooklist");
 				var newtr = document.getElementById("tbody");
-				console.log(response.data);
 				for (i = 0; i < response.data.length; i++) {
 		            li = newul2.appendChild(document.createElement("LI")).appendChild(document.createElement("a"));
 		            li.innerHTML = response.data[i].name;
