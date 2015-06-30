@@ -1,17 +1,41 @@
 var currentPage = document.location.href;
 var regExpurl = /\=([\da-z\._-]*)\&/;
 var sktoken = currentPage.match(regExpurl);
+var tcloudID; 
 if(sktoken != null){
 	console.log(sktoken[1]);
-	console.log(currentPage);
 }
+
+function userProfile_callback( data ) {
+	tcloudID = data.profile.userId;
+	
+	/*$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
+    method: 'POST',
+    dataType: 'json',
+    data: {
+      email: $.session.get('useremail'),
+      cloudtype: 'tcloud',
+      cloudid: tcloudID,
+      token: sktoken[1],
+      active: 'Y'
+    },
+    success: function(result) {
+       alert('T Cloud 등록이 완료되었습니다.');
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      alert('DB저장 실패.\n' + 
+          '잠시 후 다시 시도하세요.\n' +
+      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+    }
+  });*/
+}
+
 $(function (){
     PlanetX.init({
     	  appkey : "a9e7c01c-2062-37fc-b8ad-56eddcce4063" ,   // 본인의 appkey 정보 입력
         client_id : "4b11f26b-424a-332d-b331-103ee34178d0", // 본인의 client id 정보 입력
         redirect_uri : "http://cloud.ddalki.com:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
         scope : "tcloud,user",
-        // if true, token is saved cookie or localstorage
         savingToken : true
     });
     
@@ -23,22 +47,66 @@ $(function (){
     	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/music","JSON", { "version" :1 }, tcloud_music );
     	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/movies","JSON", { "version" :1 }, tcloud_movies );
     	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/documents","JSON", { "version" :1 }, tcloud_documents );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     }
    // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
     
-   	//PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
-    	     
+    
+    
 });
+
 function tcloud_delete (response) {
 	console.log(response);
 }
 
+
 function tcloud_update (response) {
-	console.log(response.storage.token);
-	document.getElementById('upurl').action = response.storage.token;
-	document.getElementById('upload').style.display = "block";
-	/* $('#upurl') */
+	$(function(){
+		/*document.getElementById('frm').action = response.storage.token;*/
+		//ajax form submit
+		 $("#uploadbutton").click(function(){
+			 var form = $('#frm')[0];
+			 var formData = new FormData(form);
+		       	 $.ajax({
+		       	    url: response.storage.token,
+		       	    processData: false,
+	     	    	contentType: false,
+		       	    data: formData,
+		       	    type: 'POST',
+		       	    success: function(result){
+		       	    	alert("업로드 성공!!");
+		       	    },
+		       	    error: function(result) {
+		       	    	console.log(result);
+		       	    }
+		       	 });
+		 });
+	});
+
+		/*$('#frm').ajaxForm({
+	            beforeSubmit: function (data,form,option) {
+	            	//validation체크 
+	            	//막기위해서는 return false를 잡아주면됨
+	                return true;
+	            },
+	            success: function(response,status){
+	            	//성공후 서버에서 받은 데이터 처리
+	            	alert("업로드 성공!!");
+	            },
+	            error: function(){
+	            	//에러발생을 위한 code페이지
+	            },
+	            beforeSend: setHeader
+	        });*/
 	
+	
+//	console.log(response.storage.token);
+//	$('#fileupload').attr('data-url', response.storage.token);
+//	document.getElementById('upload').style.display = "block";
+//	$('#fileupload').click(function(event) {
+//		$('#fileupload').fileupload();
+//		/*$('div.modal').modal('hide');*/
+//	});
 	/* $.ajax(response.storage.token, {
         method: 'POST',
         name: 'upload',
@@ -52,6 +120,7 @@ function tcloud_update (response) {
         }
    });  */
 }
+
 
 var newtr = document.getElementById("tbody");
 function tcloud_images (response) {
@@ -67,14 +136,13 @@ function tcloud_images (response) {
 			
 			(function(m) {
 				var check = document.getElementById('tcheck' + m);
-				console.log(check);
 				$('#deletebtn').click(function(event) {
 		        if(check.checked == true) {
 		          var imgID = response.meta.images.image[m].objectId;
 		          console.log(imgID);
 		          $.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-	                  method: 'DELETE',
-	                  dataType: 'json',
+	                  method: 'POST',
+	                  dataType: 'JSON',
 	                  headers: {
 	                	  access_token : sktoken[1]
 	                  },
@@ -153,9 +221,9 @@ function tcloud_music (response) {
 	      
 	      var td1 = createtr.appendChild(document.createElement("TD"));
 	      td1.innerHTML = response.meta.music.music[j].name;
-	      var regExpicon = /\.([\da-z\._]*)\?/;
+	      var regExpicon = /\.([\da-z]*)\?/;
         var stricon = response.meta.music.music[j].downloadUrl;
-        var resulticon = stricon.match(regExp4);
+        var resulticon = stricon.match(regExpicon);
 	      if (resulticon[1] == "mp3") {
 	    	  var view = new Image();
           view.src = "../img/fileicon_mp3.png";
@@ -187,7 +255,6 @@ function tcloud_music (response) {
 	        td5.innerHTML = result4[1];
 	    }
 	  });
-	console.log(response.meta.music);
 }
 function tcloud_movies (response) {
 	$('#tcloudmovies').click(function(event) {
@@ -202,7 +269,6 @@ function tcloud_movies (response) {
 	        
 	        (function(m) {
 	            var check = document.getElementById('tcheck' + m);
-	            console.log(check);
 	            $('#uploadbtn').click(function(event) {
 	                  if(check.checked == true) {
 	                    /* var imgID = response.meta.images.image[m].objectId;
@@ -240,7 +306,6 @@ function tcloud_movies (response) {
 	          td5.innerHTML = result4[1];
 	      }
 	    });
-	console.log(response.meta.movies);
 }
 function tcloud_documents (response) {
 	$('#tclouddocuments').click(function(event) {
@@ -254,9 +319,9 @@ function tcloud_documents (response) {
           
           var td1 = createtr.appendChild(document.createElement("TD"));
           td1.innerHTML = response.meta.documents.document[j].name;
-          var regExpicon = /\.([\da-z\._]*)\?/;
+          var regExpicon = /\.([\da-z]*)\?/;
           var stricon = response.meta.documents.document[j].downloadUrl;
-          var resulticon = stricon.match(regExp4);
+          var resulticon = stricon.match(regExpicon);
           if (resulticon[1] == "pdf") {
             var view = new Image();
             view.src = "../img/fileicon_pdf.png";
@@ -292,20 +357,8 @@ function tcloud_documents (response) {
             td5.innerHTML = result4[1];
         }
       });
-	console.log(response.meta.documents);
 }
 	
-function userProfile_callback( data ) {
-	console.log(data);
-    /* var resultMessage, resultDivision = $("#result1"); 
-    resultMessage = "<h2> userProfile success </h2>" ;
-             
-    for ( var property in data.profile ) {
-        resultMessage +=  (property + " : " + data.profile[property] + "<br>") ;
-    }
-             
-    resultDivision.html( resultMessage );        */
-  }
 
 
 /* $('#tcloudlogin').click(function(event) {
