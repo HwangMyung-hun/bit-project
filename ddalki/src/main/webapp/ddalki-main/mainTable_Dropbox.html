@@ -68,9 +68,7 @@
            <img class="relative zindex imgsize" alt="No Img" src="../img/re.png"
              onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
              
-           <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=m7kqx6bxchawqxj&response_type=code&redirect_uri=http://localhost:9999/ddalki/ddalki-main/mainTable_Dropbox.html&state=w5XObf1AiAoAAAAAAAAGaWiqFO5AhaUQzMA_Phe0ufZHdwTtl2et5w-05hKq-IyZ">
-           <img class="relative zindex imgsize" id="dbxlogin" alt="No Img" src="../img/dropbox.jpg">
-           </a>
+           
 				          
 <!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
 				            <div class="form-group">
@@ -155,6 +153,9 @@
                                 </table>
                             </div>
                             <!-- /.table-responsive -->
+                            <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=m7kqx6bxchawqxj&response_type=code&redirect_uri=http://localhost:9999/ddalki/ddalki-main/mainTable_Dropbox.html&state=w5XObf1AiAoAAAAAAAAGaWiqFO5AhaUQzMA_Phe0ufZHdwTtl2et5w-05hKq-IyZ">
+           <img class="relative zindex imgsize" id="dbxlogin" alt="No Img" src="../img/dropbox.jpg">
+           </a>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -226,6 +227,8 @@
 
 
 	<script>
+	
+	
 	var ip = 'localhost:9999/ddalki';
   var directoryLocation = '/cloud';
 	$.ajax('http://' + ip + directoryLocation + '/getDbxFolder.do', {
