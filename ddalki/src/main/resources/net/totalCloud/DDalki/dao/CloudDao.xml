@@ -18,4 +18,10 @@
       VALUES (#{email},#{cloudtype},#{cloudid},#{token},#{active})
   </insert>
   
+  <select id="activefind" parameterType="Map" resultType="Map">
+      SELECT email, cloudtype, cloudid, token, active 
+      FROM cloudinfo 
+      WHERE email=#{email} and active=#{active}
+  </select>
+  
 </mapper>
