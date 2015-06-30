@@ -41,7 +41,7 @@ public class CloudController {
   }
   
   @RequestMapping("/active")
-  public Object idfind(String email) throws Exception{
+  public Object activefind(String email) throws Exception{
     
     HashMap<String,Object> sqlParams = new HashMap<String,Object>();
     sqlParams.put("email", email);
@@ -50,6 +50,21 @@ public class CloudController {
     HashMap<String,Object> responseData = new HashMap<String,Object>();
     responseData.put("status", "success");
     responseData.put("idfind", cloudDao.activefind(sqlParams));
+    
+    return responseData;
+    
+  }
+  
+  @RequestMapping("/tcloudactive")
+  public Object tcloudactivefind(String email) throws Exception{
+    
+    HashMap<String,Object> sqlParams = new HashMap<String,Object>();
+    sqlParams.put("email", email);
+    sqlParams.put("cloudtype", "tcloud");
+    
+    HashMap<String,Object> responseData = new HashMap<String,Object>();
+    responseData.put("status", "success");
+    responseData.put("tcloudactive", cloudDao.tcloudactive(sqlParams));
     
     return responseData;
     

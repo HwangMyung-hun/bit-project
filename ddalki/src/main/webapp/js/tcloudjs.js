@@ -8,26 +8,45 @@ if(sktoken != null){
 
 function userProfile_callback( data ) {
 	tcloudID = data.profile.userId;
+	$.ajax('http://' + ip + directoryLocation + '/tcloudactive.do', {
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          email: $.session.get('useremail'),
+        },
+        success: function(result) {
+        	console.log(result.tcloudactive);
+        	if (result.tcloudactive == "Y") {
+        		console.log("tcloud 기존 회원");
+        	} else {
+        		$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
+        		    method: 'POST',
+        		    dataType: 'json',
+        		    data: {
+        		      email: $.session.get('useremail'),
+        		      cloudtype: 'tcloud',
+        		      cloudid: tcloudID,
+        		      token: sktoken[1],
+        		      active: 'Y'
+        		    },
+        		    success: function(result) {
+        		       alert('T Cloud 등록이 완료되었습니다.');
+        		    },
+        		    error: function(xhr, textStatus, errorThrown) {
+        		      alert('DB저장 실패.\n' + 
+        		          '잠시 후 다시 시도하세요.\n' +
+        		      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+        		    }
+        	    });
+        	}
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert('active로딩중 문제 발생.\n' + 
+              '잠시 후 다시 시도하세요.\n' +
+          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+        }
+      });
 	
-	/*$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
-    method: 'POST',
-    dataType: 'json',
-    data: {
-      email: $.session.get('useremail'),
-      cloudtype: 'tcloud',
-      cloudid: tcloudID,
-      token: sktoken[1],
-      active: 'Y'
-    },
-    success: function(result) {
-       alert('T Cloud 등록이 완료되었습니다.');
-    },
-    error: function(xhr, textStatus, errorThrown) {
-      alert('DB저장 실패.\n' + 
-          '잠시 후 다시 시도하세요.\n' +
-      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
-    }
-  });*/
 }
 
 $(function (){
@@ -163,6 +182,9 @@ function tcloud_images (response) {
 						console.log(downloadURL);
 						$.ajax(response.meta.images.image[m].downloadUrl, {
 					        method: 'GET',
+					        headers: {
+					        	access_token : sktoken
+					        },
 					        success: function(result) {
 					           console.log(result.data);
 					        },

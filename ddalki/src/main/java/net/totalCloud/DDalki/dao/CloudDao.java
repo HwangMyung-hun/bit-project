@@ -20,6 +20,8 @@ public interface CloudDao {
   int countAll(String word);
   
   CloudVo selectOne(int no);
+
+  String tcloudactive(HashMap<String, Object> sqlParams);
   
 
 }

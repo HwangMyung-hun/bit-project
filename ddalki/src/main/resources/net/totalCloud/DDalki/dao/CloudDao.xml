@@ -24,4 +24,10 @@
       WHERE email=#{email} and active=#{active}
   </select>
   
+  <select id="tcloudactive" parameterType="Map" resultType="String">
+      SELECT active 
+      FROM cloudinfo 
+      WHERE email=#{email} and cloudtype=#{cloudtype}
+  </select>
+  
 </mapper>
