@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>카카오</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -60,10 +60,10 @@
        <top>
   <div class="top" align="center">
    <div class="relative">
-  &nbsp;  <a class="relative" href="./mainTable.html" style="float: left; margin: 1em 0em 0em 1em"> <img alt="No Img"src="../img/sub_logo.png"></a>
+  &nbsp;  <a class="relative" href="./mainTable.html" style="float: left; margin: 10px 10px"> <img alt="No Img"src="../img/sub_logo.png"></a>
    </div>
-   <nav style="margin: 1em 10em 0em 18em;">
-     <div class="margin center padding" style="padding-left: 1em;">
+   <nav>
+     <div class="margin center padding" style="padding-left:250px;">
        <div class="left">
          <img class="relative zindex" alt="No Img" src="../img/topmenu_copy.png"
              onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
@@ -226,7 +226,7 @@
 	                            </div>
 	                            <div><img src="../img/introicon_tcloud.png" id="tcloudlogin" onclick="PlanetX.login()"><br/><button class="logoutbtn" onclick="PlanetX.logout()">로그아웃</button></div>
 	                            <div><img src="../img/introicon_ucloud.png" id="ucloudlogin" ><br/><button class="logoutbtn" id="">로그아웃</button></div>
-	                            <div><a href="javascript:loginWithKakao()" id="custom-login-btn"><img src="../img/introicon_kakao.png"></a><br/><button class="logoutbtn" id="">로그아웃</button></div>
+	                            <div><a href="javascript:loginWithKakao()" id="custom-login-btn"><img src="../img/introicon_kakao.png"></a><br/><button class="logoutbtn" onClick="logoutWithKakao();">로그아웃</button></div>
                             </div><!-- //cloudbtns -->
                         </div>
                         <!-- /.panel-body -->
