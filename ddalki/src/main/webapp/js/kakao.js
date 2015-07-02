@@ -5,10 +5,13 @@ function loginWithKakao() {
 	// 로그인 창을 띄웁니다.
 	Kakao.Auth.login({
 		success: function(authObj) {
-			alert(JSON.stringify(authObj));
+			alert('로그인 성공'+JSON.stringify(authObj));
 		},
 		fail: function(err) {
-			alert(JSON.stringify(err))
+			alert('로그인 실패'+JSON.stringify(err))
 		}
 	});	
 };
+function logoutWithKakao() {
+	Kakao.Auth.logout(alert('로그아웃 되었습니다'));
+}
