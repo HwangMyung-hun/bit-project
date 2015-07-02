@@ -1,11 +1,8 @@
+var CLIENT_ID = '163518707285-1rnv5uqh371qimkfdqaj02mp9img4aof.apps.googleusercontent.com';
+var SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/drive.file'];
 var token;
-  (function() {
-   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-   po.src = 'https://apis.google.com/js/client:plusone.js';
-   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-})();
-   
-  
+var accessToken;
+var apiKey = 'AIzaSyA3nrbSWG0imQOxUPr8tINF3NzvTtInyGI';
 function signinCallback(authResult) {
   if (authResult['access_token']) {
     // 승인 성공
@@ -13,13 +10,13 @@ function signinCallback(authResult) {
     //document.getElementById('signinButton').setAttribute('style', 'display: none');
 	  token = authResult['access_token'];
     console.log(authResult);
+    accessToken = authResult.access_token;
     var credentials = {
     		access_token : authResult['access_token'],
     		error : authResult['error'],
     		expires_in : authResult['expires_in'],
     		state : authResult['state']
     }; 
-    //loadClient(authResult);
     retrieveAllFiles(credentials);
   } else if (authResult['error']) {
     // 오류가 발생했습니다.
@@ -61,7 +58,6 @@ $('#revokeButton').click(function() {
 });
 
 function loadClient(callback) {
-	  console.log("됨");
 	  gapi.client.load('drive', 'v2', callback);
 }
 
@@ -85,12 +81,6 @@ function retrieveAllFiles(callback) {
 }
 
 
-
-var CLIENT_ID = '163518707285-1rnv5uqh371qimkfdqaj02mp9img4aof.apps.googleusercontent.com';
-var SCOPES = [
-      'https://www.googleapis.com/auth/drive'
-      ];
-
 function handleClientLoad() {
   checkAuth();
 }
@@ -98,16 +88,16 @@ function handleClientLoad() {
 var auth_callback = function(){};
 
 function checkAuth(callback) {
+  console.log(gapi.auth.authorize);
   gapi.auth.authorize(
-     {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
-     handleAuthResult);
+		  {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
+		  handleAuthResult);
   auth_callback = callback;
 }
 
 
 function handleAuthResult(authResult) {
 	if (authResult) {
-
 	  gapi.client.load('drive', 'v2', 
 	    function(){
 	      auth_callback();
@@ -119,25 +109,6 @@ function handleAuthResult(authResult) {
 	}
 }
 
-       
-var driveResult;
-function fileList() {
-	checkAuth(function(){
-	      var request = gapi.client.drive.files.list();
-	      request.execute(function(resp) {
-	        if (!resp.error) {
-	          console.log(resp.items);
-	          driveResult = resp.items;
-	          rootlist();
-	        } else if (resp.error.code == 401) {
-	      checkAuth();
-	    } else {
-	      console.log('An error occured: ' + resp.error.message);
-	        }
-	      });
-	});
-}
-//fileList();
 
 //구글 요놈
 function googlelogin() {
@@ -145,7 +116,7 @@ function googlelogin() {
 }
 
 //google list 가져오는 부분
-var driveResult;
+var driveResult = null;
 var order = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth'];
 function fileList() {
 	checkAuth(function(){
@@ -154,8 +125,10 @@ function fileList() {
 			if (!resp.error) {
 				console.log(resp.items);
 				driveResult = resp.items;
+				if(uploadreseton) actionRefresh();
 			} else if (resp.error.code == 401) {
 				// Access token might have expired.
+				//console.log(resp.error.code + "");
 				checkAuth();
 			} else {
 				console.log('An error occured: ' + resp.error.message);
@@ -163,8 +136,13 @@ function fileList() {
 		});
 	});
 }
-fileList();
+
 function rootlist() {
+    for (var i in driveResult) {
+    	if(driveResult[i].parents[0].isRoot) {
+    		foldertargetid = driveResult[i].parents[0].id;
+    	}
+    }
 	if($("#googlelist > li").length == 0) {
 		for (var i in driveResult) {
 			if(driveResult[i].parents[0].isRoot == true
@@ -177,7 +155,7 @@ function rootlist() {
 			}
 		}
 	}
-	$('#side-menu').metisMenu();
+	if(driveResult != null) $('#side-menu').metisMenu();
 }
 
 
@@ -190,7 +168,6 @@ function direcAdd(id, inteager) {
 						+ "' onclick='filetable(this.id)'>"+ driveResult[i].title 
 						+"<span class='fa arrow'></span></a><ul class='nav nav-"
 						+ order[inteager] + "-level'></ul></li>");
-				console.log(order[inteager]);
 				direcAdd(driveResult[i].id, inteager+1);
 			}
 		}
@@ -198,15 +175,18 @@ function direcAdd(id, inteager) {
 }
 
 function filetable(id) {
+	foldertargetid = id;
+	foldertargets = true;
 	$("#tbody > tr").remove();
 	for (var i in driveResult) {
-		if(driveResult[i].parents[0].id == id && 
-				(driveResult[i].mimeType != "application/vnd.google-apps.folder")) {
+		if(driveResult[i].parents[0].id == id 
+				&& !driveResult[i].labels.trashed
+				&& (driveResult[i].mimeType != "application/vnd.google-apps.folder")) {
 			$("#tbody").append("<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
                                     + "<td>"+ driveResult[i].title +"</td>"
                                     + "<td></td>"
                                     + "<td>"+ (driveResult[i].modifiedDate).split("T")[0] +"</td>"
-                                    + "<td class='center'>"+ driveResult[i].fileSize +"</td>"
+                                    + "<td class='center'>"+ fileSizeRename(driveResult[i].fileSize) +"</td>"
                                     + "<td class='center'>"+ driveResult[i].fileExtension +"</td></tr>");
 		} else if (driveResult[i].parents[0].id == id && 
 				(driveResult[i].mimeType == "application/vnd.google-apps.folder")){
@@ -222,7 +202,7 @@ function filetable(id) {
 
 function rootlistfile() {
 	for (var i in driveResult) {
-		if(driveResult[i].title != 'Untitled') {
+		if(driveResult[i].title != 'Untitled' && !driveResult[i].labels.trashed) {
 			if(driveResult[i].parents[0].isRoot) {
 				if(driveResult[i].mimeType == "application/vnd.google-apps.folder") {
 					$("#tbody").append("<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
@@ -236,7 +216,7 @@ function rootlistfile() {
 							+ "<td>"+ driveResult[i].title +"</td>"
 							+ "<td></td>"
 							+ "<td>"+ (driveResult[i].modifiedDate).split("T")[0] +"</td>"
-							+ "<td class='center'>"+ driveResult[i].fileSize +"</td>"
+							+ "<td class='center'>"+ fileSizeRename(driveResult[i].fileSize) +"</td>"
 							+ "<td class='center'>"+ driveResult[i].fileExtension +"</td></tr>");
 				}
 			}
@@ -244,23 +224,50 @@ function rootlistfile() {
 	}
 }
 
+function fileSizeRename(size) {
+  var numsize = parseInt(size);
+  if(numsize < 1024) return numsize + " Byte"
+  else if(numsize >= 1024 && numsize < 1048576) return (numsize/1024).toFixed(1) + " KB"
+  else if(numsize >= 1048576 && numsize < 1073741824) return (numsize/1048576).toFixed(1) + " MB"
+  else return (numsize/1073741824).toFixed(1) + " GB"
+}
+
 $(".cloudicon").hide();
 
 //클라우드 아이콘 보기/숨기기
 $("#addcloud").click(function() {
+	foldertargets = false;
 	$("#tbody").hide();
 	$(".dataTable_wrapper").hide();
 	$(".cloudicon").show();
 });
 
-$(".btn-social").click(function() {
-	  $("#tbody > tr").remove();
-	  $(".dataTable_wrapper").show();
-	  $("#tbody").show();
-	  $(".cloudicon").hide();
-	  rootlistfile();
+
+$(".btn-google-plus").click(function(event) {
+  foldertargets = true;
+  if(driveResult == null) fileList();
+  $("#tbody > tr").remove();
+  $(".dataTable_wrapper").show();
+  $("#tbody").show();
+  $(".cloudicon").hide();
+  rootlistfile();
+  $("#googleInsertInput").hide();
 });
 
+$(".btn-facebook, .btn-instagram").click(function(event) {
+  foldertargets = false;
+  $("#tbody > tr").remove();
+  $(".dataTable_wrapper").show();
+  $("#tbody").show();
+  $(".cloudicon").hide();
+  $("#googleInsertInput").hide();
+});
+
+var foldertargets = false;
+
+$('#uploadfile').click(function() {
+	if(foldertargets) $("#googleInsertInput").show();
+});
 
 //google download
 $("#downfile").click(function(event) {
@@ -273,7 +280,6 @@ $("#downfile").click(function(event) {
 });
 
 function downloadFiles(fileIds) {
-
   checkAuth(function(){
   var _fileIds = fileIds.split("&&&");
   for(var i = 0; i < _fileIds.length - 1; i++){
@@ -304,4 +310,116 @@ function downloadFiles(fileIds) {
 function downloadURL(url) {
     var $idown = $('<iframe>', { id:'idown', src:url }).hide().appendTo('body');
 }
+
+var foldertargetid = null;
+
+function foldertarget() {
+	return foldertargetid;
+/*  var id = $('#tbody input:first')[0].id;
+  var result;
+  for (var i in driveResult) {
+	 if(driveResult[i].id == id) return driveResult[i].parents[0].id;
+  }*/
+}
+
+var uploadreseton = false;
+
+function insertFile(event) {
+	var id = foldertarget();
+	var fileData = event.target.files[0];
+	checkAuth(function(){
+	  const boundary = '-------314159265358979323846';
+	  const delimiter = "\r\n--" + boundary + "\r\n";
+	  const close_delim = "\r\n--" + boundary + "--";
+	  
+	  var reader = new FileReader();
+	  reader.onload = function(e) {
+		  var contentType = fileData.type || 'application/octet-stream';
+		  var metadata = {
+				  'title': fileData.name,
+				  'mimeType': contentType,
+				  'parents': [{"id":"" + id}]
+		  };
+		  
+		  var base64Data = btoa(reader.result);
+		  var multipartRequestBody =
+			  delimiter +
+			  'Content-Type: application/json\r\n\r\n' +
+			  JSON.stringify(metadata) +
+			  delimiter +
+			  'Content-Type: ' + contentType + '\r\n' +
+			  'Content-Transfer-Encoding: base64\r\n' +
+			  '\r\n' +
+			  base64Data +
+			  close_delim;
+		  
+		  var request = gapi.client.request({
+			  'path': '/upload/drive/v2/files',
+			  'method': 'POST',
+			  'params': {'uploadType': 'multipart'},
+			  'headers': {
+				  'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+			  },
+			  'body': multipartRequestBody});
+		  
+	      request.execute(function(resp) {
+	          if (!resp.error) {
+	            alert("업로드 하였습니다.");
+	            console.log(resp);
+	            uploadreseton = true;
+	            fileList();// 파일 리스트 다시 받기
+	          } else if (resp.error.code == 401) {
+	            // Access token might have expired.
+	            checkAuth();
+	          } else {
+	            console.log('An error occured: ' + resp.error.message);
+	          }
+	      });
+	  }
+	  reader.readAsBinaryString(fileData);
+	});
+	$("#googleInsertInput").hide();
+}
+
+$("#googleInsertInput").hide();
+
+function actionRefresh() {
+	filetable(foldertarget());
+}
+
+function deleteFile(fileId) {
+  var _fileIds = fileId.split("&&&");
+  var dlrjanjdi = 0;
+  for(var i = 0; i < _fileIds.length - 1; i++){
+	  var xmlReq =  new  XMLHttpRequest (); 
+	  xmlReq.open( 'DELETE' ,  'https://www.googleapis.com/drive/v2/files/'  + _fileIds[i] +  '?key='  + apiKey ); 
+	  xmlReq.setRequestHeader( 'Authorization' ,  'Bearer '  + accessToken );
+	  xmlReq.onreadystatechange = function() {
+	     dlrjanjdi++;
+	     if (dlrjanjdi == 2) {
+	    	 alert("삭제하였습니다.");
+	    	 fileList();// 파일 리스트 다시 받기
+	     }
+	  }
+	  xmlReq.send();
+  }
+  
+}
+
+
+$('#deletebtn').click(function() {
+	var tr = $("#tbody input");
+	var ids = '';
+	for (var i = 0; i < tr.length; i++) {
+	  if($("input:checkbox[id='" + tr[i].id 
+			  + "']").is(":checked")) ids = ids + tr[i].id + "&&&";
+	}
+	if(ids != '')deleteFile(ids);
+});
+
+$('#dataTables-example > thead input').click(function() {
+	if($('#dataTables-example > thead input')[0].checked) $('#tbody input').prop('checked', true);
+	else $('#tbody input').prop('checked', false);
+});
+
 
