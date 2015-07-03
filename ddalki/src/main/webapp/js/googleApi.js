@@ -242,9 +242,9 @@ $("#addcloud").click(function() {
 	$(".cloudicon").show();
 });
 
-
 $(".btn-google-plus").click(function(event) {
   foldertargets = true;
+  googlenewfolder = true;
   if(driveResult == null) fileList();
   $("#tbody > tr").remove();
   $(".dataTable_wrapper").show();
@@ -256,6 +256,7 @@ $(".btn-google-plus").click(function(event) {
 
 $(".btn-facebook, .btn-instagram").click(function(event) {
   foldertargets = false;
+  googlenewfolder = false;
   $("#tbody > tr").remove();
   $(".dataTable_wrapper").show();
   $("#tbody").show();
@@ -264,19 +265,20 @@ $(".btn-facebook, .btn-instagram").click(function(event) {
 });
 
 var foldertargets = false;
-
 $('#uploadfile').click(function() {
 	if(foldertargets) $("#googleInsertInput").show();
 });
 
 //google download
 $("#downfile").click(function(event) {
-	var tr = $("#tbody input");
-	var ids = '';
-	for (var i = 0; i < tr.length; i++) {
-	 if($("input:checkbox[id='" + tr[i].id + "']").is(":checked")) ids = ids + tr[i].id + "&&&";
+	if(googlenewfolder) {
+		var tr = $("#tbody input");
+		var ids = '';
+		for (var i = 0; i < tr.length; i++) {
+			if($("input:checkbox[id='" + tr[i].id + "']").is(":checked")) ids = ids + tr[i].id + "&&&";
+		}
+		if(ids != '')downloadFiles(ids);
 	}
-	if(ids != '')downloadFiles(ids);
 });
 
 function downloadFiles(fileIds) {
@@ -422,4 +424,49 @@ $('#dataTables-example > thead input').click(function() {
 	else $('#tbody input').prop('checked', false);
 });
 
+function createFolder(id) {
+	data = new Object();
+	data.title = 'New Folder';
+	data.parents = [{"id": id}];
+	data.mimeType = "application/vnd.google-apps.folder";
+   checkAuth(function(){
+	   gapi.client.drive.files.insert({'resource': data}).execute(function(resp){
+          if (!resp.error) {
+            uploadreseton = true;
+            folderdeletereset();
+            alert("폴더 생성");
+          } else if (resp.error.code == 401) {
+            // Access token might have expired.
+            checkAuth();
+          } else {
+            console.log('An error occured: ' + resp.error.message);
+          }
+	   });
+   });
+}
 
+
+var googlenewfolder = false;
+
+$('.left img:nth-child(6)').click(function() {
+	if(googlenewfolder) createFolder(foldertarget());
+});
+
+function folderdeletereset() {
+	checkAuth(function(){
+		var request = gapi.client.drive.files.list();
+		request.execute(function(resp) {
+			if (!resp.error) {
+				console.log(resp.items);
+				driveResult = resp.items;
+				if(uploadreseton) actionRefresh();
+			} else if (resp.error.code == 401) {
+				// Access token might have expired.
+				//console.log(resp.error.code + "");
+				checkAuth();
+			} else {
+				console.log('An error occured: ' + resp.error.message);
+			}
+		});
+	});
+}
