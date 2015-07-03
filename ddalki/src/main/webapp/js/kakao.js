@@ -5,13 +5,40 @@ function loginWithKakao() {
 	// 로그인 창을 띄웁니다.
 	Kakao.Auth.login({
 		success: function(authObj) {
-			alert('로그인 성공'+JSON.stringify(authObj));
+			console.log('로그인 성공'+JSON.stringify(authObj));
 		},
 		fail: function(err) {
-			alert('로그인 실패'+JSON.stringify(err))
+			console.log('로그인 실패'+JSON.stringify(err))
 		}
 	});	
 };
+
 function logoutWithKakao() {
-	Kakao.Auth.logout(alert('로그아웃 되었습니다'));
+	Kakao.Auth.logout(console.log('로그아웃 되었습니다'));
 }
+
+/*Kakao.API.request({
+	url: '/v1/api/story/upload/multi',
+	files: event.target.files
+}).then(function (res) {
+	// 이전 API 호출이 성공한 경우 다음 API를 호출합니다.
+	return Kakao.API.request({
+		url: '/v1/api/story/post/photo',
+		data: {
+			image_url_list: res
+		}
+	});
+}).then(function (res) {
+	return Kakao.API.request({
+		url: '/v1/api/story/mystory',
+		data: { id: res.id }
+	});
+}).then(function (res) {
+	document.getElementById('post-result').innerHTML = JSON.stringify(res);
+	document.getElementById('post-image').src = res.media[0].original;
+}, function(err) {
+	alert(JSON.stringify(err));
+});
+}
+});
+};*/
