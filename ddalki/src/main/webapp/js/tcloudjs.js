@@ -51,7 +51,7 @@ function userProfile_callback( data ) {
 
 $(function (){
     PlanetX.init({
-    	  appkey : "a9e7c01c-2062-37fc-b8ad-56eddcce4063" ,   // 본인의 appkey 정보 입력
+    	appkey : "a9e7c01c-2062-37fc-b8ad-56eddcce4063" ,   // 본인의 appkey 정보 입력
         client_id : "4b11f26b-424a-332d-b331-103ee34178d0", // 본인의 client id 정보 입력
         redirect_uri : "http://cloud.ddalki.com:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
         scope : "tcloud,user",
@@ -62,10 +62,10 @@ $(function (){
     console.log(status);
     
     if (status) {
-    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_images );
-    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/music","JSON", { "version" :1 }, tcloud_music );
-    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/movies","JSON", { "version" :1 }, tcloud_movies );
-    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/documents","JSON", { "version" :1 }, tcloud_documents );
+    	
+    	
+    	
+    	
     	PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     }
    // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
@@ -97,6 +97,19 @@ function tcloud_update (response) {
 		       	    },
 		       	    error: function(result) {
 		       	    	console.log(result);
+		       	    	var reg = /\.([a-z\.]*)$/;
+		    			var filename = $('#tcloudfile').val();
+		    			var append = filename.match(reg);
+		    			console.log(append[1]);
+		    			if (append[1] == 'jpg' || append[1] == 'jpeg' || append[1] == 'png' || append[1] == 'bmp' || append[1] == 'gif') {
+		    				$( "#tcloudimages" ).trigger( "click" );
+		    			} else if (append[1] == 'avi' || append[1] == 'wmv' || append[1] == 'mp4' || append[1] == 'mkv' || append[1] == 'mpeg') {
+		    				$( "#tcloudmovies" ).trigger( "click" );
+		    			} else if (append[1] == 'mp3' || append[1] == 'wma'  || append[1] == 'wav'  || append[1] == 'mid'  || append[1] == 'ogg' ) {
+		    				$( "#tcloudmusic" ).trigger( "click" );
+		    			} else {
+		    				$( "#tclouddocuments" ).trigger( "click" );
+		    			}
 		       	    }
 		       	 });
 		 });
@@ -139,99 +152,142 @@ function tcloud_update (response) {
         }
    });  */
 }
+var tactive = false;
+$('#Tcloudactive').click(function() {
+	tactive = true;
+	console.log(tactive);
+});
 
+$('.btn-facebook, .btn-google-plus, .btn-dropbox').click(function() {
+	tactive = false;
+	console.log(tactive);
+});
 
+$('#uploadbtn').click(function(event) {
+	if (tactive == true) {
+		PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/token","JSON", {"version" :1} , tcloud_update );
+	}
+});
 var newtr = document.getElementById("tbody");
-function tcloud_images (response) {
-	$('#tcloudimages').click(function(event) {
+$('#tcloudimages').click(function() {
+	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_images );
+	function tcloud_images (response) {
 		$('#tbody>tr').remove();
 		for(j = 0; j < response.meta.images.image.length ; j++) {
 			var createtr = newtr.appendChild(document.createElement("TR"));
 			createtr.id = "tcloudlist" + j ;
-			
+
 			var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
 			td.type = 'checkbox';
 			td.id = 'tcheck' + j;
 			
+
 			(function(m) {
 				var check = document.getElementById('tcheck' + m);
-				$('#deletebtn').click(function(event) {
-		        if(check.checked == true) {
-		          var imgID = response.meta.images.image[m].objectId;
-		          console.log(imgID);
-		          $.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-	                  method: 'POST',
-	                  dataType: 'JSON',
-	                  headers: {
-	                	  access_token : sktoken[1]
-	                  },
-	                  success: function(result) {
-	                     console.log(result.data);
-	                  },
-	                  error: function(xhr, textStatus, errorThrown) {
-	                    alert('문제잇음');
-	                  }
-	             });
-		          /* PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" ,
-		        		          "JSON", {"version" :1} , tcloud_delete); */
-		        }
-	      });
+				/*if (check.checked == false) {
+					$('#tcloudlist' + m).click(function() {
+						$('#tcheck' + m).prop('checked', true);
+					});
+				} else if (check.checked == true) {
+					$('#tcloudlist' + m).click(function() {
+						console.log(m);
+						$('#tcheck' + m).prop('checked', false);
+					});
+				}*/
+				
+				$('#deletebtn').click(function() {
+					if(check.checked == true && tactive == true) {
+						var imgID = response.meta.images.image[m].objectId;
+						console.log(imgID);
+						/*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
+		                  method: 'POST',
+		                  dataType: 'JSON',
+		                  headers: {
+		                	  access_token : sktoken[1]
+		                  },
+		                  success: function(result) {
+		                     console.log(result.data);
+		                  },
+		                  error: function(xhr, textStatus, errorThrown) {
+		                    alert('문제잇음');
+		                  }
+		             });*/
+						PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" ,
+								"JSON", {"version" :1} , tcloud_delete); 
+					}
+				});
 				$('#downloadbtn').click(function(event) {
-					if(check.checked == true) {
+					if(check.checked == true && tactive == true) {
 						var downloadURL = response.meta.images.image[m].downloadUrl;
 						console.log(downloadURL);
-						$.ajax(response.meta.images.image[m].downloadUrl, {
-					        method: 'GET',
-					        headers: {
-					        	access_token : sktoken
-					        },
-					        success: function(result) {
-					           console.log(result.data);
-					        },
-					        error: function(xhr, textStatus, errorThrown) {
-					          alert('문제잇음');
-					        }
-					   });
+						function downloadURI(uri) 
+						{
+							var link = document.createElement("a");
+							link.download = 'ddd';
+							link.target = '_blank';
+							link.href = uri;
+							link.click();
+						}
+						downloadURI(downloadURL);
+
+
+						/*function SaveToDisk(fileURL, fileName) {
+						    // for non-IE
+
+						        var save = document.createElement('a');
+						        save.href = fileURL;
+						        save.target = '_blank';
+						        save.download = fileName ;
+
+						        var event = document.createEvent('Event');
+						        event.initEvent('click', true, true);
+						        save.dispatchEvent(event);
+						        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+
+						}
+						SaveToDisk(downloadURL, 'fileName.jpg');*/
 					}
 				});
 			})(j);
-			
+
 			var td1 = createtr.appendChild(document.createElement("TD"));
 			var view = new Image();
 			view.src = response.meta.images.image[j].thumbnailUrl;
 			td1.innerHTML = response.meta.images.image[j].name;
 			img1 = td1.appendChild(view);
 			img1.id = "image1";
-			
+
 			//document.getElementById("image1").style = "width : 50px;";
-			
+
 			var td2 = createtr.appendChild(document.createElement("TD"));
-			
+
 			var td3 = createtr.appendChild(document.createElement("TD"));
-			   var regExp2 = /^([0-9-]*)T/;
-	       var str2 = response.meta.images.image[j].modifiedDate;
-	       var result2 = str2.match(regExp2);
-	       var regExp3 = /T([0-9:]*)\+/;
-	       var str3 = response.meta.images.image[j].modifiedDate;
-	       var result3 = str3.match(regExp3);
-	       td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
-	       
+			var regExp2 = /^([0-9-]*)T/;
+			var str2 = response.meta.images.image[j].modifiedDate;
+			var result2 = str2.match(regExp2);
+			var regExp3 = /T([0-9:]*)\+/;
+			var str3 = response.meta.images.image[j].modifiedDate;
+			var result3 = str3.match(regExp3);
+			td3.innerHTML = result2[1] + " " + " / " + " " + result3[1];
+
 			var td4 = createtr.appendChild(document.createElement("TD"));
-			  td4.innerHTML = response.meta.images.image[j].size + "byte";
-			
+			td4.innerHTML = response.meta.images.image[j].size + "byte";
+
 			var td5 = createtr.appendChild(document.createElement("TD"));
-			   var regExp4 = /\.([\da-z\._]*)\?/;
-        var str4 = response.meta.images.image[j].downloadUrl;
-        var result4 = str4.match(regExp4);
-        td5.innerHTML = result4[1];
-        
-      
+			var regExp4 = /\.([\da-z\._]*)\?/;
+			var str4 = response.meta.images.image[j].downloadUrl;
+			var result4 = str4.match(regExp4);
+			td5.innerHTML = result4[1];
+
+
 		}
 		console.log(response.meta.images.image[0]);
-	});
-}
-function tcloud_music (response) {
-	$('#tcloudmusic').click(function(event) {
+	}
+});
+
+$('#tcloudmusic').click(function(event) {
+	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/music","JSON", { "version" :1 }, tcloud_music );
+	function tcloud_music (response) {
 	    $('#tbody>tr').remove();
 	    for(j = 0; j < response.meta.music.music.length ; j++) {
 	      
@@ -240,6 +296,65 @@ function tcloud_music (response) {
 	      
 	      var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
 	      td.type = 'checkbox';
+	      td.id = 'tcheck' + j;
+	      
+	      (function(m) {
+				var check = document.getElementById('tcheck' + m);
+				 
+				$('#deletebtn').click(function(event) {
+					if(check.checked == true && tactive == true) {
+						var imgID = response.meta.music.music[m].objectId;
+						console.log(imgID);
+			          /*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
+		                  method: 'POST',
+		                  dataType: 'JSON',
+		                  headers: {
+		                	  access_token : sktoken[1]
+		                  },
+		                  success: function(result) {
+		                     console.log(result.data);
+		                  },
+		                  error: function(xhr, textStatus, errorThrown) {
+		                    alert('문제잇음');
+		                  }
+		             });*/
+		           PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.music.music[m].objectId + "?version=1" ,
+		        		          "JSON", {"version" :1} , tcloud_delete); 
+		        	}
+				});
+				$('#downloadbtn').click(function(event) {
+					if(check.checked == true && tactive == true) {
+						var downloadURL = response.meta.music.music[m].downloadUrl;
+						console.log(downloadURL);
+						function downloadURI(uri) 
+						{
+						    var link = document.createElement("a");
+						    link.download = 'ddd';
+						    link.target = '_blank';
+						    link.href = uri;
+						    link.click();
+						}
+						downloadURI(downloadURL);
+						
+						
+						/*function SaveToDisk(fileURL, fileName) {
+						    // for non-IE
+						   
+						        var save = document.createElement('a');
+						        save.href = fileURL;
+						        save.target = '_blank';
+						        save.download = fileName ;
+
+						        var event = document.createEvent('Event');
+						        event.initEvent('click', true, true);
+						        save.dispatchEvent(event);
+						        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+
+						}
+						SaveToDisk(downloadURL, 'fileName.jpg');*/
+					}
+				});
+			})(j);
 	      
 	      var td1 = createtr.appendChild(document.createElement("TD"));
 	      td1.innerHTML = response.meta.music.music[j].name;
@@ -276,10 +391,11 @@ function tcloud_music (response) {
 	        var result4 = str4.match(regExp4);
 	        td5.innerHTML = result4[1];
 	    }
-	  });
-}
-function tcloud_movies (response) {
-	$('#tcloudmovies').click(function(event) {
+	}
+});
+$('#tcloudmovies').click(function(event) {
+	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/movies","JSON", { "version" :1 }, tcloud_movies );
+	function tcloud_movies (response) {
 	      $('#tbody>tr').remove();
 	      for(j = 0; j < response.meta.movies.movie.length ; j++) {
 	        var createtr = newtr.appendChild(document.createElement("TR"));
@@ -291,13 +407,60 @@ function tcloud_movies (response) {
 	        
 	        (function(m) {
 	            var check = document.getElementById('tcheck' + m);
-	            $('#uploadbtn').click(function(event) {
-	                  if(check.checked == true) {
-	                    /* var imgID = response.meta.images.image[m].objectId;
-	                    console.log(imgID); */
-	                    PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/token","JSON", {"version" :1} , tcloud_update );
-	                  }
-	                });
+	            
+	            $('#deletebtn').click(function(event) {
+					if(check.checked == true && tactive == true) {
+						var imgID = response.meta.documents.document[m].objectId;
+						console.log(imgID);
+			          /*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
+		                  method: 'POST',
+		                  dataType: 'JSON',
+		                  headers: {
+		                	  access_token : sktoken[1]
+		                  },
+		                  success: function(result) {
+		                     console.log(result.data);
+		                  },
+		                  error: function(xhr, textStatus, errorThrown) {
+		                    alert('문제잇음');
+		                  }
+		             });*/
+		           PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.documents.document[m].objectId + "?version=1" ,
+		        		          "JSON", {"version" :1} , tcloud_delete); 
+		        	}
+				});
+				$('#downloadbtn').click(function(event) {
+					if(check.checked == true && tactive == true) {
+						var downloadURL = response.meta.documents.document[m].downloadUrl;
+						console.log(downloadURL);
+						function downloadURI(uri) 
+						{
+						    var link = document.createElement("a");
+						    link.download = 'ddd';
+						    link.target = '_blank';
+						    link.href = uri;
+						    link.click();
+						}
+						downloadURI(downloadURL);
+						
+						
+						/*function SaveToDisk(fileURL, fileName) {
+						    // for non-IE
+						   
+						        var save = document.createElement('a');
+						        save.href = fileURL;
+						        save.target = '_blank';
+						        save.download = fileName ;
+
+						        var event = document.createEvent('Event');
+						        event.initEvent('click', true, true);
+						        save.dispatchEvent(event);
+						        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+
+						}
+						SaveToDisk(downloadURL, 'fileName.jpg');*/
+					}
+				});
 	          })(j);
 	        
 	        var td1 = createtr.appendChild(document.createElement("TD"));
@@ -327,10 +490,11 @@ function tcloud_movies (response) {
 	          var result4 = str4.match(regExp4);
 	          td5.innerHTML = result4[1];
 	      }
-	    });
-}
-function tcloud_documents (response) {
-	$('#tclouddocuments').click(function(event) {
+	}
+});
+$('#tclouddocuments').click(function(event) {
+	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/documents","JSON", { "version" :1 }, tcloud_documents );
+	function tcloud_documents (response) {
         $('#tbody>tr').remove();
         for(j = 0; j < response.meta.documents.document.length ; j++) {
           var createtr = newtr.appendChild(document.createElement("TR"));
@@ -338,6 +502,65 @@ function tcloud_documents (response) {
           
           var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
           td.type = 'checkbox';
+          td.id = 'tcheck' + j;
+	      
+	      (function(m) {
+				var check = document.getElementById('tcheck' + m);
+				 
+				$('#deletebtn').click(function(event) {
+					if(check.checked == true && tactive == true) {
+						var imgID = response.meta.documents.document[m].objectId;
+						console.log(imgID);
+			          /*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
+		                  method: 'POST',
+		                  dataType: 'JSON',
+		                  headers: {
+		                	  access_token : sktoken[1]
+		                  },
+		                  success: function(result) {
+		                     console.log(result.data);
+		                  },
+		                  error: function(xhr, textStatus, errorThrown) {
+		                    alert('문제잇음');
+		                  }
+		             });*/
+		           PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.documents.document[m].objectId + "?version=1" ,
+		        		          "JSON", {"version" :1} , tcloud_delete); 
+		        	}
+				});
+				$('#downloadbtn').click(function(event) {
+					if(check.checked == true && tactive == true) {
+						var downloadURL = response.meta.documents.document[m].downloadUrl;
+						console.log(downloadURL);
+						function downloadURI(uri) 
+						{
+						    var link = document.createElement("a");
+						    link.download = 'ddd';
+						    link.target = '_blank';
+						    link.href = uri;
+						    link.click();
+						}
+						downloadURI(downloadURL);
+						
+						
+						/*function SaveToDisk(fileURL, fileName) {
+						    // for non-IE
+						   
+						        var save = document.createElement('a');
+						        save.href = fileURL;
+						        save.target = '_blank';
+						        save.download = fileName ;
+
+						        var event = document.createEvent('Event');
+						        event.initEvent('click', true, true);
+						        save.dispatchEvent(event);
+						        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+
+						}
+						SaveToDisk(downloadURL, 'fileName.jpg');*/
+					}
+				});
+			})(j);
           
           var td1 = createtr.appendChild(document.createElement("TD"));
           td1.innerHTML = response.meta.documents.document[j].name;
@@ -378,8 +601,8 @@ function tcloud_documents (response) {
             var result4 = str4.match(regExp4);
             td5.innerHTML = result4[1];
         }
-      });
-}
+	}
+});
 	
 
 

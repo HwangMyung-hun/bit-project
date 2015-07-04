@@ -24,8 +24,16 @@
 	<context:component-scan base-package="net.totalCloud.DDalki">
 	   <context:exclude-filter type="regex" expression="net.totalCloud.DDalki.web.*"/>
 	</context:component-scan>
-
+	
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/java67db"/>
+	
+	
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	    <property name="url" value="jdbc:mysql://localhost:3306/java67db"/>
+	    <property name="username" value="java67"/>
+	    <property name="password" value="java67"/>
+	</bean> -->
 
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
