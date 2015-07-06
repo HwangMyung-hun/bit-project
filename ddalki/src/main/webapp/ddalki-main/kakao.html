@@ -144,6 +144,10 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li id="kakaoactive">
+                            <a class="btn-block btn-social btn-kakao" href="javascript:loadList()"><img style="margin-top: 5px;" alt="kakao story" src="../img/kakaostory.png"/>
+                            <span class="social-text">KAKAO Story</span><span class="fa arrow"></span></a>
+                        </li>
                         <li>
                           <a id="addcloud"><span class="glyphicon glyphicon-plus"  aria-hidden="true" ><span></a>
                         </li>
@@ -312,7 +316,7 @@
     
     $('#logout').click(function(event) {
         $.session.clear();
-        location.href = 'http://192.168.103.65:9999/ddalki/';
+        location.href = 'http://cloud.ddalki.com:9999/ddalki/';
       })
     </script>
 <script src="../js/tcloudjs.js"></script>
