@@ -254,10 +254,9 @@ $(".btn-google-plus").click(function(event) {
   $("#googleInsertInput").hide();
 });
 
-$(".btn-facebook, .btn-instagram").click(function(event) {
+$(".btn-facebook, .btn-instagram, .btn-dropbox, .btn-twitter").click(function(event) {
   foldertargets = false;
   googlenewfolder = false;
-  $("#tbody > tr").remove();
   $(".dataTable_wrapper").show();
   $("#tbody").show();
   $(".cloudicon").hide();
@@ -265,12 +264,12 @@ $(".btn-facebook, .btn-instagram").click(function(event) {
 });
 
 var foldertargets = false;
-$('#uploadfile').click(function() {
+$('.left img:nth-child(5)').click(function() {
 	if(foldertargets) $("#googleInsertInput").show();
 });
 
 //google download
-$("#downfile").click(function(event) {
+$(".left img:nth-child(4)").click(function(event) {
 	if(googlenewfolder) {
 		var tr = $("#tbody input");
 		var ids = '';
@@ -400,7 +399,7 @@ function deleteFile(fileId) {
 	     dlrjanjdi++;
 	     if (dlrjanjdi == 2) {
 	    	 alert("삭제하였습니다.");
-	    	 fileList();// 파일 리스트 다시 받기
+	    	 folderdeletereset();
 	     }
 	  }
 	  xmlReq.send();
@@ -409,14 +408,16 @@ function deleteFile(fileId) {
 }
 
 
-$('#deletebtn').click(function() {
-	var tr = $("#tbody input");
-	var ids = '';
-	for (var i = 0; i < tr.length; i++) {
-	  if($("input:checkbox[id='" + tr[i].id 
-			  + "']").is(":checked")) ids = ids + tr[i].id + "&&&";
+$('.left img:nth-child(3)').click(function() {
+	if(googlenewfolder) {
+		var tr = $("#tbody input");
+		var ids = '';
+		for (var i = 0; i < tr.length; i++) {
+			if($("input:checkbox[id='" + tr[i].id 
+					+ "']").is(":checked")) ids = ids + tr[i].id + "&&&";
+		}
+		if(ids != '')deleteFile(ids);
 	}
-	if(ids != '')deleteFile(ids);
 });
 
 $('#dataTables-example > thead input').click(function() {
@@ -457,9 +458,8 @@ function folderdeletereset() {
 		var request = gapi.client.drive.files.list();
 		request.execute(function(resp) {
 			if (!resp.error) {
-				console.log(resp.items);
 				driveResult = resp.items;
-				if(uploadreseton) actionRefresh();
+				actionRefresh();
 			} else if (resp.error.code == 401) {
 				// Access token might have expired.
 				//console.log(resp.error.code + "");
@@ -470,3 +470,54 @@ function folderdeletereset() {
 		});
 	});
 }
+
+function renameFile(fileId, newTitle) {
+  var body = {'title': newTitle};
+  checkAuth(function(){
+	  var request = gapi.client.drive.files.patch({
+		  'fileId': fileId,
+		  'resource': body
+	  });
+	  request.execute(function(resp) {
+		if (!resp.error) {
+			folderdeletereset();
+		} else if (resp.error.code == 401) {
+			// Access token might have expired.
+			//console.log(resp.error.code + "");
+			checkAuth();
+		} else {
+			console.log('An error occured: ' + resp.error.message);
+		}
+	  });
+  });
+}
+
+var preTitle;
+$('.left img:nth-child(7)').click(function() {
+	if(googlenewfolder) {
+	  var checkreset = $('#tbody input');
+	  for(var i = 0; i < checkreset.length; i++) {
+		  checkreset[i].checked = false;
+	  }
+	  alert("checkbox를 선택하시오!");
+      $('#tbody input').click(function(e) {
+    	  var titleTd = e.target.parentNode.parentNode.childNodes[1];
+    	  if(titleTd.innerText != "등록취소") preTitle = titleTd.innerText;
+    	  if(e.target.checked) {
+    		  titleTd.innerText = '';
+    		  titleTd.innerHTML = '<span><input id="googlenewtitle" type="text"/><button id="imin">등록</button>' 
+    			  + '<button id="getoutofhere">취소</button></span>';
+    		  $('#imin').click(function() {
+    			  renameFile(e.target.id, $('#googlenewtitle').val());
+    		  });
+    		  $('#getoutofhere').click(function() {
+    			  titleTd.innerHTML = preTitle;
+    			  titleTd.innerText = preTitle;
+    			  e.target.checked = false;
+    		  });
+    	  } else {
+    		  titleTd.innerText = preTitle;
+    	  }
+      });
+	}
+});
