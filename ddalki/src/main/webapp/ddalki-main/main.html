@@ -93,6 +93,9 @@
 				            </div>
 				            <button type="submit" class="btn btn-default radius">검색</button>
 				          </form> -->
+				          <div id="odcreatefolder" style="display: none;">
+				          <input type="text" placeholder="폴더명을 입력하세요" id="odcreate" width="100px"><input type="button" value="생성" id="odcreatebtn">
+				          </div>
 				        </div>
 				      </div>
 				    </nav>
@@ -251,6 +254,7 @@
                                <button id="fbuploadbtn">등록</button>
                                </form>
                             </div>
+                            <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: block;">
                             <!-- /.table-responsive -->
                             <div id="fb-root">
                             <img src="../img/introicon_facebook.png" id="facebooklogin">
@@ -363,8 +367,8 @@
    clientId="000000004C155431" scopes="onedrive.readonly wl.signin"
    redirectUri="cloud.ddalki.com:9999/ddalki/ddalki-main/main.html"></script>
 	<!-- 구글 api 아랫줄 import  -->
-	<script type="text/javascript" src="../js/googleApi.js"></script>
-	<script type="text/javascript" src="../js/dropbox.js"></script> 
+	<!-- <script type="text/javascript" src="../js/googleApi.js"></script> -->
+	<!-- <script type="text/javascript" src="../js/dropbox.js"></script>  -->
     <script type="text/javascript">
     //var ip = 'localhost:9999/ddalki';
     var ip = '192.168.103.65:9999/ddalki';
@@ -376,10 +380,8 @@
         location.href = 'http://192.168.103.65:9999/ddalki/';
       })
     </script>
-<script src="../js/tcloudjs.js"></script>
+<!-- <script src="../js/tcloudjs.js"></script> -->
 <script src="../js/facebookjs.js"></script>
-<!-- <script src="../js/cloudrail.js"></script> -->
-<!-- <script src="../js/onedrivejs2.js"></script> -->
 <script>
 console.log(window.location.protocol);
 $('#tbody').click(function(e) {

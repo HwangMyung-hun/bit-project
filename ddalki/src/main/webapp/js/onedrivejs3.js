@@ -111,7 +111,7 @@ $('#onedrivefolder').click(function() {
 							+ "' onclick='innerfile(this.id)'>"+ data.value[j].name 
 							+"<span class='fa arrow'></span></a><ul class='nav nav-"
 							+ level[2] + "-level' id='" + level[2] + j + "'></ul></li>");
-					innerfolder(data.value[j].id, 3);
+					innerfolder(data.value[j].id, 3, j);
 				} 
 				if (data.value[j].file){
 					$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
@@ -125,13 +125,18 @@ $('#onedrivefolder').click(function() {
 		}
 	});
 });
-function innerfolder(folderid , levelnum) {
+
+$("#newfolderbtn").click(function() {
+	$("#odcreatefolder").show();
+});
+
+function innerfolder(folderid , levelnum, locat) {
 	$.ajax({
 		url: "https://api.onedrive.com/v1.0/drive/items/" + folderid + "/children?access_token=" + odtoken,
 		success: function(data) {	
 			for (i = 0 ; i < data.value.length ; i++) {
 				if (data.value[i].folder) {
-					$("#"+ level[levelnum - 1] + i).append("<li> <a id='" + data.value[i].id 
+					$("#"+ level[levelnum - 1] + locat).append("<li> <a id='" + data.value[i].id 
 						+ "' onclick='innerfile(this.id)'>"+ data.value[i].name 
 						+"<span class='fa arrow'></span></a><ul class='nav nav-"
 						+ level[levelnum] + "-level' id='"+ level[levelnum] + i + "'></ul></li>");
@@ -160,14 +165,16 @@ function innerfile(folderid) {
 			}
 		}
 	});
-	$("#newfolderbtn").click(function() {
+
+	
+	$("#odcreatebtn").click(function() {
 		var createfolder = {
-            	'name' : "newfolder",
+            	'name' : $("#odcreate").val(),
             	"folder": { }
 		    }
 		var inputData = JSON.stringify(createfolder);
 		$.ajax({
-			url: "https://api.onedrive.com/v1.0/drive/root/children?nameConflict=fail",
+			url: "https://api.onedrive.com/v1.0/drive/items/" + odfolder + "/children?nameConflict=fail",
 			method: "POST",
 			datatype : "json",
 		    contentType: "application/json",
@@ -177,6 +184,7 @@ function innerfile(folderid) {
             data: inputData,
 			success: function(data) {
 				console.log(data);
+				$("#odcreatefolder").hide();
 			},
 			error: function(error){
 				console.log(error);
@@ -276,26 +284,6 @@ $('#deletebtn').click(function() {
 			  xmlReq.send();
 		}
 	}
-});
-$("#uploadbutton").click(function(){
-	 var form = $('#frm')[0];
-	 var formData = new FormData(form);
-      	 $.ajax({
-      	    url: "https://api.onedrive.com/v1.0/drive/items/root/children",
-      	    processData: false,
-	    	contentType: false,
-	    	headers: {
-	    		access_token: odtoken
-	    	},
-      	    data: formData,
-      	    type: 'POST',
-      	    success: function(result){
-      	    	alert("업로드 성공!!");
-      	    },
-      	    error: function(result) {
-      	    	console.log(result);
-      	    }
-      	 });
 });
 
 /*$.ajax({
