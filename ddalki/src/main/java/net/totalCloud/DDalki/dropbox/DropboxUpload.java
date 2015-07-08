@@ -17,7 +17,7 @@ public class DropboxUpload {
 			DbxRequestConfig config = new DbxRequestConfig("AppTest112",
 					Locale.getDefault().toString());
 
-			DbxClient client = new DbxClient(config, "w5XObf1AiAoAAAAAAAAGMGFE7m6SUHhKysMV02b64HHSS-GfV9Hhr7ZDM5ytua5N");
+			DbxClient client = new DbxClient(config, "w5XObf1AiAoAAAAAAAAGcVezrk-8ryquTVQ11OV75Sd9JiFXFZ2G3ipvxuqWV1jj");
 
 			File inputFile = new File("working-draft.txt");
 			

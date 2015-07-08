@@ -31,13 +31,18 @@ public class DropboxMain {
 		// This will fail if the user enters an invalid authorization code.
 		DbxAuthFinish authFinish = webAuth.finish(code);
 		String accessToken = authFinish.accessToken;
-
+		String tokenType = webAuth.toString();
+		String UID = authFinish.toString();
+		
 		DbxClient client = new DbxClient(config, accessToken);
 
 		System.out.println("Linked account: "
 				+ client.getAccountInfo().displayName);
 		
 		System.out.println(accessToken);
+		System.out.println(tokenType);
+		System.out.println(UID);
+		
 	}
 	
 }

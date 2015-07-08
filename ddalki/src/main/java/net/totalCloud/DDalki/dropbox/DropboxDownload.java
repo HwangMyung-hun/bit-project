@@ -15,7 +15,7 @@ public class DropboxDownload {
 					Locale.getDefault().toString());
 
 			DbxClient client = new DbxClient(config,
-					"w5XObf1AiAoAAAAAAAAGMGFE7m6SUHhKysMV02b64HHSS-GfV9Hhr7ZDM5ytua5N");
+					"w5XObf1AiAoAAAAAAAAGcVezrk-8ryquTVQ11OV75Sd9JiFXFZ2G3ipvxuqWV1jj");
 
 			FileOutputStream outputStream = new FileOutputStream(
 					"working-draft.txt");

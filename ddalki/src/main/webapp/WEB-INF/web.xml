@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd
+                      http://java.sun.com/xml/ns/javaee 
+                      http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="3.1">
 
   <!-- ContextLoaderListener가 참조하는 파라미터 정보 => 객체 설정 정보를 담은 파일의 경로 정보이다. -->
