@@ -5,6 +5,7 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -37,12 +38,53 @@
 <!-- 		<link href="../css/bootstrap.min.css" rel="stylesheet"> -->
 		<link href="../css/menu.css" rel="stylesheet">
     <style>
-    
+    .image-upload > input
+{
+    display: none;
+}
 
     </style>
 </head>
 
 <body id="wow">
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+        <input id="dbxUpload" type="file" name="files[]" data-url="http://localhost:9999/ddalki/cloud/dbxUpload.do" multiple><br>
+        
+        <div id="dropzone">Drop files here</div>
+ 
+        <div id="progress">
+          <div style="width: 0%;"></div>
+        </div>
+    
+        <table id="uploaded-files">
+          <tr>
+            <th>File Name</th>
+            <th>File Size</th>
+            <th>File Type</th>
+            <th>Download</th>
+          </tr>
+        </table>
+						<button>Upload</button>
+					</form>
+				</div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
     <div id="wrapper">
        <top>
@@ -53,19 +95,19 @@
    <nav style="margin: 1em 10em 0em 18em;">
      <div class="margin center padding" style="padding-left: 1em;">
        <div class="left">
-         <img class="relative zindex imgsize" alt="No Img" src="../img/copy.png"
+         <img class="relative zindex" alt="No Img" src="../img/topmenu_copy_off.png"
              onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/paste.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_paste_off.png"
              onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_del_off.png"
              onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/down.png"
+           <img class="relative zindex" id="dbxDownload" alt="No Img" src="../img/topmenu_down_off.png"
              onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png "
-             onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/new.png "
+	           <img class="relative zindex uploadBtn" alt="No Img" src="../img/topmenu_up_off.png "
+	                onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_new_off.png "
              onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/re.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_rename_off.png"
              onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
              
            
@@ -82,13 +124,15 @@
 				  </div>
        </top>
 
+
+
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                 <!--  -->
                     <div id="scrollbar" class="scrollbar" >
                     <ul class="nav" id="side-menu">  
                         <li class="li-div"></li>   
-                        <li>
+                        <li id="dropbox-li">
                             <a class="btn-block btn-social btn-dropbox" id="dbxsidelist" ><i class="fa fa-dropbox"></i>
                             <span class="social-text">Dropbox</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level" id="dbxsidelist2">
@@ -108,6 +152,7 @@
                 <!-- /.sidebar-collapse -->
             </div>
             <!-- /.navbar-static-side -->
+            
             
             
 
@@ -132,7 +177,7 @@
                                 <table class="table table-striped table-bordered table-hover" id="Table">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox"></th>
+                                            <th><input type="checkbox" name="checkall" onclick="javascript:CheckAll()"></th>
                                             <th id="name">Name</th>
                                             <th id="shared">Shared</th>
                                             <th id="date">Modified Date</th>
@@ -140,7 +185,7 @@
                                             <th id="type">Type</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tbody">
+                                    <tbody id="tbody" name="tbody">
                                         <tr>
                                             <td><input type="checkbox"></td>
                                             <td></td>
@@ -154,8 +199,11 @@
                             </div>
                             <!-- /.table-responsive -->
                             <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=m7kqx6bxchawqxj&response_type=code&redirect_uri=http://localhost:9999/ddalki/ddalki-main/mainTable_Dropbox.html&state=w5XObf1AiAoAAAAAAAAGaWiqFO5AhaUQzMA_Phe0ufZHdwTtl2et5w-05hKq-IyZ">
-                            <img class="relative zindex imgsize" id="dbxlogin" alt="No Img" src="../img/introicon_dropbox.png">
+                            <img class="relative zindex" id="dbxlogin" alt="No Img" src="../img/introicon_dropbox.png">
                             </a>
+                   
+                            
+                            
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -216,7 +264,12 @@
     <!-- DataTables JavaScript -->
     <script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
-
+    
+    <script type="text/javascript" src="../js/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="../js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="../js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="../js/dropbox.js"></script>
+    
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
   
@@ -229,75 +282,7 @@
 	<script>
 	
 	
-	var ip = 'localhost:9999/ddalki';
-  var directoryLocation = '/cloud';
-	$.ajax('http://' + ip + directoryLocation + '/getDbxFolder.do', {
-    method: 'GET',
-    dataType: 'json',
-    success: function(result) {
-      var folderrows = result.folderData;
-      var filerows = result.fileData;
-      var detailrows = result.detailData;
-      
-      $('#dbxsidelist').click(function(event){
-
-        var newul = document.getElementById("dbxsidelist2");
-        var newLI = document.getElementById("LI");
-        
-        var newul2 = document.getElementById("dropboxlist");
-        var newtr = document.getElementById("tbody");
-        
-        for (i = 0; i < folderrows.length; i++) {
-          li = newul.appendChild(document.createElement("LI")).appendChild(document.createElement("a"));
-          li.innerHTML = folderrows[i];
-          li.id = "dbxList" + i;
-               $('#tbody>tr').remove(); 
-                for(j = 0; j < filerows.length ; j++) {
-
-                  var createtr = newtr.appendChild(document.createElement("TR"));
-                  createtr.id = "dbxfillist" + j;
-                  
-                  td1 = createtr.appendChild(document.createElement("TD"));
-                  td1.type = 'checkbox';
-                  
-                  td2 = createtr.appendChild(document.createElement("TD"));
-                  td2.innerHTML = filerows[j];
-                  
-                  td3 = createtr.appendChild(document.createElement("Td"));
-                  
-                  td4 = createtr.appendChild(document.createElement("Td"));
-                  var regExp2 = /\"([\d\/:\s]*)U/;
-                  var strDate2 = detailrows[j];
-                  var result = strDate2.match(regExp2);
-                  td4.innerHTML = result[1];
-                  
-                  
-                  td5 = createtr.appendChild(document.createElement("Td"));
-                  var regExp3 = /\"([\w\.]*)\"/;
-                  var strDate3 = detailrows[j];
-                  var result2 = strDate3.match(regExp3);
-                  
-                  td6 = createtr.appendChild(document.createElement("Td"));
-                  var regExp4 = /(?!\/\w+\.)(\w+$)|(?!\/\w+\.)(\w+)(?=\?.*$)/;
-                  var strDate4 = filerows[j];
-                  var result3 = strDate4.match(regExp4);
-                  td6.innerHTML = result3[1];
-                  console.log(result3);
-                }
-              }
-          
-    });
-      
-    },
-    error: function(xhr, textStatus, errorThrown) {
-      alert('자걱.\n' + 
-          '잠시 후 다시 시도하세요.\n' +
-      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
-    }
-  });
-	
-
-	
+ 
 	
 	
 	
@@ -334,48 +319,56 @@
 	  
 	  
 	  function MouseOverCopy(MyImage) {
-	        MyImage.src = "../img/copy1.png";
+	        MyImage.src = "../img/topmenu_copy_on.png";
 	    }
       function MouseOutCopy(MyImage) {
-	        MyImage.src = "../img/copy.png";
+	        MyImage.src = "../img/topmenu_copy_off.png";
 	    }
       function MouseOverPaste(MyImage) {
-		        MyImage.src = "../img/paste1.png";
+		        MyImage.src = "../img/topmenu_paste_on.png";
 	    }
       function MouseOutPaste(MyImage) {
-		        MyImage.src = "../img/paste.png";
+		        MyImage.src = "../img/topmenu_paste_off.png";
 	    }
       function MouseOverDelete(MyImage) {
-	        MyImage.src = "../img/delete1.png";
+	        MyImage.src = "../img/topmenu_del_on.png";
 	    }
       function MouseOutDelete(MyImage) {
-	        MyImage.src = "../img/delete.png";
+	        MyImage.src = "../img/topmenu_del_off.png";
 	    }
       function MouseOverDown(MyImage) {
-		        MyImage.src = "../img/down1.png";
+		        MyImage.src = "../img/topmenu_down_on.png";
 	    }
       function MouseOutDown(MyImage) {
-		        MyImage.src = "../img/down.png";
+		        MyImage.src = "../img/topmenu_down_off.png";
 	    }
       function MouseOverUpload(MyImage) {
-		        MyImage.src = "../img/upload1.png";
+		        MyImage.src = "../img/topmenu_up_on.png";
 	    }
       function MouseOutUpload(MyImage) {
-		        MyImage.src = "../img/upload.png";
+		        MyImage.src = "../img/topmenu_up_off.png";
 	    }
       function MouseOverNew(MyImage) {
-	        MyImage.src = "../img/new1.png";
+	        MyImage.src = "../img/topmenu_new_on.png";
 		}
 	  function MouseOutNew(MyImage) {
-	        MyImage.src = "../img/new.png";
+	        MyImage.src = "../img/topmenu_new_off.png";
   		}	
 	  function MouseOverRe(MyImage) {
-		    MyImage.src = "../img/re1.png";
+		    MyImage.src = "../img/topmenu_rename_on.png";
 		}
 	  function MouseOutRe(MyImage) {
-	  		MyImage.src = "../img/re.png";
+	  		MyImage.src = "../img/topmenu_rename_off.png";
 		}
     </script>
+<script type="text/javascript">
+$('.uploadBtn').click(function(event) {
+$('div.modal').modal('show');
+  
+});
+</script>
+
+
 
 </body>
 
