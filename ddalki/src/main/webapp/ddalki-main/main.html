@@ -72,19 +72,19 @@
    <nav style="margin: 1em 10em 0em 18em;">
      <div class="margin center padding" style="padding-left: 1em;">
        <div class="left">
-         <img class="relative zindex imgsize" alt="No Img" src="../img/copy.png"
+         <img class="relative zindex" alt="No Img" src="../img/topmenu_copy_off.png"
              onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/paste.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_paste_off.png"
              onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/delete.png" id="deletebtn"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_del_off.png"
              onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/down.png" id="downloadbtn"
+           <img class="relative zindex" id="dbxDownload" alt="No Img" src="../img/topmenu_down_off.png"
              onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/upload.png " id="uploadbtn"
-             onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/new.png " id="newfolderbtn"
+             <img class="relative zindex uploadBtn" alt="No Img" src="../img/topmenu_up_off.png "
+                  onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_new_off.png "
              onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex imgsize" alt="No Img" src="../img/re.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_rename_off.png"
              onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
 				          
 <!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
@@ -466,48 +466,48 @@ $(function (){
  setTimeout("readygo()",300); */
  
 
-	function MouseOverCopy(MyImage) {
-		MyImage.src = "../img/copy1.png";
-	}
-	function MouseOutCopy(MyImage) {
-		MyImage.src = "../img/copy.png";
-	}
-	function MouseOverPaste(MyImage) {
-		MyImage.src = "../img/paste1.png";
-	}
-	function MouseOutPaste(MyImage) {
-		MyImage.src = "../img/paste.png";
-	}
-	function MouseOverDelete(MyImage) {
-		MyImage.src = "../img/delete1.png";
-	}
-	function MouseOutDelete(MyImage) {
-		MyImage.src = "../img/delete.png";
-	}
-	function MouseOverDown(MyImage) {
-		MyImage.src = "../img/down1.png";
-	}
-	function MouseOutDown(MyImage) {
-		MyImage.src = "../img/down.png";
-	}
-	function MouseOverUpload(MyImage) {
-		MyImage.src = "../img/upload1.png";
-	}
-	function MouseOutUpload(MyImage) {
-		MyImage.src = "../img/upload.png";
-	}
-	function MouseOverNew(MyImage) {
-		MyImage.src = "../img/new1.png";
-	}
-	function MouseOutNew(MyImage) {
-		MyImage.src = "../img/new.png";
-	}
-	function MouseOverRe(MyImage) {
-		MyImage.src = "../img/re1.png";
-	}
-	function MouseOutRe(MyImage) {
-		MyImage.src = "../img/re.png";
-	}
+ function MouseOverCopy(MyImage) {
+   MyImage.src = "../img/topmenu_copy_on.png";
+}
+function MouseOutCopy(MyImage) {
+   MyImage.src = "../img/topmenu_copy_off.png";
+}
+function MouseOverPaste(MyImage) {
+     MyImage.src = "../img/topmenu_paste_on.png";
+}
+function MouseOutPaste(MyImage) {
+     MyImage.src = "../img/topmenu_paste_off.png";
+}
+function MouseOverDelete(MyImage) {
+   MyImage.src = "../img/topmenu_del_on.png";
+}
+function MouseOutDelete(MyImage) {
+   MyImage.src = "../img/topmenu_del_off.png";
+}
+function MouseOverDown(MyImage) {
+     MyImage.src = "../img/topmenu_down_on.png";
+}
+function MouseOutDown(MyImage) {
+     MyImage.src = "../img/topmenu_down_off.png";
+}
+function MouseOverUpload(MyImage) {
+     MyImage.src = "../img/topmenu_up_on.png";
+}
+function MouseOutUpload(MyImage) {
+     MyImage.src = "../img/topmenu_up_off.png";
+}
+function MouseOverNew(MyImage) {
+   MyImage.src = "../img/topmenu_new_on.png";
+}
+function MouseOutNew(MyImage) {
+   MyImage.src = "../img/topmenu_new_off.png";
+} 
+function MouseOverRe(MyImage) {
+ MyImage.src = "../img/topmenu_rename_on.png";
+}
+function MouseOutRe(MyImage) {
+ MyImage.src = "../img/topmenu_rename_off.png";
+}
 	
 	console.log($('#dataTables-example > thead > tr :first-child'));
 	$('.relative').click(function() {
