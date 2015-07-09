@@ -1,42 +1,74 @@
 var onedrive_id = "000000004C155431";
 var onedrive_scope = "wl.signin wl.offline_access onedrive.readwrite onedrive.appfolder";
-var onedrive_redirect = "http://cloud.ddalki.com:9999/ddalki/ddalki-main/main.html";
+var onedrive_redirect = "http://localhost:9999/ddalki/ddalki-main/callback.html";
 var onedrive_secret = "cdau0UrKN3cW3hnBpJ-kD9uPp9dC5Fsv";
 var odtoken;
 var folderid;
+var onedriveactive = null;
+
+$(function(){
+	odtoken = getTokenFromCookie();
+	console.log(odtoken);
+});
 
 function onedrivelogout() {
 	location.href='https://login.live.com/oauth20_logout.srf?client_id=' + onedrive_id + '&redirect_uri=' + onedrive_redirect + '';
 }
 
 $('#onedrivelogin').click(function(event){
-	location.href =
+	var url =
 	    "https://login.live.com/oauth20_authorize.srf" +
 	    "?client_id=" + onedrive_id +
 	    "&scope=" + onedrive_scope +
 	    "&response_type=token" +
 	    "&redirect_uri=" + onedrive_redirect;
+	popup2(url);
 	/*location.href='https://login.live.com/oauth20_authorize.srf?client_id=' + onedrive_id + '&scope=' + onedrive_scope + '&response_type=code&redirect_uri=' + onedrive_redirect + '';*/
 });
+function popup2(url) {
+	  var width = 525,
+	      height = 525,
+	      screenX = window.screenX,
+	      screenY = window.screenY,
+	      outerWidth = window.outerWidth,
+	      outerHeight = window.outerHeight;
 
-/*function onAuthCallback() {
+	  var left = screenX + Math.max(outerWidth - width, 0) / 2;
+	  var top = screenY + Math.max(outerHeight - height, 0) / 2;
+
+	  var features = [
+	              "width=" + width,
+	              "height=" + height,
+	              "top=" + top,
+	              "left=" + left,
+	              "status=no",
+	              "resizable=yes",
+	              "toolbar=no",
+	              "menubar=no",
+	              "scrollbars=yes"];
+	  var popup = window.open(url, "oauth", features.join(","));
+	  if (!popup) {
+	    alert("failed to pop up auth window");
+	  }
+	  popup.focus();
+}
+function onAuthCallback() {
 	  var authInfo = getAuthInfoFromUrl();
-	  var odtoken = authInfo["access_token"];
+	  var token = authInfo["access_token"];
 	  var expiry = parseInt(authInfo["expires_in"]);
-	  setCookie(odtoken, expiry);
-	  window.opener.onAuthenticated(odtoken, window);
-	}*/
-
-window.onload = function(){
-	var authInfo = getAuthInfoFromUrl();
-	if(authInfo.access_token.length > 600){
-		odtoken = authInfo["access_token"];
-		console.log(odtoken);
-		var expiry = parseInt(authInfo["expires_in"]);
-		setCookie(odtoken, expiry);
-		onAuthenticated(odtoken, window);
+	  setCookie(token, expiry);
+	  window.opener.onAuthenticated(token, window);
+	  window.location.replace("http://localhost:9999/ddalki/ddalki-main/main.html");
 	}
-};
+
+/*window.onload = function(){
+	var authInfo = getAuthInfoFromUrl();
+	odtoken = authInfo["access_token"];
+	console.log(odtoken);
+	var expiry = parseInt(authInfo["expires_in"]);
+	setCookie(odtoken, expiry);
+	onAuthenticated(odtoken, window);
+};*/
 
 function setCookie(token, expiresInSeconds) {
 	var expiration = new Date();
@@ -63,9 +95,29 @@ function getAuthInfoFromUrl() {
 	    alert("failed to receive auth token");
 	  }
 	}
+function getTokenFromCookie() {
+	  var cookies = document.cookie;
+	  var name = "odauth=";
+	  var start = cookies.indexOf(name);
+	  if (start >= 0) {
+	    start += name.length;
+	    var end = cookies.indexOf(';', start);
+	    if (end < 0) {
+	      end = cookies.length;
+	    }
+	    else {
+	      postCookie = cookies.substring(end);
+	    }
 
-function onAuthenticated(odtoken, authWindow) {
-	if (odtoken) {
+	    var value = cookies.substring(start, end);
+	    return value;
+	  }
+
+	  return "";
+	}
+
+function onAuthenticated(odtoken2, authWindow) {
+	if (odtoken2) {
 		if (authWindow) {
 			authWindow.close();
 		}
@@ -81,10 +133,10 @@ function onAuthenticated(odtoken, authWindow) {
 				afterPath = ":";
 			}
 			var odurl = "https://api.onedrive.com/v1.0/drive/root" + beforePath + path + afterPath;
-			var odquery = "?expand=thumbnails,children(expand=thumbnails(select=large,c200x150_Crop))&access_token=" + odtoken;
-			console.log(odtoken);
+			var odquery = "?expand=thumbnails,children(expand=thumbnails(select=large,c200x150_Crop))&access_token=" + odtoken2;
+			console.log(odtoken2);
 			$.ajax({
-				url: "https://api.onedrive.com/v1.0/drive?access_token=" + odtoken,
+				url: "https://api.onedrive.com/v1.0/drive?access_token=" + odtoken2,
 				success: function(data) {
 					folderid = data.id;
 					console.log(folderid);
@@ -101,36 +153,48 @@ function onAuthenticated(odtoken, authWindow) {
 }
 var level = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth'];
 var ODlist = null;
+var ondriveallow = 0;
 $('#onedrivefolder').click(function() {
-	$("#onedrivelist > li").remove();
 	$("#tbody > tr").remove();
-	$.ajax({
-		url: "https://api.onedrive.com/v1.0/drive/root/children?access_token=" + odtoken,
-		success: function(data) {
-			for (j = 0; j < data.value.length ; j++) {
-				if (data.value[j].folder) {
-					ODlist = data.value;
-					$("#onedrivelist").append("<li> <a id='" + data.value[j].id 
-							+ "' onclick='innerfile(this.id)'>"+ data.value[j].name 
-							+"<span class='fa arrow'></span></a><ul class='nav nav-"
-							+ level[2] + "-level' id='" + level[2] + j + "'></ul></li>");
-					innerfolder(data.value[j].id, 3, j);
-				} 
-				if (data.value[j].file){
-					$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
-							+ "<td>"+ data.value[j].name +"</td>"
-							+ "<td></td>"
-							+ "<td>"+ data.value[j].lastModifiedDateTime +"</td>"
-							+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
-							+ "<td class='center'>"+ data.value[j].name +"</td></tr>");
+	ondriveallow++;
+	if($('.btn-twitter li').length == 0 && ondriveallow == 1) {
+		onedriveactive = true;
+		$("#onedrivelist > li").remove();
+		$("#tbody > tr").remove();
+		$.ajax({
+			url: "https://api.onedrive.com/v1.0/drive/root/children?access_token=" + odtoken,
+			success: function(data) {
+				for (j = 0; j < data.value.length ; j++) {
+					if (data.value[j].folder) {
+						ODlist = data.value;
+						$("#onedrivelist").append("<li> <a id='" + data.value[j].id 
+								+ "' onclick='innerfile(this.id)'>"+ data.value[j].name 
+								+"<span class='fa arrow'></span></a><ul class='nav nav-"
+								+ level[2] + "-level' id='" + level[2] + j + "'></ul></li>");
+						innerfolder(data.value[j].id, 3, j);
+					} 
+					if (data.value[j].file){
+						$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
+								+ "<td>"+ data.value[j].name +"</td>"
+								+ "<td></td>"
+								+ "<td>"+ data.value[j].lastModifiedDateTime +"</td>"
+								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
+								+ "<td class='center'>"+ data.value[j].name +"</td></tr>");
+					}
 				}
 			}
-		}
-	});
+		});
+	}
 });
 
 $("#newfolderbtn").click(function() {
-	$("#odcreatefolder").show();
+	if(onedriveactive == true) {
+		$("#odcreatefolder").show();
+	}
+});
+
+$('.btn-facebook, .btn-google-plus, .btn-dropbox, .btn-instagram').click(function() {
+	onedriveactive = false;
 });
 
 function innerfolder(folderid , levelnum, locat) {
@@ -171,28 +235,31 @@ function innerfile(folderid) {
 
 	
 	$("#odcreatebtn").click(function() {
-		var createfolder = {
-            	'name' : $("#odcreate").val(),
-            	"folder": { }
-		    }
-		var inputData = JSON.stringify(createfolder);
-		$.ajax({
-			url: "https://api.onedrive.com/v1.0/drive/items/" + odfolder + "/children?nameConflict=fail",
-			method: "POST",
-			datatype : "json",
-		    contentType: "application/json",
-			beforeSend : function(xhr) {
-		      xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
-		    },
-            data: inputData,
-			success: function(data) {
-				console.log(data);
-				$("#odcreatefolder").hide();
-			},
-			error: function(error){
-				console.log(error);
+		if(onedriveactive == true){
+			var createfolder = {
+					'name' : $("#odcreate").val(),
+					"folder": { }
 			}
-		});
+			var inputData = JSON.stringify(createfolder);
+			$.ajax({
+				url: "https://api.onedrive.com/v1.0/drive/items/" + odfolder + "/children?nameConflict=fail",
+				method: "POST",
+				datatype : "json",
+				contentType: "application/json",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
+				},
+				data: inputData,
+				success: function(data) {
+					console.log(data);
+					$("#odcreatefolder").hide();
+					ondriveallow = 0;
+				},
+				error: function(error){
+					console.log(error);
+				}
+			});
+		}
 	});
 }
 function ODupload(event) {
@@ -257,38 +324,79 @@ function ODupload(event) {
 	});*/
 }
 $("#downloadbtn").click(function(event) {
-	var ODfilelist = $("#tbody input");
-	for (i = 0; i< ODfilelist.length ; i++) {
-		if($("input:checkbox[id='" + ODfilelist[i].id + "']").is(":checked")) {
-			location.href = "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id + "/content?access_token=" + odtoken
-			/*$.ajax({
+	if(onedriveactive == true) {
+		var ODfilelist = $("#tbody input");
+		for (i = 0; i< ODfilelist.length ; i++) {
+			if($("input:checkbox[id='" + ODfilelist[i].id + "']").is(":checked")) {
+				location.href = "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id + "/content?access_token=" + odtoken
+				/*$.ajax({
 				url: "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id + "/content?access_token=" + odtoken,
 				success: function(data) {	
 					alert(data);
 				}
 			});*/
+			}
+		}
+	}
+});
+$("#renamebtn").click(function(event) {
+	console.log(onedriveactive);	
+	if(onedriveactive == true) {
+		var ODfilelist = $("#tbody input");
+		for (i = 0; i< ODfilelist.length ; i++) {
+			if($("input:checkbox[id='" + ODfilelist[i].id + "']").is(":checked")) {
+				console.log($("input:checkbox[id='" + ODfilelist[i].id + "']").parents());
+				/*var odrename = {
+						'name' : ,
+				}
+				var inputData = JSON.stringify(createfolder);
+				$.ajax({
+					url: "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id ,
+					method: "POST",
+					datatype : "json",
+					contentType: "application/json",
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader("X-HTTP-Method-Override", 'PATCH');
+						xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
+					},
+					data: inputData,
+					success: function(data) {
+						console.log(data);
+						ondriveallow = 0;
+					},
+					error: function(error){
+						console.log(error);
+					}
+				});*/
+			}
 		}
 	}
 });
 var dlrjanjdi = 0;
 $('#deletebtn').click(function() {
-	var ODfilelist = $("#tbody input");
-	for (i = 0; i< ODfilelist.length ; i++) {
-		if($("input:checkbox[id='" + ODfilelist[i].id + "']").is(":checked")) {
-			var xmlReq =  new  XMLHttpRequest (); 
-			  xmlReq.open( 'DELETE' ,  "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id + "?access_token=" + odtoken );
-			  xmlReq.setRequestHeader( 'Authorization' ,  'Bearer');
-			  xmlReq.onreadystatechange = function() {
-			     dlrjanjdi++;
-			     if (dlrjanjdi == 2) {
-			    	 alert("삭제하였습니다.");
-			     }
-			  }
-			  xmlReq.send();
+	if(onedriveactive == true) {
+		var ODfilelist = $("#tbody input");
+		for (i = 0; i< ODfilelist.length ; i++) {
+			if($("input:checkbox[id='" + ODfilelist[i].id + "']").is(":checked")) {
+				var xmlReq =  new  XMLHttpRequest (); 
+				xmlReq.open( 'DELETE' ,  "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id + "?access_token=" + odtoken );
+				xmlReq.setRequestHeader( 'Authorization' ,  'Bearer');
+				xmlReq.onreadystatechange = function() {
+					dlrjanjdi++;
+					if (dlrjanjdi == 2) {
+						alert("삭제하였습니다.");
+					}
+				}
+				xmlReq.send();
+			}
 		}
 	}
 });
-
+$('#uploadbtn').click(function() {
+	if(onedriveactive == true){
+		$('#ondriveupload').show();
+	}
+})
 /*$.ajax({
 		url: "https://api.onedrive.com/v1.0/drive/root/children?access_token=" + odtoken,
 		success: function(data) {

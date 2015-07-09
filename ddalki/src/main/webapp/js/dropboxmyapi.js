@@ -379,3 +379,7 @@ function droprefresh(result) {
         }
      });
 }
+
+$('.btn-social').click(function() {
+	$('#side-menu').metisMenu();
+});

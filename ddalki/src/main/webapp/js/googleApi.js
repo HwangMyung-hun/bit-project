@@ -155,7 +155,7 @@ function rootlist() {
 			}
 		}
 	}
-	if(driveResult != null) $('#side-menu').metisMenu();
+	$('#side-menu').metisMenu();
 }
 
 

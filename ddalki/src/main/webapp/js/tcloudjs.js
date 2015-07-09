@@ -1,10 +1,13 @@
-var currentPage = document.location.href;
-var regExpurl = /\=([\da-z\._-]*)\&/;
-var sktoken = currentPage.match(regExpurl);
-var tcloudID; 
-if(sktoken != null){
-	console.log(sktoken[1]);
+if (document.location.href.length < 400) {
+	var currentPage = document.location.href;
+	var regExpurl = /\=([\da-z\._-]*)\&/;
+	var sktoken = currentPage.match(regExpurl);
+	var tcloudID; 
+	if(sktoken != null){
+		console.log(sktoken[1]);
+	}
 }
+
 
 function userProfile_callback( data ) {
 	tcloudID = data.profile.userId;
@@ -53,7 +56,7 @@ $(function (){
     PlanetX.init({
     	appkey : "a9e7c01c-2062-37fc-b8ad-56eddcce4063" ,   // 본인의 appkey 정보 입력
         client_id : "4b11f26b-424a-332d-b331-103ee34178d0", // 본인의 client id 정보 입력
-        redirect_uri : "http://cloud.ddalki.com:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
+        redirect_uri : "http://localhost:9999/ddalki/ddalki-main/main.html",            // 본인의 redirect uri 정보 입력
         scope : "tcloud,user",
         savingToken : true
     });
@@ -62,10 +65,6 @@ $(function (){
     console.log(status);
     
     if (status) {
-    	
-    	
-    	
-    	
     	PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     }
    // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
@@ -110,6 +109,7 @@ function tcloud_update (response) {
 		    			} else {
 		    				$( "#tclouddocuments" ).trigger( "click" );
 		    			}
+		    			$('#frm').hide();
 		       	    }
 		       	 });
 		 });
@@ -158,13 +158,15 @@ $('#Tcloudactive').click(function() {
 	console.log(tactive);
 });
 
-$('.btn-facebook, .btn-google-plus, .btn-dropbox').click(function() {
+$('.btn-facebook, .btn-google-plus, .btn-dropbo, .btn-twitter').click(function() {
 	tactive = false;
 	console.log(tactive);
+	$('#frm').hide();
 });
 
 $('#uploadbtn').click(function(event) {
 	if (tactive == true) {
+		$('#frm').show();
 		PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/token","JSON", {"version" :1} , tcloud_update );
 	}
 });
@@ -199,12 +201,23 @@ $('#tcloudimages').click(function() {
 					if(check.checked == true && tactive == true) {
 						var imgID = response.meta.images.image[m].objectId;
 						console.log(imgID);
+						var xmlReq =  new  XMLHttpRequest (); 
+						  xmlReq.open( 'DELETE' ,  "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" );
+						  xmlReq.setRequestHeader( 'access_token' ,  sktoken[1]);
+						  xmlReq.onreadystatechange = function() {
+						     dlrjanjdi++;
+						     if (dlrjanjdi == 2) {
+						    	 alert("삭제하였습니다.");
+						     }
+						  }
+						  xmlReq.send();
 						/*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-		                  method: 'POST',
+		                  method: 'DELETE',
 		                  dataType: 'JSON',
-		                  headers: {
-		                	  access_token : sktoken[1]
-		                  },
+		                  contentType: "application/json",
+		                  beforeSend : function(xhr) {
+						      xhr.setRequestHeader("access_token", sktoken[1]);
+					      },
 		                  success: function(result) {
 		                     console.log(result.data);
 		                  },
@@ -212,8 +225,8 @@ $('#tcloudimages').click(function() {
 		                    alert('문제잇음');
 		                  }
 		             });*/
-						PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" ,
-								"JSON", {"version" :1} , tcloud_delete); 
+						/*PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" ,
+								"JSON", {"version" :1} , tcloud_delete); */
 					}
 				});
 				$('#downloadbtn').click(function(event) {
