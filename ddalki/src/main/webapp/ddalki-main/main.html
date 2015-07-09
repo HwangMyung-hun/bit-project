@@ -12,11 +12,11 @@
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
 	
 	<!-- 구글 로그인 js/ 윗줄 import -->
-
 	<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-	    
 	<script type="text/javascript" async="" src="https://apis.google.com/js/client:plusone.js" gapi_processed="true"></script>
 	
+	<!-- dropbox.js (드롭박스 js api) -->
+    <script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js"></script>
 	
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -76,15 +76,15 @@
              onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
            <img class="relative zindex" alt="No Img" src="../img/topmenu_paste_off.png"
              onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_del_off.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_del_off.png" id="deletebtn"
              onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" id="dbxDownload" alt="No Img" src="../img/topmenu_down_off.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_down_off.png" id="downloadbtn"
              onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
-             <img class="relative zindex uploadBtn" alt="No Img" src="../img/topmenu_up_off.png "
+             <img class="relative zindex uploadBtn" alt="No Img" src="../img/topmenu_up_off.png " id="uploadbtn"
                   onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_new_off.png "
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_new_off.png " id="newfolderbtn"
              onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_rename_off.png"
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_rename_off.png" id="renamebtn"
              onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
 				          
 <!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
@@ -242,19 +242,20 @@
                               <input id="fileupload" type="file" name="upload"
                                 data-url="http://www.google.com" multiple>
                             </div> -->
-							<form id="frm" method="post" enctype="multipart/form-data">
+							<form id="frm" method="post" enctype="multipart/form-data" style="display: none;">
 								<input type="file" name="upload" id="tcloudfile"/>
 								<input type="button" id="uploadbutton" value="등록" />
 							</form>
-							<div class = "cloudicon">
-                            <div id="upload2">
+							<div id="upload2">
                               <form action="fileUpload.do" method="post" enctype="multipart/form-data">
                                <input id="fbfile" type="file" name="fbfile">
                                <textarea id="fbtext" placeholder="내용을 입력하세요" cols=80 rows=10></textarea>
                                <button id="fbuploadbtn">등록</button>
                                </form>
                             </div>
-                            <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: block;">
+                            <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: none;">
+							<div class = "cloudicon">
+                            
                             <!-- /.table-responsive -->
                             <div id="fb-root">
                             <img src="../img/introicon_facebook.png" id="facebooklogin">
@@ -288,6 +289,13 @@
 							  </span>
 							  <button id="revokeButton">연결 해제</button>
 							</div>
+					        <div>
+                              <img src="../img/introicon_dropbox.png" id="drop-in-btn" onclick="dropboxinbtn();">
+                              <button onclick='allfile();'>파일 확인 콘솔</button>
+                            </div>
+                            
+                            
+                            
                         </div>
                         </div>
                         <!-- /.panel-body -->
@@ -363,50 +371,30 @@
 	<script type="text/javascript" src="../js/jquery.fileupload.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>   
 	<script type="text/javascript" src="../js/CloudRailClient.js"></script> 
-	<script id="odauth" src="../js/onedrivejs3.js"
+	<script id="odauth" src="../js/onedrivejs.js"
    clientId="000000004C155431" scopes="onedrive.readonly wl.signin"
-   redirectUri="cloud.ddalki.com:9999/ddalki/ddalki-main/main.html"></script>
+   redirectUri="localhost:9999/ddalki/ddalki-main/callback.html"></script>
 	<!-- 구글 api 아랫줄 import  -->
-	<!-- <script type="text/javascript" src="../js/googleApi.js"></script> -->
-	<!-- <script type="text/javascript" src="../js/dropbox.js"></script>  -->
+	<script type="text/javascript" src="../js/googleApi.js"></script>
+	<script type="text/javascript" src="../js/dropboxmyapi.js"></script>
     <script type="text/javascript">
     //var ip = 'localhost:9999/ddalki';
-    var ip = '192.168.103.65:9999/ddalki';
+    var ip = 'localhost:9999/ddalki';
     var directoryLocation = '/cloud';
     
-    
+     
     $('#logout').click(function(event) {
         $.session.clear();
-        location.href = 'http://192.168.103.65:9999/ddalki/';
+        location.href = 'http://localhost:9999/ddalki/';
       })
     </script>
-<!-- <script src="../js/tcloudjs.js"></script> -->
+<script src="../js/tcloudjs.js"></script>
 <script src="../js/facebookjs.js"></script>
 <script>
-console.log(window.location.protocol);
 $('#tbody').click(function(e) {
 	if($(e.target).parent()[0].children[0].children[0].checked) $(e.target).parent()[0].children[0].children[0].checked = false;
 	else $(e.target).parent()[0].children[0].children[0].checked = true;
 });
-
-	$('#ucloudlogin').click(function(event) {
-	    location.href = 'http://' + ip + directoryLocation + '/ucloudlogin.do';
-	    
-      /* $.ajax('http://' + ip + directoryLocation + '/ucloudlogin.do', {
-            method: 'POST',
-            dataType: 'text',
-            
-            success: function(result) {
-               alert('ucloud 등록이 완료되었습니다.');
-               console.log(result.data);
-            },
-            error: function(xhr, textStatus, errorThrown) {
-              alert('자걱.\n' + 
-                  '잠시 후 다시 시도하세요.\n' +
-              '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
-            }
-       });  */
-  });
 </script>
 <script>
 console.log($.session.get('useremail'));
