@@ -55,9 +55,9 @@
       display: none;
       border : 1px solid red;
     }
-    /* #facebookactive, #Tcloudactive{
+    #facebookactive, #googleactive, #Tcloudactive, #dropboxactive, #onedriveactive {
       display: none;
-    } */
+    } 
     </style>
 </head>
 
@@ -135,7 +135,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li id="googleactive">
                            <a class="btn-block btn-social btn-google-plus" onclick="rootlist();"><i class="fa fa-google-plus"></i>
                            <span class="social-text">google</span><span class="fa arrow"></span></a>
                            <ul class="nav nav-second-level" id="googlelist">
@@ -162,7 +162,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li id="dropboxactive">
                             <a class="btn-block btn-social btn-dropbox" id="dbxsidelist" ><i class="fa fa-facebook"></i>
                             <span class="social-text">Dropbox</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level" id="dbxsidelist2">
@@ -402,20 +402,31 @@ console.log($.session.get('username'));
 console.log($.session.get('usertel'));
 
 $(function (){
-	  /* $.ajax('http://' + ip + directoryLocation + '/active.do', {
+	  $.ajax('http://' + ip + directoryLocation + '/active.do', {
 	        method: 'POST',
 	        dataType: 'json',
 	        data: {
 	          email: $.session.get('useremail'),
 	        },
 	        success: function(result) {
+        	  console.log("result.idfind.length : " + result.idfind.length);
 	          for(i=0; i < result.idfind.length ; i++) {
-	        	  console.log(result.idfind[i].cloudtype);
 	        	  if (result.idfind[i].cloudtype == "facebook") {
+	        	    console.log("facebook");
 	        		  document.getElementById('facebookactive').style.display = "block";
-	        	  } else if (result.idfind[i].cloudtype == "tcloud") {
-	        		  document.getElementById('Tcloudactive').style.display = "block";
-	        	  }
+	        	  } else if (result.idfind[i].cloudtype == "google") {
+	        	    console.log("google");
+                document.getElementById('googleactive').style.display = "block";
+              } else if (result.idfind[i].cloudtype == "tcloud") {
+                console.log("tcloud");
+                document.getElementById('Tcloudactive').style.display = "block";
+              } else if (result.idfind[i].cloudtype == "dropbox") {
+                console.log("dropbox");
+                var dbx = document.getElementById('dropboxactive').style.display = "block";
+              } else if (result.idfind[i].cloudtype == "onedrive") {
+                console.log("onedrive");
+                document.getElementById('onedriveactive').style.display = "block";
+              }
 	          }
 	        },
 	        error: function(xhr, textStatus, errorThrown) {
@@ -423,7 +434,7 @@ $(function (){
 	              '잠시 후 다시 시도하세요.\n' +
 	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
 	        }
-	      }); */
+	      }); 
 	}); 
   
   $(document).ready(function() {
@@ -496,13 +507,12 @@ function MouseOverRe(MyImage) {
 function MouseOutRe(MyImage) {
  MyImage.src = "../img/topmenu_rename_off.png";
 }
-	
-	console.log($('#dataTables-example > thead > tr :first-child'));
-	$('.relative').click(function() {
-		$('#dataTables-example > thead > tr :first-child').removeAttr('class')
-		.removeAttr('tabindex').removeAttr('aria-controls').removeAttr('rowspan').removeAttr('colspan').removeAttr('aria-label').removeAttr('aria-sort');
-	});
+
 </script>
+
+
+
+
 
 </body>
 
