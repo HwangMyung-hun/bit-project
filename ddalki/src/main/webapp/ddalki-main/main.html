@@ -55,9 +55,9 @@
       display: none;
       border : 1px solid red;
     }
-    #facebookactive, #googleactive, #Tcloudactive, #dropboxactive, #onedriveactive {
+    /* #facebookactive, #Tcloudactive{
       display: none;
-    } 
+    } */
     </style>
 </head>
 
@@ -67,7 +67,7 @@
        <top>
   <div class="top" align="center">
    <div class="relative" style="margin: 0em 0em 0em 10px;">
-  &nbsp;  <a class="relative" href="./main.html" style="float: left; margin: 1em 0em 0em 1em"> <img alt="No Img"src="../img/sub_logo.png"></a>
+  &nbsp;  <a class="relative" href="./mainTable.html" style="float: left; margin: 1em 0em 0em 1em"> <img alt="No Img"src="../img/sub_logo.png"></a>
    </div>
    <nav style="margin: 1em 10em 0em 18em;">
      <div class="margin center padding" style="padding-left: 1em;">
@@ -93,10 +93,10 @@
 				            </div>
 				            <button type="submit" class="btn btn-default radius">검색</button>
 				          </form> -->
+				        </div>
 				          <div id="odcreatefolder" style="display: none;">
 				          <input type="text" placeholder="폴더명을 입력하세요" id="odcreate" width="100px"><input type="button" value="생성" id="odcreatebtn">
 				          </div>
-				        </div>
 				      </div>
 				    </nav>
 				  </div>
@@ -135,7 +135,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li id="googleactive">
+                        <li>
                            <a class="btn-block btn-social btn-google-plus" onclick="rootlist();"><i class="fa fa-google-plus"></i>
                            <span class="social-text">google</span><span class="fa arrow"></span></a>
                            <ul class="nav nav-second-level" id="googlelist">
@@ -162,8 +162,8 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li id="dropboxactive">
-                            <a class="btn-block btn-social btn-dropbox" id="dbxsidelist" ><i class="fa fa-dropbox"></i>
+                        <li>
+                            <a class="btn-block btn-social btn-dropbox" id="dbxsidelist" ><i class="fa fa-facebook"></i>
                             <span class="social-text">Dropbox</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level" id="dbxsidelist2">
                                 
@@ -394,7 +394,42 @@
 $('#tbody').click(function(e) {
 	if($(e.target).parent()[0].children[0].children[0].checked) $(e.target).parent()[0].children[0].children[0].checked = false;
 	else $(e.target).parent()[0].children[0].children[0].checked = true;
+	console.log($(e.target).parent()[0].children[5].innerText);
+	if($(e.target).parent()[0].children[5].innerText == 'folder'){
+		console.log($('#side-menu a'));
+		console.log($('#side-menu').children()[5].children);
+		for(i = 0; i < $('#side-menu a').length; i++){
+			if($(e.target).parent()[0].children[1].innerText == $('#side-menu a')[i].innerText) {
+				console.log($('#side-menu a')[i]);
+				 $($('#side-menu a')[i]).trigger('click');
+			}
+		}
+	} 
 });
+
+$('#side-menu').click(function(m) {
+	console.log($(m.target)[0].innerText);
+	console.log($(m.target).parent().parent().parent().children().parent().parent().parent().children()[0].innerText);
+	$('.nav-pills > li ').remove();
+	whoisparent($(m.target));
+});
+function whoisparent(child) {
+	console.log(child[0].innerText);
+	console.log(child.parent().parent().parent().children()[0].innerText);
+	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive') {
+		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
+	}
+	if (child.parent().parent().parent().children()[0].innerText != 'Facebook' && 
+			child.parent().parent().parent().children()[0].innerText != 'google' && 
+			child.parent().parent().parent().children()[0].innerText != 'Tcloud' && 
+			child.parent().parent().parent().children()[0].innerText != 'Dropbox' && 
+			child.parent().parent().parent().children()[0].innerText != 'Onedrive') {
+		whoisparent(child.parent().parent().parent().children())
+	} else {
+		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child.parent().parent().parent().children()[0].innerText + "</li>");		
+	}
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
+}
 </script>
 <script>
 console.log($.session.get('useremail'));
@@ -402,31 +437,20 @@ console.log($.session.get('username'));
 console.log($.session.get('usertel'));
 
 $(function (){
-	  $.ajax('http://' + ip + directoryLocation + '/active.do', {
+	  /* $.ajax('http://' + ip + directoryLocation + '/active.do', {
 	        method: 'POST',
 	        dataType: 'json',
 	        data: {
 	          email: $.session.get('useremail'),
 	        },
 	        success: function(result) {
-        	  console.log("result.idfind.length : " + result.idfind.length);
 	          for(i=0; i < result.idfind.length ; i++) {
+	        	  console.log(result.idfind[i].cloudtype);
 	        	  if (result.idfind[i].cloudtype == "facebook") {
-	        	    console.log("facebook");
 	        		  document.getElementById('facebookactive').style.display = "block";
-	        	  } else if (result.idfind[i].cloudtype == "google") {
-	        	    console.log("google");
-                document.getElementById('googleactive').style.display = "block";
-              } else if (result.idfind[i].cloudtype == "tcloud") {
-                console.log("tcloud");
-                document.getElementById('Tcloudactive').style.display = "block";
-              } else if (result.idfind[i].cloudtype == "dropbox") {
-                console.log("dropbox");
-                var dbx = document.getElementById('dropboxactive').style.display = "block";
-              } else if (result.idfind[i].cloudtype == "onedrive") {
-                console.log("onedrive");
-                document.getElementById('onedriveactive').style.display = "block";
-              }
+	        	  } else if (result.idfind[i].cloudtype == "tcloud") {
+	        		  document.getElementById('Tcloudactive').style.display = "block";
+	        	  }
 	          }
 	        },
 	        error: function(xhr, textStatus, errorThrown) {
@@ -434,7 +458,7 @@ $(function (){
 	              '잠시 후 다시 시도하세요.\n' +
 	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
 	        }
-	      }); 
+	      }); */
 	}); 
   
   $(document).ready(function() {
@@ -507,12 +531,13 @@ function MouseOverRe(MyImage) {
 function MouseOutRe(MyImage) {
  MyImage.src = "../img/topmenu_rename_off.png";
 }
-
+	
+	console.log($('#dataTables-example > thead > tr :first-child'));
+	$('.relative').click(function() {
+		$('#dataTables-example > thead > tr :first-child').removeAttr('class')
+		.removeAttr('tabindex').removeAttr('aria-controls').removeAttr('rowspan').removeAttr('colspan').removeAttr('aria-label').removeAttr('aria-sort');
+	});
 </script>
-
-
-
-
 
 </body>
 
