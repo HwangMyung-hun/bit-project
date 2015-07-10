@@ -8,7 +8,48 @@ var onedriveactive = null;
 
 $(function(){
 	odtoken = getTokenFromCookie();
-	console.log(odtoken);
+	if(odtoken) {
+		console.log(odtoken);
+		$.ajax('http://' + ip + directoryLocation + '/tcloudactive.do', {
+	        method: 'POST',
+	        dataType: 'json',
+	        data: {
+	          email: $.session.get('useremail'),
+	          cloudtype: 'onedrive'
+	        },
+	        success: function(result) {
+	        	console.log(result);
+	        	/*if (result.active == "Y") {
+	        		console.log("onedrive 기존 회원");
+	        	} else {
+	        		$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
+	        		    method: 'POST',
+	        		    dataType: 'json',
+	        		    data: {
+	        		      email: $.session.get('useremail'),
+	        		      cloudtype: 'onedrive',
+	        		      cloudid: 'aa',
+	        		      token: odtoken,
+	        		      active: 'Y'
+	        		    },
+	        		    success: function(result) {
+	        		       alert('onedrive 등록이 완료되었습니다.');
+	        		    },
+	        		    error: function(xhr, textStatus, errorThrown) {
+	        		      alert('DB저장 실패.\n' + 
+	        		          '잠시 후 다시 시도하세요.\n' +
+	        		      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+	        		    }
+	        	    });
+	        	}*/
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('active로딩중 문제 발생.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+	        }
+	      });
+	}
 });
 
 function onedrivelogout() {
@@ -58,7 +99,6 @@ function onAuthCallback() {
 	  var expiry = parseInt(authInfo["expires_in"]);
 	  setCookie(token, expiry);
 	  window.opener.onAuthenticated(token, window);
-	  window.location.replace("http://localhost:9999/ddalki/ddalki-main/main.html");
 	}
 
 /*window.onload = function(){
@@ -121,6 +161,7 @@ function onAuthenticated(odtoken2, authWindow) {
 		if (authWindow) {
 			authWindow.close();
 		}
+		document.location.reload();
 		(function($){
 			var path = "";
 			var beforePath = "";
@@ -157,29 +198,46 @@ var ondriveallow = 0;
 $('#onedrivefolder').click(function() {
 	$("#tbody > tr").remove();
 	ondriveallow++;
+	/*console.log($('.nav-pills > li > a')[0]);
+	$('.nav-pills > li > a')[0].innerHTML = '';
+	$('.nav-pills > li > a')[0].innerHTML = 'OneDrive';*/
 	if($('.btn-twitter li').length == 0 && ondriveallow == 1) {
 		onedriveactive = true;
 		$("#onedrivelist > li").remove();
 		$("#tbody > tr").remove();
 		$.ajax({
-			url: "https://api.onedrive.com/v1.0/drive/root/children?access_token=" + odtoken,
+			url: "https://api.onedrive.com/v1.0/drive/root/children?expand=thumbnails,children(expand=thumbnails(select=smallSquare,c200x150_Crop))&access_token=" + odtoken,
 			success: function(data) {
 				for (j = 0; j < data.value.length ; j++) {
 					if (data.value[j].folder) {
 						ODlist = data.value;
 						$("#onedrivelist").append("<li> <a id='" + data.value[j].id 
-								+ "' onclick='innerfile(this.id)'>"+ data.value[j].name 
+								+ "' onclick='innerfile(this.id, this.innerText)'>"+ data.value[j].name 
 								+"<span class='fa arrow'></span></a><ul class='nav nav-"
 								+ level[2] + "-level' id='" + level[2] + j + "'></ul></li>");
 						innerfolder(data.value[j].id, 3, j);
 					} 
-					if (data.value[j].file){
+					if (data.value[j].file && data.value[j].thumbnails[0]){
+						$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
+								+ "<td>"+ data.value[j].name +"<img src='" + data.value[j].thumbnails[0].smallSquare.url + "' id='image1'></td>"
+								+ "<td></td>"
+								+ "<td>"+ data.value[j].lastModifiedDateTime.split("T")[0] +"</td>"
+								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
+								+ "<td class='center'>"+ data.value[j].name.split(".")[1] +"</td></tr>");
+					} else if (data.value[j].folder) {
+						$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
+								+ "<td>"+ data.value[j].name +"<img src='../img/fileicon_folder.png' id='image1'></td>"
+								+ "<td></td>"
+								+ "<td>"+ data.value[j].lastModifiedDateTime.split("T")[0] +"</td>"
+								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
+								+ "<td class='center'>folder</td></tr>");
+					} else {
 						$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
 								+ "<td>"+ data.value[j].name +"</td>"
 								+ "<td></td>"
-								+ "<td>"+ data.value[j].lastModifiedDateTime +"</td>"
+								+ "<td>"+ data.value[j].lastModifiedDateTime.split("T")[0] +"</td>"
 								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
-								+ "<td class='center'>"+ data.value[j].name +"</td></tr>");
+								+ "<td class='center'>"+ data.value[j].name.split(".")[1] +"</td></tr>");
 					}
 				}
 			}
@@ -204,64 +262,88 @@ function innerfolder(folderid , levelnum, locat) {
 			for (i = 0 ; i < data.value.length ; i++) {
 				if (data.value[i].folder) {
 					$("#"+ level[levelnum - 1] + locat).append("<li> <a id='" + data.value[i].id 
-						+ "' onclick='innerfile(this.id)'>"+ data.value[i].name 
+						+ "' onclick='innerfile(this.id, this.innerText)'>"+ data.value[i].name 
 						+"<span class='fa arrow'></span></a><ul class='nav nav-"
 						+ level[levelnum] + "-level' id='"+ level[levelnum] + i + "'></ul></li>");
-					innerfolder(data.value[i].id, levelnum+1);
+					innerfolder(data.value[i].id, levelnum+1, i);
 				}
 			}
 		}
 	});
 }
 var odfolder;
-function innerfile(folderid) {
+function innerfile(folderid, name) {
 	odfolder = folderid;
 	$("#tbody > tr").remove();
+	console.log(name);
+	/*$('.nav-pills > li:nth-child(2)').remove();
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + name + "</li>");*/
 	$.ajax({
-		url: "https://api.onedrive.com/v1.0/drive/items/" + folderid + "/children?access_token=" + odtoken,
-		success: function(data) {	
+		url: "https://api.onedrive.com/v1.0/drive/items/" + folderid + "/children?expand=thumbnails,children(expand=thumbnails(select=smallSquare,c200x150_Crop))&access_token=" + odtoken,
+		success: function(data) {
 			for (i = 0 ; i < data.value.length ; i++) {
-				if (data.value[i].file) {
+				if(data.value[i].thumbnails.length){
+					$("#tbody").append("<tr><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
+							+ "<td>"+ data.value[i].name +"<img src='" + data.value[i].thumbnails[0].smallSquare.url + "' id='image1'></td>"
+							+ "<td></td>"
+							+ "<td>"+ data.value[i].lastModifiedDateTime.split("T")[0] +"</td>"
+							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
+							+ "<td class='center'>"+ data.value[i].name.split('.')[1] +"</td></tr>");
+				} else if (data.value[i].folder) {
+					$("#tbody").append("<tr id='clickfolder'><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
+							+ "<td>"+ data.value[i].name +"<img src='../img/fileicon_folder.png' id='image1'></td>"
+							+ "<td></td>"
+							+ "<td>"+ data.value[i].lastModifiedDateTime.split('T')[0] +"</td>"
+							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
+							+ "<td class='center'>folder</td></tr>");
+					(function(m) {
+						$('#clickfolder').dblclick(function() {
+							innerfile(  data.value[m].id , data.value[m].name );
+						});
+					})(i);	
+				} else {
 					$("#tbody").append("<tr><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
 							+ "<td>"+ data.value[i].name +"</td>"
 							+ "<td></td>"
-							+ "<td>"+ data.value[i].lastModifiedDateTime +"</td>"
+							+ "<td>"+ data.value[i].lastModifiedDateTime.split('T')[0] +"</td>"
 							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
-							+ "<td class='center'>"+ data.value[i].name +"</td></tr>");
+							+ "<td class='center'>"+ data.value[i].name.split('.')[1] +"</td></tr>");
 				}
 			}
-		}
-	});
-
-	
-	$("#odcreatebtn").click(function() {
-		if(onedriveactive == true){
-			var createfolder = {
-					'name' : $("#odcreate").val(),
-					"folder": { }
-			}
-			var inputData = JSON.stringify(createfolder);
-			$.ajax({
-				url: "https://api.onedrive.com/v1.0/drive/items/" + odfolder + "/children?nameConflict=fail",
-				method: "POST",
-				datatype : "json",
-				contentType: "application/json",
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
-				},
-				data: inputData,
-				success: function(data) {
-					console.log(data);
-					$("#odcreatefolder").hide();
-					ondriveallow = 0;
-				},
-				error: function(error){
-					console.log(error);
-				}
-			});
 		}
 	});
 }
+
+$("#odcreatebtn").click(function() {
+	if(onedriveactive == true){
+		var createfolder = {
+				'name' : $("#odcreate").val(),
+				"folder": { }
+		}
+		var inputData = JSON.stringify(createfolder);
+		$.ajax({
+			url: "https://api.onedrive.com/v1.0/drive/items/" + odfolder + "/children?nameConflict=fail",
+			method: "POST",
+			datatype : "json",
+			contentType: "application/json",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
+			},
+			data: inputData,
+			success: function(data) {
+				console.log(data);
+				$("#odcreatefolder").hide();
+				ondriveallow = 0;
+				innerfile(data.id, data.name);
+				$('#side-menu').metisMenu();
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});	
+	}
+});
+
 function ODupload(event) {
 	var upfolder = odfolder;
 	var odfile = event.target.files[0];
@@ -345,33 +427,42 @@ $("#renamebtn").click(function(event) {
 		var ODfilelist = $("#tbody input");
 		for (i = 0; i< ODfilelist.length ; i++) {
 			if($("input:checkbox[id='" + ODfilelist[i].id + "']").is(":checked")) {
-				console.log($("input:checkbox[id='" + ODfilelist[i].id + "']").parents());
-				/*var odrename = {
-						'name' : ,
-				}
-				var inputData = JSON.stringify(createfolder);
-				$.ajax({
-					url: "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id ,
-					method: "POST",
-					datatype : "json",
-					contentType: "application/json",
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader("X-HTTP-Method-Override", 'PATCH');
-						xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
-					},
-					data: inputData,
-					success: function(data) {
-						console.log(data);
-						ondriveallow = 0;
-					},
-					error: function(error){
-						console.log(error);
-					}
-				});*/
+				console.log($("input:checkbox[id='" + ODfilelist[i].id + "']").parents().children()[2]);
+				$("input:checkbox[id='" + ODfilelist[i].id + "']").parents().children()[2].innerText = '';
+				$("input:checkbox[id='" + ODfilelist[i].id + "']").parents().children()[2].innerHTML = '<input id="odupdate" type="text"/><button id="updatedbtn">변경</button>';
+				(function(m) {
+					$('#updatedbtn').click(function() {
+						updatename(ODfilelist[m].id, $('#odupdate').val())
+						
+					});
+				})(i);
 			}
 		}
 	}
 });
+function updatename (id, name) {
+	var odrename = {
+			'name' : name
+	}
+	var inputData = JSON.stringify(odrename);	
+	$.ajax({
+		url: "https://api.onedrive.com/v1.0/drive/items/" + id ,
+		method: "POST",
+		datatype : "json",
+		contentType: "application/json",
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader("X-HTTP-Method-Override", 'PATCH');
+			xhr.setRequestHeader("Authorization", 'Bearer ' + odtoken);
+		},
+		data: inputData,
+		success: function(data) {
+			console.log(data);
+		},
+		error: function(error){
+			console.log(error);
+		}
+	});
+}
 var dlrjanjdi = 0;
 $('#deletebtn').click(function() {
 	if(onedriveactive == true) {
@@ -381,10 +472,11 @@ $('#deletebtn').click(function() {
 				var xmlReq =  new  XMLHttpRequest (); 
 				xmlReq.open( 'DELETE' ,  "https://api.onedrive.com/v1.0/drive/items/" + ODfilelist[i].id + "?access_token=" + odtoken );
 				xmlReq.setRequestHeader( 'Authorization' ,  'Bearer');
-				xmlReq.onreadystatechange = function() {
+				xmlReq.onreadystatechange = function(event) {
 					dlrjanjdi++;
 					if (dlrjanjdi == 2) {
 						alert("삭제하였습니다.");
+						$('#side-menu').metisMenu();
 					}
 				}
 				xmlReq.send();

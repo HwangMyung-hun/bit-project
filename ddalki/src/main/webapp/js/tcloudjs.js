@@ -16,10 +16,11 @@ function userProfile_callback( data ) {
         dataType: 'json',
         data: {
           email: $.session.get('useremail'),
+          cloudtype: 'tcloud'
         },
         success: function(result) {
-        	console.log(result.tcloudactive);
-        	if (result.tcloudactive == "Y") {
+        	console.log(result.active);
+        	if (result.active == "Y") {
         		console.log("tcloud 기존 회원");
         	} else {
         		$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
