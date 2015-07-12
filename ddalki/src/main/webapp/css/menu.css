@@ -7,6 +7,10 @@
 .right{text-align:right}
 .height{height:40px}
 .lh{line-height:40px}
+
+#lnb li{border: 0;}
+#lnb.nav li{height:15px:padding:0 0 0 15px}
+
 .width{width:1200px}
 .bar{float:left;width:970px}
 .center{text-align:center}
