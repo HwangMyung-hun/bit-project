@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>딸기 클라우드 - 김범준</title>
 	
 	<!-- 구글 로그인 js/ 윗줄 import -->
 	<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
@@ -72,19 +72,19 @@
    <nav style="margin: 1em 10em 0em 18em;">
      <div class="margin center padding" style="padding-left: 1em;">
        <div class="left">
-         <img class="relative zindex" alt="No Img" src="../img/topmenu_copy_off.png"
+         <img class="relative zindex" alt="복사" src="../img/topmenu_copy.png"
              onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_paste_off.png"
+           <img class="relative zindex" alt="붙여넣기" src="../img/topmenu_paste.png"
              onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_del_off.png" id="deletebtn"
+           <img class="relative zindex" alt="삭제" src="../img/topmenu_del_off.png" id="deletebtn"
              onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_down_off.png" id="downloadbtn"
+           <img class="relative zindex" alt="다운로드" src="../img/topmenu_down.png" id="downloadbtn"
              onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
-             <img class="relative zindex uploadBtn" alt="No Img" src="../img/topmenu_up_off.png " id="uploadbtn"
-                  onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_new_off.png " id="newfolderbtn"
+           <img class="relative zindex" alt="업로드" src="../img/topmenu_up.png " id="uploadbtn"
+             onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;" onClick="kakaoPhotoUp()" >
+           <img class="relative zindex" alt="새 폴더" src="../img/topmenu_new.png " id="newfolderbtn"
              onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
-           <img class="relative zindex" alt="No Img" src="../img/topmenu_rename_off.png" id="renamebtn"
+           <img class="relative zindex" alt="이름 변경" src="../img/topmenu_rename.png" id="renamebtn"
              onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
 				          
 <!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
@@ -178,6 +178,11 @@
                            </ul>
                            <!-- /.nav-second-level -->
                        </li>
+                        <li id="kakaoactive">
+                            <a class="btn-block btn-social btn-kakao" id="kakaoListshow"><img style="margin-top: 5px;" alt="kakao story" src="../img/kakaostory.png"/>
+                            
+                            <span class="social-text">KAKAO Story</span><span class="fa arrow"></span></a>
+                        </li>
                         <li>
                           <a id="addcloud"><span class="glyphicon glyphicon-plus"  aria-hidden="true" ><span></a>
                         </li>
@@ -194,9 +199,13 @@
             <div class="row">
                 <!--  -->
                 <div class="panel-body">
-                    <ul class="nav nav-pills">
-                        <li id="arrow-on"><a href="#home-pills" data-toggle="tab">home</a>
-                        </li>
+                    <!-- <ul class="nav nav-pills">
+                        <li id="arrow-on"><a href="#home-pills" data-toggle="tab">home</a></li>
+                    </ul> -->
+                    <ul class="nav nav-pills" id="lnb">
+                        <li> <a href="#home-pills"> facebook > </a></li>
+                        <li> <a href="#home-pills"> images > </a></li>
+                        <li> <a href="#home-pills"> mobile > </a> </li>
                     </ul>
                   </div>
                 
@@ -254,16 +263,29 @@
                                </form>
                             </div>
                             <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: none;">
-							<div class = "cloudicon">
+							<!-- <div class = "cloudicon "> -->
+							<div class = "cloudbtns ">
                             
                             <!-- /.table-responsive -->
                             <div id="fb-root">
-                            <img src="../img/introicon_facebook.png" id="facebooklogin">
+                            	<img src="../img/introicon_facebook.png" id="facebooklogin">
+                            	<br/><button class="logoutbtn" onclick=")">연결해제</button>
                             </div>
                             <img src="../img/introicon_tcloud.png" id="tcloudlogin" onclick="PlanetX.login()">
-                            <button onclick="PlanetX.logout()">tcloud로그아웃</button>
-                            <img src="../img/introicon_ucloud.png" id="ucloudlogin" >
-                            <img src="../img/introicon_onedrive.png" id="onedrivelogin" ><button onclick="onedrivelogout()">onedrive 로그아웃</button>
+                            <div>
+                            	<img src="../img/introicon_tcloud.png" id="tcloudlogin" onclick="PlanetX.login()">
+                            	<br/><button class="logoutbtn" onclick="PlanetX.logout()">연결해제</button>
+                            </div>
+                            <div>
+                            	<img src="../img/introicon_ucloud.png" id="ucloudlogin" >
+                            	<br/><button class="logoutbtn" id="">연결해제</button>
+                         		</div>
+                            <div>
+	                            <img src="../img/introicon_onedrive.png" id="onedrivelogin" >
+	                            <button onclick="onedrivelogout()">연결해제</button>
+                            </div>
+	                          <div><a href="javascript:loginWithKakao()" id="custom-login-btn"><img src="../img/introicon_kakao.png"></a><br/>
+	                            			<button class="logoutbtn" onClick="logoutWithKakao();">연결해제</button>	
                             <div id="content"></div>
                              <div id="od-loading"></div>
 							  <div id="od-breadcrumb"></div>
