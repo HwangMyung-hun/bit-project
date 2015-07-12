@@ -56,5 +56,28 @@ public class CloudController {
     return responseData;
 
   }
+  
+  @RequestMapping("/hasCloud")
+  public Object hasCloud(String email, String cloudtype, String cloudid) 
+		  throws Exception {
+
+    HashMap<String, Object> sqlParams = new HashMap<String, Object>();
+    sqlParams.put("email", email);
+    sqlParams.put("cloudtype", cloudtype);
+    sqlParams.put("cloudid", cloudid);
+
+    HashMap<String, Object> responseData = new HashMap<String, Object>();
+    if(cloudDao.alreadyExistsCloud(sqlParams) == null) {
+    	cloudDao.hasCloud(sqlParams);
+    	responseData.put("status", "success");
+    	responseData.put("cloud", "success");
+    } else {
+    	responseData.put("status", "success");
+    	responseData.put("cloud", "exist");
+    }
+
+    return responseData;
+
+  }
 
 }
