@@ -18,10 +18,21 @@
       VALUES (#{email},#{cloudtype},#{cloudid},#{token},#{active})
   </insert>
   
+  <insert id="hasCloud" parameterType="Map">
+      INSERT INTO cloudinfo (email,cloudtype,cloudid) 
+      VALUES (#{email},#{cloudtype},#{cloudid})
+  </insert>
+  
   <select id="activefind" parameterType="Map" resultType="Map">
       SELECT email, cloudtype, cloudid, token, active 
       FROM cloudinfo 
       WHERE email=#{email} and active=#{active}
+  </select>
+  
+  <select id="alreadyExistsCloud" parameterType="Map" resultType="Map">
+      SELECT email, cloudtype, cloudid, token, active 
+      FROM cloudinfo 
+      WHERE email=#{email} and cloudtype=#{cloudtype}
   </select>
   
   <select id="tcloudactive" parameterType="Map" resultType="String">
