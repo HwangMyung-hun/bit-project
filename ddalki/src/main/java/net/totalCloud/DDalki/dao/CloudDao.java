@@ -22,6 +22,10 @@ public interface CloudDao {
   CloudVo selectOne(int no);
 
   String tcloudactive(HashMap<String, Object> sqlParams);
+
+  void hasCloud(HashMap<String, Object> sqlParams);
+
+  Object alreadyExistsCloud(HashMap<String, Object> sqlParams);
   
 
 }
