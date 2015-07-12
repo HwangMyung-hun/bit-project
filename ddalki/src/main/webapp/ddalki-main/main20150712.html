@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>딸기 클라우드 - 김범준</title>
+	
+	<!-- 구글 로그인 js/ 윗줄 import -->
+	<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+	<script type="text/javascript" async="" src="https://apis.google.com/js/client:plusone.js" gapi_processed="true"></script>
+	
+	<!-- dropbox.js (드롭박스 js api) -->
+    <script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js"></script>
+	
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Social Buttons CSS -->
+    <link href="../bower_components/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+
+    
+<!-- 		<link href="../css/bootstrap.min.css" rel="stylesheet"> -->
+		<link href="../css/menu.css" rel="stylesheet">
+    <style>
+    #image1 {
+      width : 30px;
+      height : 30px;
+    }
+    #upload {
+      display: none;
+      border : 1px solid red;
+    }
+    #upload2 {
+      display: none;
+      border : 1px solid red;
+    }
+    /* #facebookactive, #Tcloudactive{
+      display: none;
+    } */
+    </style>
+</head>
+
+<body id="wow">
+
+    <div id="wrapper">
+       <top>
+  <div class="top" align="center">
+   <div class="relative" style="margin: 0em 0em 0em 10px;">
+  &nbsp;  <a class="relative" href="./mainTable.html" style="float: left; margin: 1em 0em 0em 1em"> <img alt="No Img"src="../img/sub_logo.png"></a>
+   </div>
+   <nav style="margin: 1em 10em 0em 18em;">
+     <div class="margin center padding" style="padding-left: 1em;">
+       <div class="left">
+         <img class="relative zindex" alt="No Img" src="../img/topmenu_copy_off.png"
+             onmouseover="MouseOverCopy(this)" onmouseout="MouseOutCopy(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_paste_off.png"
+             onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_del_off.png" id="deletebtn"
+             onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_down_off.png" id="downloadbtn"
+             onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)" style="margin-right: 10px; cursor:pointer;">
+             <img class="relative zindex uploadBtn" alt="No Img" src="../img/topmenu_up_off.png " id="uploadbtn"
+                  onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_new_off.png " id="newfolderbtn"
+             onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)" style="margin-right: 10px; cursor:pointer;">
+           <img class="relative zindex" alt="No Img" src="../img/topmenu_rename_off.png" id="renamebtn"
+             onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor:pointer;">
+				          
+<!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
+				            <div class="form-group">
+				              <input type="text" class="form-control radius" placeholder="Search">
+				            </div>
+				            <button type="submit" class="btn btn-default radius">검색</button>
+				          </form> -->
+				        </div>
+				          <div id="odcreatefolder" style="display: none;">
+				          <input type="text" placeholder="폴더명을 입력하세요" id="odcreate" width="100px"><input type="button" value="생성" id="odcreatebtn">
+				          </div>
+				      </div>
+				    </nav>
+				  </div>
+       </top>
+
+<!--             <ul class="nav navbar-top-links navbar-right">               
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    /.dropdown-user
+                </li>
+                /.dropdown
+            </ul>
+            /.navbar-top-links -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                <!--  -->
+                    <div id="scrollbar" class="scrollbar" >
+                    <ul class="nav" id="side-menu">  
+                        <li class="li-div"></li>   
+                        <li id="facebookactive">
+                            <a class="btn-block btn-social btn-facebook" ><i class="fa fa-facebook"></i>
+                            <span class="social-text">Facebook</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level" id="facebooklist">
+                                
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                           <a class="btn-block btn-social btn-google-plus" onclick="rootlist();"><i class="fa fa-google-plus"></i>
+                           <span class="social-text">google</span><span class="fa arrow"></span></a>
+                           <ul class="nav nav-second-level" id="googlelist">
+                               
+                           </ul>
+                           <!-- /.nav-second-level -->
+                       </li>
+                        <li id="Tcloudactive">
+                            <a class="btn-block btn-social btn-instagram" ><i class="fa fa-instagram"></i>
+                            <span class="social-text">Tcloud</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level" id="Tcloudlist">
+                                <li>
+                                    <a id="tcloudimages">images</a>
+                                </li>
+                                <li>
+                                    <a id="tcloudmovies">movies</a>
+                                </li>
+                                <li>
+                                    <a id="tcloudmusic">music</a>
+                                </li>
+                                <li>
+                                    <a id="tclouddocuments">documents</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a class="btn-block btn-social btn-dropbox" id="dbxsidelist" ><i class="fa fa-facebook"></i>
+                            <span class="social-text">Dropbox</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level" id="dbxsidelist2">
+                                
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li id="onedriveactive">
+                           <a class="btn-block btn-social btn-twitter" id="onedrivefolder"><i class="fa fa-twitter"></i>
+                           <span class="social-text">Onedrive</span><span class="fa arrow"></span></a>
+                           <ul class="nav nav-second-level" id="onedrivelist">	
+                               
+                           </ul>
+                           <!-- /.nav-second-level -->
+                       </li>
+                        <li>
+                          <a id="addcloud"><span class="glyphicon glyphicon-plus"  aria-hidden="true" ><span></a>
+                        </li>
+                    </ul>
+                    <!-- side menu  -->
+                    </div>
+                    <!--  -->
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+
+        <div id="page-wrapper">
+            <div class="row">
+                <!--  -->
+                <div class="panel-body">
+                    <ul class="nav nav-pills">
+                        <li id="arrow-on"><a href="#home-pills" data-toggle="tab">home</a>
+                        </li>
+                    </ul>
+                  </div>
+                
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div >
+<!--                             DataTables Advanced Tables -->
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body scrollbar" id="style-default" style="height: 506px;">
+                            <div class="dataTable_wrapper">
+                                <table class="table table-striped table-bordered table-hover" > <!-- id="dataTables-example" -->
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th id="name">Name</th>
+                                            <th id="shared">Shared</th>
+                                            <th id="date">Modified Date</th>
+                                            <th id="size">Size</th>
+                                            <th id="type">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="center"></td>
+                                            <td class="center"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <input id="googleInsertInput" type="file" accept="*/*" onchange="insertFile(event)" style="display: block;">
+                            </div>
+                            <!-- <div id="upload">
+	                            <form id="upurl" action="" name="upload" method="post" enctype="multipart/form-data">
+	                               <input type="file" name="upload">
+	                               <button>입력</button>
+	                            </form>
+                            </div> -->
+                           <!--  <div style="width: 500px; padding: 20px" id="upload">
+                              <input id="fileupload" type="file" name="upload"
+                                data-url="http://www.google.com" multiple>
+                            </div> -->
+							<form id="frm" method="post" enctype="multipart/form-data" style="display: none;">
+								<input type="file" name="upload" id="tcloudfile"/>
+								<input type="button" id="uploadbutton" value="등록" />
+							</form>
+							<div id="upload2">
+                              <form action="fileUpload.do" method="post" enctype="multipart/form-data">
+                               <input id="fbfile" type="file" name="fbfile">
+                               <textarea id="fbtext" placeholder="내용을 입력하세요" cols=80 rows=10></textarea>
+                               <button id="fbuploadbtn">등록</button>
+                               </form>
+                            </div>
+                            <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: none;">
+							<div class = "cloudicon">
+                            
+                            <!-- /.table-responsive -->
+                            <div id="fb-root">
+                            <img src="../img/introicon_facebook.png" id="facebooklogin">
+                            </div>
+                            <img src="../img/introicon_tcloud.png" id="tcloudlogin" onclick="PlanetX.login()">
+                            <button onclick="PlanetX.logout()">tcloud로그아웃</button>
+                            <img src="../img/introicon_ucloud.png" id="ucloudlogin" >
+                            <img src="../img/introicon_onedrive.png" id="onedrivelogin" ><button onclick="onedrivelogout()">onedrive 로그아웃</button>
+                            <div id="content"></div>
+                             <div id="od-loading"></div>
+							  <div id="od-breadcrumb"></div>
+							  <div id="od-content">
+							    <div id="od-items" class="od-pagecol"></div>
+							    <div id="od-json" class="od-pagecol"></div>
+							  </div>
+                            <div>
+							  <span id = "signinButton">
+							    <span style="display:none">
+							            <span 
+							             class="g-signin"
+							             data-callback="signinCallback"
+							             data-clientid="163518707285-1rnv5uqh371qimkfdqaj02mp9img4aof.apps.googleusercontent.com"
+							             data-cookiepolicy="single_host_origin"
+							             data-requestvisibleactions="http://schemas.google.com/AddActivity"
+							             data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/drive.file
+							              https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appfolder"
+							              >
+							            </span>
+							    </span>
+							  <img src="../img/introicon_google.png" id = "googlecloud" style="cursor:pointer" onclick="googlelogin()">
+							  </span>
+							  <button id="revokeButton">연결 해제</button>
+							</div>
+					        <div>
+                              <img src="../img/introicon_dropbox.png" id="drop-in-btn" onclick="dropboxinbtn();">
+                              <button onclick='allfile();'>파일 확인 콘솔</button>
+                            </div>
+                            
+                            
+                            
+                        </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+      <footer>
+			  <div class="width margin height">
+			    <div class="progress relative bar height radius" align="left"
+			      style="margin-bottom: 0px; margin-left: 50px;">
+			      <div class="progress-bar progress-bar-striped google lh"
+			        style="width: 8%">
+			        <span class="sr-only">8% Complete (success)</span> Google Drive(5G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped naver lh"
+			        style="width: 24%">
+			        <span class="sr-only">24% Complete (warning)</span> N Drive(15G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped one lh"
+			        style="width: 6%">
+			        <span class="sr-only">6% Complete (danger)</span> One Drive(4G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped drop lh"
+			        style="width: 30%">
+			        <span class="sr-only">8% Complete (danger)</span> Drop Box(5G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped face lh"
+			        style="width: 1%">
+			        <span class="sr-only">1% Complete (danger)</span> FaceBook(4G)
+			      </div>
+			      <div class="progress-bar progress-bar-striped empty lh"
+			        style="width: 53%">
+			        <span class="sr-only">53% Complete (danger)</span> Userable Space (100 GB)
+			      </div>
+			    </div>
+			    <div class="button relrative" style="margin-right: 50px;">
+			      <button type="submit" class="btn relative center height radius" 
+			                     onclick="location.href='./duplication.html'">중복검사</button>
+			    </div>
+			  </div>
+			  <button id="logout">로그아웃</button>
+      </footer>
+    </div>
+    <!-- /#wrapper -->
+     
+    <!-- jQuery -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+  	
+    <script src="../js/move.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/jquery.session.js"></script>
+    <script type="text/javascript" src="../js/planetxsdk.js"></script>
+    <script type="text/javascript" src="../js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../js/jquery.iframe-transport.js"></script>
+	<script type="text/javascript" src="../js/jquery.fileupload.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>   
+	<script type="text/javascript" src="../js/CloudRailClient.js"></script> 
+	<script id="odauth" src="../js/onedrivejs.js"
+   clientId="000000004C155431" scopes="onedrive.readonly wl.signin"
+   redirectUri="localhost:9999/ddalki/ddalki-main/callback.html"></script>
+	<!-- 구글 api 아랫줄 import  -->
+	<script type="text/javascript" src="../js/googleApi.js"></script>
+	<script type="text/javascript" src="../js/dropboxmyapi.js"></script>
+    <script type="text/javascript">
+    //var ip = 'localhost:9999/ddalki';
+    var ip = 'localhost:9999/ddalki';
+    var directoryLocation = '/cloud';
+    
+     
+    $('#logout').click(function(event) {
+        $.session.clear();
+        location.href = 'http://localhost:9999/ddalki/';
+      })
+    </script>
+<script src="../js/tcloudjs.js"></script>
+<script src="../js/facebookjs.js"></script>
+<script>
+$('#tbody').click(function(e) {
+	if($(e.target).parent()[0].children[0].children[0].checked) $(e.target).parent()[0].children[0].children[0].checked = false;
+	else $(e.target).parent()[0].children[0].children[0].checked = true;
+	console.log($(e.target).parent()[0].children[5].innerText);
+	if($(e.target).parent()[0].children[5].innerText == 'folder'){
+		console.log($('#side-menu a'));
+		console.log($('#side-menu').children()[5].children);
+		for(i = 0; i < $('#side-menu a').length; i++){
+			if($(e.target).parent()[0].children[1].innerText == $('#side-menu a')[i].innerText) {
+				console.log($('#side-menu a')[i]);
+				 $($('#side-menu a')[i]).trigger('click');
+			}
+		}
+	} 
+});
+
+$('#side-menu').click(function(m) {
+	console.log($(m.target)[0].innerText);
+	console.log($(m.target).parent().parent().parent().children().parent().parent().parent().children()[0].innerText);
+	$('.nav-pills > li ').remove();
+	whoisparent($(m.target));
+});
+function whoisparent(child) {
+	console.log(child[0].innerText);
+	console.log(child.parent().parent().parent().children()[0].innerText);
+	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive') {
+		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
+	}
+	if (child.parent().parent().parent().children()[0].innerText != 'Facebook' && 
+			child.parent().parent().parent().children()[0].innerText != 'google' && 
+			child.parent().parent().parent().children()[0].innerText != 'Tcloud' && 
+			child.parent().parent().parent().children()[0].innerText != 'Dropbox' && 
+			child.parent().parent().parent().children()[0].innerText != 'Onedrive') {
+		whoisparent(child.parent().parent().parent().children())
+	} else {
+		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child.parent().parent().parent().children()[0].innerText + "</li>");		
+	}
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
+}
+</script>
+<script>
+console.log($.session.get('useremail'));
+console.log($.session.get('username'));
+console.log($.session.get('usertel'));
+
+$(function (){
+	  /* $.ajax('http://' + ip + directoryLocation + '/active.do', {
+	        method: 'POST',
+	        dataType: 'json',
+	        data: {
+	          email: $.session.get('useremail'),
+	        },
+	        success: function(result) {
+	          for(i=0; i < result.idfind.length ; i++) {
+	        	  console.log(result.idfind[i].cloudtype);
+	        	  if (result.idfind[i].cloudtype == "facebook") {
+	        		  document.getElementById('facebookactive').style.display = "block";
+	        	  } else if (result.idfind[i].cloudtype == "tcloud") {
+	        		  document.getElementById('Tcloudactive').style.display = "block";
+	        	  }
+	          }
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('active로딩중 문제 발생.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+	        }
+	      }); */
+	}); 
+  
+  $(document).ready(function() {
+      $('#dataTables-example').DataTable({
+              responsive: true
+      });
+  });
+  
+ $(document).ready(function() {
+      $("#name").width(280);
+  });
+ 
+ /* window.onload = function() {
+   move('#wrapper')
+   .scale(0.1)
+   .end();
+ };
+ 
+ function readygo() {
+ move('#wrapper')
+ .scale(1)
+ .duration(900)
+ .set('opacity', 1)
+ .end();
+  
+ }
+ 
+ setTimeout("readygo()",300); */
+ 
+
+ function MouseOverCopy(MyImage) {
+   MyImage.src = "../img/topmenu_copy_on.png";
+}
+function MouseOutCopy(MyImage) {
+   MyImage.src = "../img/topmenu_copy_off.png";
+}
+function MouseOverPaste(MyImage) {
+     MyImage.src = "../img/topmenu_paste_on.png";
+}
+function MouseOutPaste(MyImage) {
+     MyImage.src = "../img/topmenu_paste_off.png";
+}
+function MouseOverDelete(MyImage) {
+   MyImage.src = "../img/topmenu_del_on.png";
+}
+function MouseOutDelete(MyImage) {
+   MyImage.src = "../img/topmenu_del_off.png";
+}
+function MouseOverDown(MyImage) {
+     MyImage.src = "../img/topmenu_down_on.png";
+}
+function MouseOutDown(MyImage) {
+     MyImage.src = "../img/topmenu_down_off.png";
+}
+function MouseOverUpload(MyImage) {
+     MyImage.src = "../img/topmenu_up_on.png";
+}
+function MouseOutUpload(MyImage) {
+     MyImage.src = "../img/topmenu_up_off.png";
+}
+function MouseOverNew(MyImage) {
+   MyImage.src = "../img/topmenu_new_on.png";
+}
+function MouseOutNew(MyImage) {
+   MyImage.src = "../img/topmenu_new_off.png";
+} 
+function MouseOverRe(MyImage) {
+ MyImage.src = "../img/topmenu_rename_on.png";
+}
+function MouseOutRe(MyImage) {
+ MyImage.src = "../img/topmenu_rename_off.png";
+}
+	
+	console.log($('#dataTables-example > thead > tr :first-child'));
+	$('.relative').click(function() {
+		$('#dataTables-example > thead > tr :first-child').removeAttr('class')
+		.removeAttr('tabindex').removeAttr('aria-controls').removeAttr('rowspan').removeAttr('colspan').removeAttr('aria-label').removeAttr('aria-sort');
+	});
+</script>
+
+</body>
+
+</html>
