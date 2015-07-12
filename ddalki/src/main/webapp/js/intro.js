@@ -56,7 +56,7 @@ function tomainform() {
 }
 
 function gomain() {
-	location.href = 'http://localhost:9999/ddalki/ddalki-main/main.html';
+	location.href = 'http://cloud.ddalki.com:9999/ddalki/ddalki-main/main.html';
 }
 
 
