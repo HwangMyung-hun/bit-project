@@ -11,6 +11,8 @@
 #lnb li{border: 0;}
 #lnb.nav li{height:15px:padding:0 0 0 15px}
 
+#logout{margin:15px}
+
 .width{width:1200px}
 .bar{float:left;width:970px}
 .center{text-align:center}
