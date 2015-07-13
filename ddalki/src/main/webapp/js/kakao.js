@@ -54,7 +54,15 @@ function kakaoListInit(){
 				//td.className = 'testclass';
 
 				var td1 = createtr.appendChild(document.createElement("TD"));
-				td1.innerHTML = res;
+				td1.innerHTML = res.content;
+				var td2 = createtr.appendChild(document.createElement("TD"));
+				td2.innerHTML = ' ';
+				var td3 = createtr.appendChild(document.createElement("TD"));
+				td3.innerHTML = res.created_at;
+				var td4 = createtr.appendChild(document.createElement("TD"));
+				td4.innerHTML = res.original.height;
+				var td5 = createtr.appendChild(document.createElement("TD"));
+				td5.innerHTML = res.media_type;
 				/*var view = new Image();
 			//view.src = response.meta.images.image[j].thumbnailUrl;
 			view.src = res;
