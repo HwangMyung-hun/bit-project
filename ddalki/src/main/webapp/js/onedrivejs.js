@@ -5,7 +5,9 @@ var onedrive_secret = "cdau0UrKN3cW3hnBpJ-kD9uPp9dC5Fsv";
 var odtoken;
 var folderid;
 var onedriveactive = null;
-var onedriveStorage = new Array();
+var oneVolume = [0, 0];
+var onevolok;
+var onedriveID;
 
 $(function(){
 	odtoken = getTokenFromCookie();
@@ -14,52 +16,58 @@ $(function(){
 		$.ajax({
 			url: "https://api.onedrive.com/v1.0/drive?access_token=" + odtoken,
 			success: function(data) {
-				onedriveStorage = [data.quota.total, data.quota.used];
-				console.log(onedriveStorage);
+				console.log(data.id);
+				onedriveID = data.id;
+				oneVolume = [data.quota.total, data.quota.used];
+				onevolok = 'ok';
+				VolumeBar();
+				$.ajax('http://' + ip + directoryLocation + '/tcloudactive.do', {
+					method: 'POST',
+					dataType: 'json',
+					data: {
+						email: $.session.get('useremail'),
+						cloudtype: 'onedrive'
+					},
+					success: function(result) {
+						console.log(result);
+						if (result.active == "Y") {
+			        		console.log("onedrive 기존 회원");
+			        	} else {
+			        		$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
+			        		    method: 'POST',
+			        		    dataType: 'json',
+			        		    data: {
+			        		      email: $.session.get('useremail'),
+			        		      cloudtype: 'onedrive',
+			        		      cloudid: onedriveID,
+			        		      token: odtoken,
+			        		      active: 'Y'
+			        		    },
+			        		    success: function(result) {
+			        		       alert('onedrive 등록이 완료되었습니다.');
+			        		    },
+			        		    error: function(xhr, textStatus, errorThrown) {
+			        		      alert('DB저장 실패.\n' + 
+			        		          '잠시 후 다시 시도하세요.\n' +
+			        		      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+			        		    }
+			        	    });
+			        	}
+					},
+					error: function(xhr, textStatus, errorThrown) {
+						alert('active로딩중 문제 발생.\n' + 
+								'잠시 후 다시 시도하세요.\n' +
+						'계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+					}
+				});
 			},
 			error: function(err){
 				console.log(err);
 			}
 		});
-		$.ajax('http://' + ip + directoryLocation + '/tcloudactive.do', {
-	        method: 'POST',
-	        dataType: 'json',
-	        data: {
-	          email: $.session.get('useremail'),
-	          cloudtype: 'onedrive'
-	        },
-	        success: function(result) {
-	        	console.log(result);
-	        	/*if (result.active == "Y") {
-	        		console.log("onedrive 기존 회원");
-	        	} else {
-	        		$.ajax('http://' + ip + directoryLocation + '/addcloud.do', {
-	        		    method: 'POST',
-	        		    dataType: 'json',
-	        		    data: {
-	        		      email: $.session.get('useremail'),
-	        		      cloudtype: 'onedrive',
-	        		      cloudid: 'aa',
-	        		      token: odtoken,
-	        		      active: 'Y'
-	        		    },
-	        		    success: function(result) {
-	        		       alert('onedrive 등록이 완료되었습니다.');
-	        		    },
-	        		    error: function(xhr, textStatus, errorThrown) {
-	        		      alert('DB저장 실패.\n' + 
-	        		          '잠시 후 다시 시도하세요.\n' +
-	        		      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
-	        		    }
-	        	    });
-	        	}*/
-	        },
-	        error: function(xhr, textStatus, errorThrown) {
-	          alert('active로딩중 문제 발생.\n' + 
-	              '잠시 후 다시 시도하세요.\n' +
-	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
-	        }
-	      });
+	} else {
+		onevolok = 'ok';
+		VolumeBar();
 	}
 });
 
@@ -292,14 +300,20 @@ function innerfile(folderid, name) {
 	$.ajax({
 		url: "https://api.onedrive.com/v1.0/drive/items/" + folderid + "/children?expand=thumbnails,children(expand=thumbnails(select=smallSquare,c200x150_Crop))&access_token=" + odtoken,
 		success: function(data) {
+			console.log(data);
 			for (i = 0 ; i < data.value.length ; i++) {
 				if(data.value[i].thumbnails.length){
 					$("#tbody").append("<tr><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
-							+ "<td>"+ data.value[i].name +"<img src='" + data.value[i].thumbnails[0].smallSquare.url + "' id='image1'></td>"
+							+ "<td>"+ data.value[i].name +"<img src='" + data.value[i].thumbnails[0].smallSquare.url + "' id='image1' onclick=window.open('" + data.value[i].webUrl + "')></td>"
 							+ "<td></td>"
 							+ "<td>"+ data.value[i].lastModifiedDateTime.split("T")[0] +"</td>"
 							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
 							+ "<td class='center'>"+ data.value[i].name.split('.')[1] +"</td></tr>");
+					/*(function(m) {
+						$('#image1').click(function() {
+							window.open(data.value[m].webUrl);
+						});
+					})(i);	*/
 				} else if (data.value[i].folder) {
 					$("#tbody").append("<tr id='clickfolder'><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
 							+ "<td>"+ data.value[i].name +"<img src='../img/fileicon_folder.png' id='image1'></td>"
@@ -307,11 +321,6 @@ function innerfile(folderid, name) {
 							+ "<td>"+ data.value[i].lastModifiedDateTime.split('T')[0] +"</td>"
 							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
 							+ "<td class='center'>folder</td></tr>");
-					(function(m) {
-						$('#clickfolder').dblclick(function() {
-							innerfile(  data.value[m].id , data.value[m].name );
-						});
-					})(i);	
 				} else {
 					$("#tbody").append("<tr><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
 							+ "<td>"+ data.value[i].name +"</td>"
@@ -344,9 +353,10 @@ $("#odcreatebtn").click(function() {
 			success: function(data) {
 				console.log(data);
 				$("#odcreatefolder").hide();
-				ondriveallow = 0;
 				innerfile(data.id, data.name);
 				$('#side-menu').metisMenu();
+				ondriveallow = 0;
+				$('#onedrivefolder').trigger('click');
 			},
 			error: function(error){
 				console.log(error);
@@ -488,6 +498,8 @@ $('#deletebtn').click(function() {
 					if (dlrjanjdi == 2) {
 						alert("삭제하였습니다.");
 						$('#side-menu').metisMenu();
+						ondriveallow = 0;
+						$('#onedrivefolder').trigger('click');
 					}
 				}
 				xmlReq.send();
@@ -495,11 +507,11 @@ $('#deletebtn').click(function() {
 		}
 	}
 });
-$('#uploadbtn').click(function() {
+/*$('#uploadbtn').click(function() {
 	if(onedriveactive == true){
 		$('#ondriveupload').show();
 	}
-})
+})*/
 /*$.ajax({
 		url: "https://api.onedrive.com/v1.0/drive/root/children?access_token=" + odtoken,
 		success: function(data) {

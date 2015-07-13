@@ -7,7 +7,8 @@ if (document.location.href.length < 400) {
 		console.log(sktoken[1]);
 	}
 }
-var TcloudStorage = new Array(); 
+var TcloudVolume = [0, 0]; 
+var tcloudvolok;
 
 function userProfile_callback( data ) {
 	tcloudID = data.profile.userId;
@@ -68,13 +69,18 @@ $(function (){
     if (status) {
     	PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/usage", "JSON", { "version": 1}, TcloudStorage_callback );
+    } else {
+    	tcloudvolok = 'ok';
+    	VolumeBar();
     }
    // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
 });
 
 function TcloudStorage_callback (res) {
-	TcloudStorage = [res.usage.total, res.usage.used];
-	console.log(TcloudStorage);
+	TcloudVolume = [res.usage.total, res.usage.used];
+	console.log(TcloudVolume);
+	tcloudvolok = 'ok';
+	VolumeBar();
 }
 
 function tcloud_delete (response) {
@@ -203,34 +209,7 @@ $('#tcloudimages').click(function() {
 				
 				$('#deletebtn').click(function() {
 					if(check.checked == true && tactive == true) {
-						var imgID = response.meta.images.image[m].objectId;
-						console.log(imgID);
-						var xmlReq =  new  XMLHttpRequest (); 
-						  xmlReq.open( 'DELETE' ,  "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" );
-						  xmlReq.setRequestHeader( 'access_token' ,  sktoken[1]);
-						  xmlReq.onreadystatechange = function() {
-						     dlrjanjdi++;
-						     if (dlrjanjdi == 2) {
-						    	 alert("삭제하였습니다.");
-						     }
-						  }
-						  xmlReq.send();
-						/*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-		                  method: 'DELETE',
-		                  dataType: 'JSON',
-		                  contentType: "application/json",
-		                  beforeSend : function(xhr) {
-						      xhr.setRequestHeader("access_token", sktoken[1]);
-					      },
-		                  success: function(result) {
-		                     console.log(result.data);
-		                  },
-		                  error: function(xhr, textStatus, errorThrown) {
-		                    alert('문제잇음');
-		                  }
-		             });*/
-						/*PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1" ,
-								"JSON", {"version" :1} , tcloud_delete); */
+						PlanetX.api( "post", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId ,"JSON", {"version" : 1, "_method" : "DELETE" }, tcloud_delete );
 					}
 				});
 				$('#downloadbtn').click(function(event) {
@@ -318,26 +297,10 @@ $('#tcloudmusic').click(function(event) {
 	      (function(m) {
 				var check = document.getElementById('tcheck' + m);
 				 
-				$('#deletebtn').click(function(event) {
+				$('#deletebtn').click(function() {
 					if(check.checked == true && tactive == true) {
-						var imgID = response.meta.music.music[m].objectId;
-						console.log(imgID);
-			          /*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-		                  method: 'POST',
-		                  dataType: 'JSON',
-		                  headers: {
-		                	  access_token : sktoken[1]
-		                  },
-		                  success: function(result) {
-		                     console.log(result.data);
-		                  },
-		                  error: function(xhr, textStatus, errorThrown) {
-		                    alert('문제잇음');
-		                  }
-		             });*/
-		           PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.music.music[m].objectId + "?version=1" ,
-		        		          "JSON", {"version" :1} , tcloud_delete); 
-		        	}
+						PlanetX.api( "post", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId ,"JSON", {"version" : 1, "_method" : "DELETE" }, tcloud_delete );
+					}
 				});
 				$('#downloadbtn').click(function(event) {
 					if(check.checked == true && tactive == true) {
@@ -425,26 +388,10 @@ $('#tcloudmovies').click(function(event) {
 	        (function(m) {
 	            var check = document.getElementById('tcheck' + m);
 	            
-	            $('#deletebtn').click(function(event) {
+	            $('#deletebtn').click(function() {
 					if(check.checked == true && tactive == true) {
-						var imgID = response.meta.documents.document[m].objectId;
-						console.log(imgID);
-			          /*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-		                  method: 'POST',
-		                  dataType: 'JSON',
-		                  headers: {
-		                	  access_token : sktoken[1]
-		                  },
-		                  success: function(result) {
-		                     console.log(result.data);
-		                  },
-		                  error: function(xhr, textStatus, errorThrown) {
-		                    alert('문제잇음');
-		                  }
-		             });*/
-		           PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.documents.document[m].objectId + "?version=1" ,
-		        		          "JSON", {"version" :1} , tcloud_delete); 
-		        	}
+						PlanetX.api( "post", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId ,"JSON", {"version" : 1, "_method" : "DELETE" }, tcloud_delete );
+					}
 				});
 				$('#downloadbtn').click(function(event) {
 					if(check.checked == true && tactive == true) {
@@ -524,26 +471,10 @@ $('#tclouddocuments').click(function(event) {
 	      (function(m) {
 				var check = document.getElementById('tcheck' + m);
 				 
-				$('#deletebtn').click(function(event) {
+				$('#deletebtn').click(function() {
 					if(check.checked == true && tactive == true) {
-						var imgID = response.meta.documents.document[m].objectId;
-						console.log(imgID);
-			          /*$.ajax("https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId + "?version=1", {
-		                  method: 'POST',
-		                  dataType: 'JSON',
-		                  headers: {
-		                	  access_token : sktoken[1]
-		                  },
-		                  success: function(result) {
-		                     console.log(result.data);
-		                  },
-		                  error: function(xhr, textStatus, errorThrown) {
-		                    alert('문제잇음');
-		                  }
-		             });*/
-		           PlanetX.api( "DELETE", "https://apis.skplanetx.com/tcloud/images/" + response.meta.documents.document[m].objectId + "?version=1" ,
-		        		          "JSON", {"version" :1} , tcloud_delete); 
-		        	}
+						PlanetX.api( "post", "https://apis.skplanetx.com/tcloud/images/" + response.meta.images.image[m].objectId ,"JSON", {"version" : 1, "_method" : "DELETE" }, tcloud_delete );
+					}
 				});
 				$('#downloadbtn').click(function(event) {
 					if(check.checked == true && tactive == true) {
