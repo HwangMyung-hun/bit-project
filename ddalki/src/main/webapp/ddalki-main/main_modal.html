@@ -462,8 +462,7 @@ $(function (){
 	      }); 
 	}); 
 	
-
-var googleVolume = [500, 400];
+var googleVolume = [800, 200];
 var googleVol;
 var TcloudVolume = [1500, 500];
 var TcloudVol;
@@ -475,20 +474,57 @@ var totalVolume;
 
 
 $(document).ready(function() {
-  totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
   
-  googleVol = googleVolume[1] / totalVolume * 100;
-  TcloudVol = TcloudVolume[1] / totalVolume * 100;
-  oneVol = oneVolume[1] / totalVolume * 100;
-  dbxVol = dbxVolume[1] / totalVolume * 100;
+  if (dbxVolume == null){
+    
+	  totalVolume = (googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
+	  
+	  googleVol = googleVolume[1] / totalVolume * 100;
+	  TcloudVol = TcloudVolume[1] / totalVolume * 100;
+	  oneVol = oneVolume[1] / totalVolume * 100;
+	  console.log(totalVolume);
+  }
+  else if (googleVolume == null){
+    
+    totalVolume = (dbxVolume[0] + oneVolume[0] + TcloudVolume[0]);
+    
+    TcloudVol = TcloudVolume[1] / totalVolume * 100;
+    oneVol = oneVolume[1] / totalVolume * 100;
+    dbxVol = dbxVolume[1] / totalVolume * 100;
+  }
+  else if (oneVolume == null){
+    
+    totalVolume = (dbxVolume[0] + googleVolume[0] + TcloudVolume[0]);
+    
+    googleVol = googleVolume[1] / totalVolume * 100;
+    TcloudVol = TcloudVolume[1] / totalVolume * 100;
+    dbxVol = dbxVolume[1] / totalVolume * 100;
+  }
+  else if (TcloudVolume == null){
+    
+    totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0]);
+    
+    googleVol = googleVolume[1] / totalVolume * 100;
+    oneVol = oneVolume[1] / totalVolume * 100;
+    dbxVol = dbxVolume[1] / totalVolume * 100;
+  }
+  else {
+    totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
+    
+    googleVol = googleVolume[1] / totalVolume * 100;
+    TcloudVol = TcloudVolume[1] / totalVolume * 100;
+    oneVol = oneVolume[1] / totalVolume * 100;
+    dbxVol = dbxVolume[1] / totalVolume * 100;
+  }
   
-  usableVolume = totalVolume - (dbxVolume[1] + googleVolume[1] + oneVolume[1] + TcloudVolume[1]);
+  
+  /* usableVolume = totalVolume - (dbxVolume[1] + googleVolume[1] + oneVolume[1] + TcloudVolume[1]);
   usableVol = usableVolume / totalVolume * 100;
   console.log(usableVol);
   
   console.log(totalVolume);
   console.log(dbxVol);
-  console.log(googleVol);
+  console.log(googleVol); */
   
   if (googleVol != null){
 	  document.getElementById('googleVolume').style.width = googleVol + "%";
