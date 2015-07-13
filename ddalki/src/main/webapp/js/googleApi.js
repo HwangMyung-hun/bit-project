@@ -5,11 +5,29 @@ var accessToken;
 var apiKey = 'AIzaSyA3nrbSWG0imQOxUPr8tINF3NzvTtInyGI';
 function signinCallback(authResult) {
   if (authResult['access_token']) {
+	  var ip = 'localhost:9999/ddalki';
+	  var directoryLocation = '/cloud';
+	    $.ajax('http://' + ip + directoryLocation + '/hasCloud.do', {
+	        method: 'POST',
+	        dataType: 'json',
+	        data: {
+	          email: "aa",
+	          cloudtype: "google",
+	          cloudid: "allow"
+	        },
+	        success: function(result) {
+	        	googleactive();
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('자걱.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+	        }
+	      });
     // 승인 성공
     // 사용자가 승인되었으므로 로그인 버튼 숨김. 예:
     //document.getElementById('signinButton').setAttribute('style', 'display: none');
-	  token = authResult['access_token'];
-    console.log(authResult);
+	token = authResult['access_token'];
     accessToken = authResult.access_token;
     var credentials = {
     		access_token : authResult['access_token'],
@@ -19,12 +37,43 @@ function signinCallback(authResult) {
     }; 
     retrieveAllFiles(credentials);
   } else if (authResult['error']) {
+	googleunactive();
     // 오류가 발생했습니다.
     // 가능한 오류 코드:
     //   "access_denied" - 사용자가 앱에 대한 액세스 거부
     //   "immediate_failed" - 사용자가 자동으로 로그인할 수 없음
     // console.log('오류 발생: ' + authResult['error']);
   }
+}
+
+function googleactive() {
+	//존재하면서 활성화
+}
+
+function googleunactive() {
+  var ip = 'localhost:9999/ddalki';
+  var directoryLocation = '/cloud';
+  $.ajax('http://' + ip + directoryLocation + '/hasCloud.do', {
+    method: 'POST',
+    dataType: 'json',
+    data: {
+      email: "aa",
+      cloudtype: "google",
+      cloudid: "allow"
+    },
+    success: function(result) {
+    	if(result.cloud == "exist") {
+    		// 있으면서 비활성화
+    	} else {
+    		// 존재조차 안함
+    	}
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      alert('자걱.\n' + 
+          '잠시 후 다시 시도하세요.\n' +
+      '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:1112)');
+    }
+  });
 }
 
 function disconnectUser(access_token) {
@@ -174,6 +223,8 @@ function direcAdd(id, inteager) {
 	}
 }
 
+var crefolder = false;
+
 function filetable(id) {
 	foldertargetid = id;
 	foldertargets = true;
@@ -182,15 +233,17 @@ function filetable(id) {
 		if(driveResult[i].parents[0].id == id 
 				&& !driveResult[i].labels.trashed
 				&& (driveResult[i].mimeType != "application/vnd.google-apps.folder")) {
-			$("#tbody").append("<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
-                                    + "<td>"+ driveResult[i].title +"</td>"
-                                    + "<td></td>"
-                                    + "<td>"+ (driveResult[i].modifiedDate).split("T")[0] +"</td>"
-                                    + "<td class='center'>"+ fileSizeRename(driveResult[i].fileSize) +"</td>"
-                                    + "<td class='center'>"+ driveResult[i].fileExtension +"</td></tr>");
+			$("#tbody").append(
+					"<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
+                    + "<td>"+ driveResult[i].title +"</td>"
+                    + "<td></td>"
+                    + "<td>"+ (driveResult[i].modifiedDate).split("T")[0] +"</td>"
+                    + "<td class='center'>"+ fileSizeRename(driveResult[i].fileSize) +"</td>"
+                    + "<td class='center'>"+ driveResult[i].fileExtension +"</td></tr>");
 		} else if (driveResult[i].parents[0].id == id && 
 				(driveResult[i].mimeType == "application/vnd.google-apps.folder")){
-			$("#tbody").append("<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
+			$("#tbody").append(
+					"<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
                     + "<td>"+ driveResult[i].title +"</td>"
                     + "<td></td>"
                     + "<td>"+ (driveResult[i].modifiedDate).split("T")[0] +"</td>"
@@ -198,7 +251,22 @@ function filetable(id) {
                     + "<td class='center'>folder</td></tr>");
 		}
 	}
+	etcthumnail();
+	gdTumbnailInsert();
+	if(crefolder) {
+		$("#tbody input")[0].checked = true;
+		$('.left img:nth-child(7)').trigger("click");
+		crefolder = 11;
+	}
+	///
+	///
+	///
+	if(crefolder == 11) {
+		crefolder = false;
+	}
 }
+
+
 
 function rootlistfile() {
 	for (var i in driveResult) {
@@ -222,6 +290,8 @@ function rootlistfile() {
 			}
 		}
 	}
+	etcthumnail();
+	gdTumbnailInsert();
 }
 
 function fileSizeRename(size) {
@@ -391,6 +461,20 @@ function actionRefresh() {
 function deleteFile(fileId) {
   var _fileIds = fileId.split("&&&");
   var dlrjanjdi = 0;
+  var ids = undefined;
+  var idin = 0;
+  for(var i = 0; i < _fileIds.length - 1; i++){
+	  for(var j = 0; j < driveResult.length; j++) {
+		  if(driveResult[j].id == _fileIds[i] && driveResult[j].mimeType 
+				  == "application/vnd.google-apps.folder") {
+			  idin++;
+			  if(idin == 1) {
+				  ids = [];
+			  }
+			  ids.push(_fileIds[i]);
+		  }
+	  }
+  }
   for(var i = 0; i < _fileIds.length - 1; i++){
 	  var xmlReq =  new  XMLHttpRequest (); 
 	  xmlReq.open( 'DELETE' ,  'https://www.googleapis.com/drive/v2/files/'  + _fileIds[i] +  '?key='  + apiKey ); 
@@ -399,12 +483,11 @@ function deleteFile(fileId) {
 	     dlrjanjdi++;
 	     if (dlrjanjdi == 2) {
 	    	 alert("삭제하였습니다.");
-	    	 folderdeletereset();
-	     }
+	    	 folderdeletereset(ids, 1);
+	     } 
 	  }
 	  xmlReq.send();
   }
-  
 }
 
 
@@ -426,6 +509,7 @@ $('#dataTables-example > thead input').click(function() {
 });
 
 function createFolder(id) {
+	crefolder = true;
 	data = new Object();
 	data.title = 'New Folder';
 	data.parents = [{"id": id}];
@@ -453,13 +537,35 @@ $('.left img:nth-child(6)').click(function() {
 	if(googlenewfolder) createFolder(foldertarget());
 });
 
-function folderdeletereset() {
+function folderdeletereset(fileId, del) {
 	checkAuth(function(){
 		var request = gapi.client.drive.files.list();
 		request.execute(function(resp) {
 			if (!resp.error) {
 				driveResult = resp.items;
 				actionRefresh();
+				if(fileId != undefined && del == undefined) {
+					for(var i in driveResult) {
+						if(driveResult[i].id == fileId && driveResult[i].parents[0].isRoot) {
+							rootfolderlistreset(fileId);
+							break;
+						} else {
+							folderlistreset(fileId);
+							break;
+						}
+					}
+				}
+				if(fileId != undefined && del != undefined) {
+					for(var i in driveResult) {
+						if(driveResult[i].id == fileId && driveResult[i].parents[0].isRoot) {
+							rootfolderhadereset(fileId);
+							break;
+						} else {
+							folderhadereset(fileId);
+							break;
+						}
+					}
+				}
 			} else if (resp.error.code == 401) {
 				// Access token might have expired.
 				//console.log(resp.error.code + "");
@@ -471,6 +577,43 @@ function folderdeletereset() {
 	});
 }
 
+function rootfolderlistreset(fileId) {
+	var title;
+	for(var i = 0;i < driveResult.length; i++) {
+		if (driveResult[i].id == fileId) {
+			title = driveResult[i].title;
+			break;
+		}
+	}
+	$($("#" + fileId)[0].parentElement).remove();
+	var classname = $('#' + parentid + '+ul')[0].className.split('nav-')[1].split("-level")[0];
+	var realorder;
+	for (var i in order) {
+		if(order[i] == classname) {
+			realorder = i;
+		}
+	}
+	$('.btn-google-plus + ul').append("<li> <a id='" + fileId 
+			+ "' onclick='filetable(this.id)'>"+ title 
+			+"<span class='fa arrow'></span></a><ul class='nav nav-"
+			+ order[realorder + 1] + "-level'></ul></li>");
+	$('#side-menu').metisMenu();
+}
+
+function rootfolderhadereset(fileId) {
+	//제거
+	for(var i in fileId) {
+		$($("#" + fileId[i])[0].parentElement).remove();
+	}
+}
+
+function folderhadereset(fileId) {
+	for(var i in fileId) {
+		$($("#" + fileId[i])[0].parentElement).remove();
+	}
+}
+
+
 function renameFile(fileId, newTitle) {
   var body = {'title': newTitle};
   checkAuth(function(){
@@ -480,7 +623,17 @@ function renameFile(fileId, newTitle) {
 	  });
 	  request.execute(function(resp) {
 		if (!resp.error) {
-			folderdeletereset();
+			for(var i in driveResult) {
+				if(driveResult[i].mimeType == "application/vnd.google-apps.folder" 
+					&& driveResult[i].id == fileId) {
+					folderdeletereset(fileId);
+					break;
+				} else if (driveResult[i].mimeType != "application/vnd.google-apps.folder" 
+					&& driveResult[i].id == fileId){
+					folderdeletereset();
+					break;
+				}
+			}
 		} else if (resp.error.code == 401) {
 			// Access token might have expired.
 			//console.log(resp.error.code + "");
@@ -492,32 +645,97 @@ function renameFile(fileId, newTitle) {
   });
 }
 
+function folderlistreset(fileId) {
+	// 폴더 리스트 리셋
+	var parentid;
+	var title;
+	for(var i = 0;i < driveResult.length; i++) {
+		if (driveResult[i].id == fileId) {
+			parentid = driveResult[i].parents[0].id;
+			title = driveResult[i].title;
+			break;
+		}
+	}
+	$($("#" + fileId)[0].parentElement).remove();
+	var classname = $('#' + parentid + '+ul')[0].className.split('nav-')[1].split("-level")[0];
+	var realorder;
+	for (var i in order) {
+		if(order[i] == classname) {
+			realorder = i;
+		}
+	}
+	$('#' + parentid + '+ul').append("<li> <a id='" + fileId 
+			+ "' onclick='filetable(this.id)'>"+ title 
+			+"<span class='fa arrow'></span></a><ul class='nav nav-"
+			+ order[realorder + 1] + "-level'></ul></li>");
+	$('#side-menu').metisMenu();
+}
+
 var preTitle;
 $('.left img:nth-child(7)').click(function() {
 	if(googlenewfolder) {
-	  var checkreset = $('#tbody input');
-	  for(var i = 0; i < checkreset.length; i++) {
-		  checkreset[i].checked = false;
-	  }
-	  alert("checkbox를 선택하시오!");
-      $('#tbody input').click(function(e) {
-    	  var titleTd = e.target.parentNode.parentNode.childNodes[1];
-    	  if(titleTd.innerText != "등록취소") preTitle = titleTd.innerText;
-    	  if(e.target.checked) {
-    		  titleTd.innerText = '';
-    		  titleTd.innerHTML = '<span><input id="googlenewtitle" type="text"/><button id="imin">등록</button>' 
-    			  + '<button id="getoutofhere">취소</button></span>';
-    		  $('#imin').click(function() {
-    			  renameFile(e.target.id, $('#googlenewtitle').val());
-    		  });
-    		  $('#getoutofhere').click(function() {
-    			  titleTd.innerHTML = preTitle;
-    			  titleTd.innerText = preTitle;
-    			  e.target.checked = false;
-    		  });
-    	  } else {
-    		  titleTd.innerText = preTitle;
-    	  }
-      });
+      var tr = $("#tbody input");
+	  var ids = '';
+	  for (var i = 0; i < tr.length; i++) {
+  		if($("input:checkbox[id='" + tr[i].id + "']").is(":checked")) {
+			ids = ids + tr[i].id;
+			break;
+		}
+      }
+	  for (var i = 0; i < tr.length; i++) {
+  		if($("input:checkbox[id='" + tr[i].id + "']").is(":checked")) {
+			if(!(tr[i].id == ids)) tr[i].checked = false;
+		}
+      }
+	  var titleTd = $("input:checkbox[id='" + ids + "']")[0].parentNode.parentNode.childNodes[1];
+	  $("#tbody input").click(function(e) {
+		  if(e.target.id == ids){
+			  $("#" + foldertargetid).trigger('click');
+			  folderdeletereset(ids);
+				for(var i in driveResult) {
+					if(driveResult[i].id == fileId && driveResult[i].parents[0].isRoot) {
+						rootfolderlistreset(ids)
+						break;
+					} 
+				}
+		  } 
+	  });
+	  if($("input:checkbox[id='" + ids + "']")[0].checked) {
+		  titleTd.innerText = '';
+		  titleTd.innerHTML = '<span><input id="googlenewtitle" type="text"/><button id="imin">등록</button>' 
+			  + '<button id="getoutofhere">취소</button></span>';
+		  $('#imin').click(function() {
+			  if ($("#tbody td")[5].innerText != 'folder') renameFile(ids, $('#googlenewtitle').val() + "." + $("#tbody td")[5].innerText);
+			  else renameFile(ids, $('#googlenewtitle').val());
+		  });
+		  $('#getoutofhere').click(function() {
+			  $("#" + foldertargetid).trigger('click');
+			  folderdeletereset(ids);
+				for(var i in driveResult) {
+					if(driveResult[i].id == fileId && driveResult[i].parents[0].isRoot) {
+						rootfolderlistreset(ids)
+						break;
+					} 
+				}
+		  });
+	  } 
 	}
 });
+
+function gdTumbnailInsert() {
+	var tumnailfor = [];
+	for (var i in driveResult) {
+		if(driveResult[i].parents[0].id == foldertargetid && driveResult[i].thumbnailLink != undefined) {
+			tumnailfor.push(driveResult[i]); 
+		}
+	}
+	if(tumnailfor.length != 0) {
+		for (var i in tumnailfor) {
+			if(tumnailfor[i].mimeType != "application/vnd.google-apps.folder") {
+				$('#' + tumnailfor[i].id)[0].parentElement.
+					parentElement.childNodes[1].innerHTML +=
+					"<img src='"+ tumnailfor[i].thumbnailLink +"' id='image1'>";
+			}
+		}
+	}
+}
