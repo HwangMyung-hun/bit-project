@@ -5,11 +5,22 @@ var onedrive_secret = "cdau0UrKN3cW3hnBpJ-kD9uPp9dC5Fsv";
 var odtoken;
 var folderid;
 var onedriveactive = null;
+var onedriveStorage = new Array();
 
 $(function(){
 	odtoken = getTokenFromCookie();
 	if(odtoken) {
 		console.log(odtoken);
+		$.ajax({
+			url: "https://api.onedrive.com/v1.0/drive?access_token=" + odtoken,
+			success: function(data) {
+				onedriveStorage = [data.quota.total, data.quota.used];
+				console.log(onedriveStorage);
+			},
+			error: function(err){
+				console.log(err);
+			}
+		});
 		$.ajax('http://' + ip + directoryLocation + '/tcloudactive.do', {
 	        method: 'POST',
 	        dataType: 'json',
@@ -180,7 +191,7 @@ function onAuthenticated(odtoken2, authWindow) {
 				url: "https://api.onedrive.com/v1.0/drive?access_token=" + odtoken2,
 				success: function(data) {
 					folderid = data.id;
-					console.log(folderid);
+					console.log(data);
 				},
 				error: function(err){
 					console.log(err);

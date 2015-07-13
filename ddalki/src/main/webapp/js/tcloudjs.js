@@ -7,7 +7,7 @@ if (document.location.href.length < 400) {
 		console.log(sktoken[1]);
 	}
 }
-
+var TcloudStorage = new Array(); 
 
 function userProfile_callback( data ) {
 	tcloudID = data.profile.userId;
@@ -67,12 +67,15 @@ $(function (){
     
     if (status) {
     	PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/usage", "JSON", { "version": 1}, TcloudStorage_callback );
     }
    // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
-    
-    
-    
 });
+
+function TcloudStorage_callback (res) {
+	TcloudStorage = [res.usage.total, res.usage.used];
+	console.log(TcloudStorage);
+}
 
 function tcloud_delete (response) {
 	console.log(response);
