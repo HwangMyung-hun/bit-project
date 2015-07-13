@@ -11,7 +11,7 @@
 #lnb li{border: 0;}
 #lnb.nav li{height:15px:padding:0 0 0 15px}
 
-#logout{margin:15px}
+#logout{position:absolute; top:525px; left:15px; height:30px;width:235px;background-color: #666;color:#fff;border-radius:3px;border:none;font-weight:bold}
 
 .width{width:1200px}
 .bar{float:left;width:970px}

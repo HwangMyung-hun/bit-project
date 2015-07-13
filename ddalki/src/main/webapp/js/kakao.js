@@ -41,9 +41,18 @@ function kakaoListInit(){
 		Kakao.API.request({
 			url: '/v1/api/story/mystories'
 		}).then(function (res) {
-			console.log(res);
+			//console.log(res.0.media_type);
 			$('#tbody>tr').remove();
 			for(j = 0; j < 17 ; j++) {
+			//console.log(res[j][content]);
+			//console.log("asdfadf"+ res[0]["id"])
+/*			for(var i in res) {
+				console.log(res[i]);
+				for(var j in res[i]) {
+					console.log("res["+i+"]["+j+"] : " + res[i][j])
+				}*/
+				
+				
 				var createtr = newtr.appendChild(document.createElement("TR"));
 				createtr.id = "kakaolist" + j;
 
@@ -58,17 +67,16 @@ function kakaoListInit(){
 				var td3 = createtr.appendChild(document.createElement("TD"));
 				var td4 = createtr.appendChild(document.createElement("TD"));
 				var td5 = createtr.appendChild(document.createElement("TD"));
-				td1.innerHTML = res.0.content;
-				td2.innerHTML = 33;
-				td3.innerHTML = 44;
-				td4.innerHTML = 55;
-				td5.innerHTML = 66;
-/*				td1.innerHTML = res.0.content;
-				td2.innerHTML = '11';
-				td3.innerHTML = res.0.created_at;
-				td4.innerHTML = res.0.original;
-				td5.innerHTML = res.0.media_type;
-*/				
+				
+				td1.innerHTML = res[j].content;
+//				td1.appendChild(document.createElement("img"));
+//				td1.img.src=res[j].media.small;
+				//console.log("이미지 주소"+res[j].media.original);
+				td2.innerHTML = ' ';
+				td3.innerHTML = res[j].created_at;
+				td4.innerHTML = res[j].original;
+				td5.innerHTML = res[j].media_type;
+				
 				/*var view = new Image();
 			//view.src = response.meta.images.image[j].thumbnailUrl;
 			view.src = res;
