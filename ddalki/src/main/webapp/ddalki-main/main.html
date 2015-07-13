@@ -178,11 +178,11 @@
                            </ul>
                            <!-- /.nav-second-level -->
                        </li>
-                        <li id="kakaoactive">
+                        <!-- <li id="kakaoactive">
                             <a class="btn-block btn-social btn-kakao" id="kakaoListshow"><img style="margin-top: 5px;" alt="kakao story" src="../img/kakaostory.png"/>
                             
                             <span class="social-text">KAKAO Story</span><span class="fa arrow"></span></a>
-                        </li>
+                        </li> -->
                         <li>
                           <a id="addcloud"><span class="glyphicon glyphicon-plus"  aria-hidden="true" ><span></a>
                         </li>
@@ -200,14 +200,14 @@
             <div class="row">
                 <!--  -->
                 <div class="panel-body">
-                    <!-- <ul class="nav nav-pills">
+                    <ul class="nav nav-pills">
                         <li id="arrow-on"><a href="#home-pills" data-toggle="tab">home</a></li>
-                    </ul> -->
-                    <ul class="nav nav-pills" id="lnb">
+                    </ul> 
+                    <!-- <ul class="nav nav-pills" id="lnb">
                         <li> <a href="#home-pills"> facebook > </a></li>
                         <li> <a href="#home-pills"> images > </a></li>
                         <li> <a href="#home-pills"> mobile > </a> </li>
-                    </ul>
+                    </ul> -->
                   </div>
                 
                 <div class="col-lg-12">
@@ -264,8 +264,8 @@
                                </form>
                             </div>
                             <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: none;">
-							<!-- <div class = "cloudicon "> -->
-							<div class="cloudbtns ">
+							<div class = "cloudicon ">
+							<!-- <div class="cloudbtns "> -->
 
 								<!-- /.table-responsive -->
 								<div id="fb-root">
@@ -273,18 +273,18 @@
 									<br />
 									<button class="logoutbtn" onclick=")">연결해제</button>
 								</div>
-								<img src="../img/introicon_tcloud.png" id="tcloudlogin"
-									onclick="PlanetX.login()">
+								<!-- 	<img src="../img/introicon_tcloud.png" id="tcloudlogin"
+									onclick="PlanetX.login()"> -->
 								<div>
 									<img src="../img/introicon_tcloud.png" id="tcloudlogin"
 										onclick="PlanetX.login()"> <br />
 									<button class="logoutbtn" onclick="PlanetX.logout()">연결해제</button>
 								</div>
-								<div>
+								<!-- <div>
 									<img src="../img/introicon_ucloud.png" id="ucloudlogin">
 									<br />
 									<button class="logoutbtn" id="">연결해제</button>
-								</div>
+								</div> -->
 								<div>
 									<img src="../img/introicon_onedrive.png" id="onedrivelogin">
 									<br />
@@ -424,8 +424,8 @@
 <script type="text/javascript" src="../js/dropboxmyapi.js"></script>
 <script src="../js/tcloudjs.js"></script>
 <script src="../js/facebookjs.js"></script>
-<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script src="../js/kakao.js"></script>
+<!-- <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="../js/kakao.js"></script> -->
 <script type="text/javascript">
 //var ip = 'localhost:9999/ddalki';
 var ip = 'localhost:9999/ddalki';
@@ -440,13 +440,9 @@ $('#logout').click(function(event) {
 $('#tbody').click(function(e) {
 	if($(e.target).parent()[0].children[0].children[0].checked) $(e.target).parent()[0].children[0].children[0].checked = false;
 	else $(e.target).parent()[0].children[0].children[0].checked = true;
-	console.log($(e.target).parent()[0].children[5].innerText);
 	if($(e.target).parent()[0].children[5].innerText == 'folder'){
-		console.log($('#side-menu a'));
-		console.log($('#side-menu').children()[5].children);
 		for(i = 0; i < $('#side-menu a').length; i++){
 			if($(e.target).parent()[0].children[1].innerText == $('#side-menu a')[i].innerText) {
-				console.log($('#side-menu a')[i]);
 				 $($('#side-menu a')[i]).trigger('click');
 			}
 		}
@@ -454,14 +450,10 @@ $('#tbody').click(function(e) {
 });
 
 $('#side-menu').click(function(m) {
-	console.log($(m.target)[0].innerText);
-	console.log($(m.target).parent().parent().parent().children().parent().parent().parent().children()[0].innerText);
 	$('.nav-pills > li ').remove();
 	whoisparent($(m.target));
 });
 function whoisparent(child) {
-	console.log(child[0].innerText);
-	console.log(child.parent().parent().parent().children()[0].innerText);
 	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive') {
 		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
 	}
@@ -472,9 +464,9 @@ function whoisparent(child) {
 			child.parent().parent().parent().children()[0].innerText != 'Onedrive') {
 		whoisparent(child.parent().parent().parent().children())
 	} else {
-		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child.parent().parent().parent().children()[0].innerText + "</li>");		
+		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child.parent().parent().parent().children()[0].innerText + " > </li>");		
 	}
-	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + " > </li>");
 }
 </script>
 <script>
