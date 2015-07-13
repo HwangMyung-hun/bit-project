@@ -462,102 +462,39 @@ $(function (){
 	      }); 
 	}); 
 	
-var googleVolume = [800, 200];
+
+var googleVolume = [0, 0];
 var googleVol;
-var TcloudVolume = [1500, 500];
+var TcloudVolume = [0, 0];
 var TcloudVol;
-var dbxVolume = [1000, 900];
+var dbxVolume = [0, 0];
 var dbxVol;
-var oneVolume = [700, 500];
+var oneVolume = [0, 0];
 var oneVol;
 var totalVolume;
 
 
 $(document).ready(function() {
-  
-  if (dbxVolume == null){
-    
-	  totalVolume = (googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
-	  
-	  googleVol = googleVolume[1] / totalVolume * 100;
-	  TcloudVol = TcloudVolume[1] / totalVolume * 100;
-	  oneVol = oneVolume[1] / totalVolume * 100;
-	  console.log(totalVolume);
-  }
-  else if (googleVolume == null){
-    
-    totalVolume = (dbxVolume[0] + oneVolume[0] + TcloudVolume[0]);
-    
-    TcloudVol = TcloudVolume[1] / totalVolume * 100;
-    oneVol = oneVolume[1] / totalVolume * 100;
-    dbxVol = dbxVolume[1] / totalVolume * 100;
-  }
-  else if (oneVolume == null){
-    
-    totalVolume = (dbxVolume[0] + googleVolume[0] + TcloudVolume[0]);
-    
-    googleVol = googleVolume[1] / totalVolume * 100;
-    TcloudVol = TcloudVolume[1] / totalVolume * 100;
-    dbxVol = dbxVolume[1] / totalVolume * 100;
-  }
-  else if (TcloudVolume == null){
-    
-    totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0]);
-    
-    googleVol = googleVolume[1] / totalVolume * 100;
-    oneVol = oneVolume[1] / totalVolume * 100;
-    dbxVol = dbxVolume[1] / totalVolume * 100;
-  }
-  else {
-    totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
-    
-    googleVol = googleVolume[1] / totalVolume * 100;
-    TcloudVol = TcloudVolume[1] / totalVolume * 100;
-    oneVol = oneVolume[1] / totalVolume * 100;
-    dbxVol = dbxVolume[1] / totalVolume * 100;
-  }
-  
-  
-  /* usableVolume = totalVolume - (dbxVolume[1] + googleVolume[1] + oneVolume[1] + TcloudVolume[1]);
+  totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
+  googleVol = googleVolume[1] / totalVolume * 100;
+  TcloudVol = TcloudVolume[1] / totalVolume * 100;
+  dbxVol = dbxVolume[1] / totalVolume * 100;
+  oneVol = oneVolume[1] / totalVolume * 100;
+  usableVolume = totalVolume - (dbxVolume[1] + googleVolume[1] + oneVolume[1] + TcloudVolume[1]);
   usableVol = usableVolume / totalVolume * 100;
   console.log(usableVol);
   
   console.log(totalVolume);
   console.log(dbxVol);
-  console.log(googleVol); */
-  
-  if (googleVol != null){
-	  document.getElementById('googleVolume').style.width = googleVol + "%";
-	  document.getElementById('googleVolume').innerHTML = "<span class='sr-only'>" + googleVol + "% Complete (success)</span> Google Drive (" + googleVol.toFixed(0) + "%)"; 
-  } else{
-    document.getElementById('googleVolume').style.width = 0 + "%";
-    document.getElementById('googleVolume').innerHTML = "<span class='sr-only'>" + 0 + "% Complete (success)</span> Google Drive (" + 0 + "%)";
-  }
-  
-  if (TcloudVol != null){
-	  document.getElementById('TcloudVolume').style.width = TcloudVol + "%";
-	  document.getElementById('TcloudVolume').innerHTML = "<span class='sr-only'>" + TcloudVol + "% Complete (success)</span> T-Cloud (" + TcloudVol.toFixed(0) + "%)";
-  }else{
-    document.getElementById('TcloudVolume').style.width = 0 + "%";
-    document.getElementById('TcloudVolume').innerHTML = "<span class='sr-only'>" + 0 + "% Complete (success)</span> Google Drive (" + 0 + "%)";
-  }
-  
-  if (dbxVol != null){
-		  document.getElementById('dropboxVolume').style.width = dbxVol + "%";
-		  document.getElementById('dropboxVolume').innerHTML = "<span class='sr-only'>" + dbxVol + "% Complete (success)</span> Dropbox (" + dbxVol.toFixed(0) + "%)";
-  }else{
-    document.getElementById('dropboxVolume').style.width = 0 + "%";
-    document.getElementById('dropboxVolume').innerHTML = "<span class='sr-only'>" + 0 + "% Complete (success)</span> Google Drive (" + 0 + "%)";
-  }
-  
-  if (oneVol != null){
-	  document.getElementById('onedriveVolume').style.width = oneVol + "%";
-	  document.getElementById('onedriveVolume').innerHTML = "<span class='sr-only'>" + oneVol + "% Complete (success)</span> One Drive (" + oneVol.toFixed(0) + "%)";
-  }else{
-    document.getElementById('onedriveVolume').style.width = 0 + "%";
-    document.getElementById('onedriveVolume').innerHTML = "<span class='sr-only'>" + 0 + "% Complete (success)</span> Google Drive (" + 0 + "%)";
-  }
-  
+  console.log(googleVol);
+  document.getElementById('googleVolume').style.width = googleVol + "%";
+  document.getElementById('TcloudVolume').style.width = dbxVol + "%";
+  document.getElementById('dropboxVolume').style.width = dbxVol + "%";
+  document.getElementById('onedriveVolume').style.width = dbxVol + "%";
+  document.getElementById('googleVolume').innerHTML = "<span class='sr-only'>" + googleVol + "% Complete (success)</span> Google Drive (" + googleVol.toFixed(0) + "%)"; 
+  document.getElementById('TcloudVolume').innerHTML = "<span class='sr-only'>" + TcloudVol + "% Complete (success)</span> T-Cloud (" + TcloudVol.toFixed(0) + "%)";
+  document.getElementById('dropboxVolume').innerHTML = "<span class='sr-only'>" + dbxVol + "% Complete (success)</span> Dropbox (" + dbxVol.toFixed(0) + "%)";
+  document.getElementById('onedriveVolume').innerHTML = "<span class='sr-only'>" + oneVol + "% Complete (success)</span> One Drive (" + oneVol.toFixed(0) + "%)";
 });
 
 
