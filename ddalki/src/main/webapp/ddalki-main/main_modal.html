@@ -475,14 +475,11 @@ var totalVolume;
 
 
 $(document).ready(function() {
-  totalVolume = (dbxVolume[0] + googleVolume[0] + oneVolume[0] + TcloudVolume[0]);
-  googleVol = googleVolume[1] / totalVolume * 100;
-  TcloudVol = TcloudVolume[1] / totalVolume * 100;
-  dbxVol = dbxVolume[1] / totalVolume * 100;
-  oneVol = oneVolume[1] / totalVolume * 100;
-  usableVolume = totalVolume - (dbxVolume[1] + googleVolume[1] + oneVolume[1] + TcloudVolume[1]);
-  usableVol = usableVolume / totalVolume * 100;
-  console.log(usableVol);
+  totalVolume = (Number(dbxVolume[0]) + Number(googleVolume[0]) + Number(oneVolume[0]) + Number(TcloudVolume[0]));
+  googleVol = Number(googleVolume[1]) / totalVolume * 100;
+  TcloudVol = Number(TcloudVolume[1]) / totalVolume * 100;
+  dbxVol = Number(dbxVolume[1]) / totalVolume * 100;
+  oneVol = Number(oneVolume[1]) / totalVolume * 100;
   
   console.log(totalVolume);
   console.log(dbxVol);
