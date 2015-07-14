@@ -9,6 +9,7 @@ if (document.location.href.length < 400) {
 }
 var TcloudVolume = [0, 0]; 
 var tcloudvolok;
+var Tcloudfind = new Array();
 
 function userProfile_callback( data ) {
 	tcloudID = data.profile.userId;
@@ -69,12 +70,37 @@ $(function (){
     if (status) {
     	PlanetX.api( "get", "https://apis.skplanetx.com/users/me/profile", "JSON", { "version": 1}, userProfile_callback );
     	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/usage", "JSON", { "version": 1}, TcloudStorage_callback );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_find );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/music","JSON", { "version" :1 }, tcloud_find );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/movies","JSON", { "version" :1 }, tcloud_find );
+    	PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/documents","JSON", { "version" :1 }, tcloud_find );
     } else {
     	tcloudvolok = 'ok';
     	VolumeBar();
     }
    // PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/images","JSON", { "version" :1 }, tcloud_callback );
 });
+
+function tcloud_find(response) {
+	console.log(response);
+	if (response.meta.images) {
+		for(j = 0; j < response.meta.images.image.length ; j++){
+			Tcloudfind.push([response.meta.images.image[j].name, response.meta.images.image[j].size]);
+		}
+	} else if (response.meta.music) {
+		for(j = 0; j < response.meta.music.music.length ; j++){
+			Tcloudfind.push([response.meta.music.music[j].name, response.meta.music.music[j].size]);
+		}
+	} else if (response.meta.movies) {
+		for(j = 0; j < response.meta.movies.movie.length ; j++){
+			Tcloudfind.push([response.meta.movies.movie[j].name, response.meta.movies.movie[j].size]);
+		}
+	} else if (response.meta.documents) {
+		for(j = 0; j < response.meta.documents.document.length ; j++) {
+			Tcloudfind.push([response.meta.documents.document[j].name, response.meta.documents.document[j].size]);
+		}
+	}
+}
 
 function TcloudStorage_callback (res) {
 	TcloudVolume = [res.usage.total, res.usage.used];

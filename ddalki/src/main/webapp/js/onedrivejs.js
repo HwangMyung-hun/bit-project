@@ -8,6 +8,7 @@ var onedriveactive = null;
 var oneVolume = [0, 0];
 var onevolok;
 var onedriveID;
+var onedrivefind = new Array();
 
 $(function(){
 	odtoken = getTokenFromCookie();
@@ -65,6 +66,15 @@ $(function(){
 				console.log(err);
 			}
 		});
+		$.ajax({
+			url: "https://api.onedrive.com/v1.0/drive/root/children?select=name,size,folder,id&access_token=" + odtoken,
+			success: function(data) {
+				findfile(data);
+			},
+			error: function(err){
+				console.log(err); 
+			}
+		});
 	} else {
 		onevolok = 'ok';
 		VolumeBar();
@@ -73,6 +83,46 @@ $(function(){
 
 function onedrivelogout() {
 	location.href='https://login.live.com/oauth20_logout.srf?client_id=' + onedrive_id + '&redirect_uri=' + onedrive_redirect + '';
+}
+
+$('#findbtn').click(function(event) {
+	$("#tbody > tr").remove();
+	for (i = 0; i < onedrivefind.length ; i++){
+		for (j = 0; j < Tcloudfind.length; j++) {
+			if (onedrivefind[i][0] == Tcloudfind[j][0] && onedrivefind[i][1] == Tcloudfind[j][1]) {
+				console.log(onedrivefind[i][0]);
+				console.log(Tcloudfind[j][1]);
+				$("#tbody").append("<tr><td><input type='checkbox'></td>"
+						+ "<td>"+ onedrivefind[i][0] +"</td>"
+						+ "<td>OneDrive</td>"
+						+ "<td></td>"
+						+ "<td class='center'></td>"
+						+ "<td class='center'></td></tr>");
+				$("#tbody").append("<tr><td><input type='checkbox'></td>"
+						+ "<td>"+ Tcloudfind[j][0] +"</td>"
+						+ "<td>Tcloud</td>"
+						+ "<td></td>"
+						+ "<td class='center'></td>"
+						+ "<td class='center'></td></tr>");
+			}
+		}
+	}
+});
+
+function findfile(data) {
+	for (i = 0; i < data.value.length; i++) {
+		if(data.value[i].folder) {
+			$.ajax({
+				url: "https://api.onedrive.com/v1.0/drive/items/" + data.value[i].id + "/children?select=name,size,folder,id&access_token=" + odtoken,
+				success: function(data2) {
+					findfile(data2);
+				}
+			});
+		} else {
+			onedrivefind.push([data.value[i].name, data.value[i].size])
+			console.log(onedrivefind);
+		}
+	}
 }
 
 $('#onedrivelogin').click(function(event){
