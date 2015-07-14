@@ -53,8 +53,19 @@ function googleactive() {
 		  request.execute(function(resp) {
 		    googleVolume[0] = resp.quotaBytesTotal;
 		    googleVolume[1] = resp.quotaBytesUsed;
-		    console.log(googleVolume[0]+","+googleVolume[1]);
 		    VolumeBar();
+		});
+		request = gapi.client.drive.files.list();  
+		request.execute(function(resp) {
+			if (!resp.error) {
+				driveResult = resp.items;
+			} else if (resp.error.code == 401) {
+				// Access token might have expired.
+				//console.log(resp.error.code + "");
+				checkAuth();
+			} else {
+				console.log('An error occured: ' + resp.error.message);
+			}
 		});
 	});
 }
@@ -324,8 +335,6 @@ $("#addcloud").click(function() {
 });
 
 $(".btn-google-plus").click(function(event) {
-  console.log(driveResult);
-  console.log(alldirandfile);
   foldertargets = true;
   googlenewfolder = true;
   if(driveResult == null) fileList();
@@ -753,3 +762,8 @@ function gdTumbnailInsert() {
 		}
 	}
 }
+
+
+
+
+  
