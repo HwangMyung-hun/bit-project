@@ -160,15 +160,11 @@
 							<ul class="nav nav-second-level" id="googlelist">
 
 							</ul> <!-- /.nav-second-level --></li>
-						<li id="Tcloudactive"><a
+						<li id="Tcloudactive" class=""><a
 							class="btn-block btn-social btn-instagram"><i
 								class="fa fa-instagram"></i> <span class="social-text">Tcloud</span><span
 								class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="Tcloudlist">
-								<li><a id="tcloudimages">images</a></li>
-								<li><a id="tcloudmovies">movies</a></li>
-								<li><a id="tcloudmusic">music</a></li>
-								<li><a id="tclouddocuments">documents</a></li>
 							</ul> <!-- /.nav-second-level --></li>
 						<li><a class="btn-block btn-social btn-dropbox"
 							id="dbxsidelist"><i class="fa fa-facebook"></i> <span
@@ -423,12 +419,12 @@
   redirectUri="localhost:9999/ddalki/ddalki-main/callback.html"></script>
   
 <!-- 구글 api 아랫줄 import  -->
-<!-- <script type="text/javascript" src="../js/googleApi.js"></script> -->
+<script type="text/javascript" src="../js/googleApi.js"></script>
 <script type="text/javascript" src="../js/dropboxmyapi.js"></script>
 <script src="../js/tcloudjs.js"></script>
 <script src="../js/facebookjs.js"></script>
-<!-- <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script src="../js/kakao.js"></script> -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="../js/kakao.js"></script>
 <script type="text/javascript">
 //var ip = 'localhost:9999/ddalki';
 var ip = 'localhost:9999/ddalki';
@@ -514,7 +510,6 @@ var googleVolume = [0, 0];
 var dbxVolume = [0, 0];
 
 function VolumeBar() {
-	if (onevolok == 'ok' && tcloudvolok == 'ok') {
 		var totalVolume = Number(oneVolume[0]) + Number(TcloudVolume[0]) + Number(googleVolume[0]) + Number(dbxVolume[0]); 
 		var oneVol =  	 ( Number(oneVolume[1])    / totalVolume ) * 100;
 		var TcloudVol =  ( Number(TcloudVolume[1]) / totalVolume ) * 100;
@@ -533,8 +528,33 @@ function VolumeBar() {
 	    document.getElementById('dropboxVolume').innerHTML = "<span class='sr-only'>" + dbxVol + "% Complete (success)</span> Dropbox (" + dbxVol.toFixed(0) + "%)";
 	    document.getElementById('onedriveVolume').innerHTML = "<span class='sr-only'>" + oneVol + "% Complete (success)</span> One Drive (" + oneVol.toFixed(0) + "%)";
 	    document.getElementById('usableVolume').innerHTML = "<span class='sr-only'>" + useVol + "% Complete (success)</span> usable (" + useVol.toFixed(0) + "%)";
-	}
 }
+
+$('#findbtn').click(function(event) {
+	$('.nav-pills > li ').remove();
+	$("#tbody > tr").remove();
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>중복검사</li>");
+	for (i = 0; i < onedrivefind.length ; i++){
+		for (j = 0; j < Tcloudfind.length; j++) {
+			if (onedrivefind[i][0] == Tcloudfind[j][0] && onedrivefind[i][1] == Tcloudfind[j][1]) {
+				console.log(onedrivefind[i][0]);
+				console.log(Tcloudfind[j][1]);
+				$("#tbody").append("<tr><td><input type='checkbox'></td>"
+						+ "<td>"+ onedrivefind[i][0] +"</td>"
+						+ "<td>OneDrive</td>"
+						+ "<td></td>"
+						+ "<td class='center'></td>"
+						+ "<td class='center'></td></tr>");
+				$("#tbody").append("<tr><td><input type='checkbox'></td>"
+						+ "<td>"+ Tcloudfind[j][0] +"</td>"
+						+ "<td>Tcloud</td>"
+						+ "<td></td>"
+						+ "<td class='center'></td>"
+						+ "<td class='center'></td></tr>");
+			}
+		}
+	}
+});
   
   $(document).ready(function() {
       $('#dataTables-example').DataTable({
@@ -612,6 +632,7 @@ function MouseOutRe(MyImage) {
 		$('#dataTables-example > thead > tr :first-child').removeAttr('class')
 		.removeAttr('tabindex').removeAttr('aria-controls').removeAttr('rowspan').removeAttr('colspan').removeAttr('aria-label').removeAttr('aria-sort');
 	});
+	
 </script>
 
 </body>
