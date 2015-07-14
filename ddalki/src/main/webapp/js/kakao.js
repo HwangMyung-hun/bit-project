@@ -51,7 +51,6 @@ function kakaoListInit(){
 					console.log("res["+i+"]["+j+"] : " + res[i][j])
 				}*/
 				
-				
 				var createtr = newtr.appendChild(document.createElement("TR"));
 				createtr.id = "kakaolist" + j;
 
@@ -61,15 +60,27 @@ function kakaoListInit(){
 				td.id = 'kakaocheck' + j;
 				//td.className = 'testclass';
 
-				//console.log();
-				$("#kakaolist"+j).append(
-                  "<td>"+res[j].content+" <a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' style='height:30px;width:30px'></a></td>"
-                  +"<td> </td>"
-                  +"<td>"+res[j].created_at+"</td>"
-                  +"<td>10Mb</td>"
-                  +"<td>jpg</td>"
-                );
-                
+				function imagexit(){
+					var image;
+					var type;
+					if(res[j].media != undefined){
+						image ="<td>"+res[j].content+" <a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' style='height:30px;width:30px'></a></td>";
+						type = res[j].media[0]["original"];
+					}else{								
+						image = "<td>"+res[j].content+"</td>";
+						type = "첨부파일 없음";
+					}
+					
+					
+					$("#kakaolist"+j).append(image
+							+"<td> </td>"
+							+"<td>"+res[j].created_at+"</td>"
+							+"<td>10Mb</td>"
+							+"<td>"+type+"</td>"
+					);
+				}
+				
+				imagexit();
 /*				$("#kakaolist"+j).append("<td><img src='"+"http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704"+"' style='height:30px;width:30px'> </td>");
 				var td1 = createtr.appendChild(document.createElement("TD"));
 				var td2 = createtr.appendChild(document.createElement("TD"));
@@ -153,7 +164,7 @@ function kakaoPhotoUp() {
 };
 //사진 업로드 API 끝
 
-
+/*
 $(function(){
 	kakaoListInit()
-});
+});*/
