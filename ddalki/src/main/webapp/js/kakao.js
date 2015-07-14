@@ -48,7 +48,7 @@ function kakaoListInit(){
 /*			for(var i in res) {
 				console.log(res[i]);
 				for(var j in res[i]) {
-					console.log("res["+i+"]["+j+"] : " + res[i][j])
+					console.log(res[j].media[0]["original"])
 				}*/
 				
 				var createtr = newtr.appendChild(document.createElement("TR"));
@@ -64,18 +64,23 @@ function kakaoListInit(){
 					var image;
 					var type;
 					if(res[j].media != undefined){
-						image ="<td>"+res[j].content+" <a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' style='height:30px;width:30px'></a></td>";
-						type = res[j].media[0]["original"];
+						image ="<td><a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' id='image1'></a> "+res[j].content+"</td>";
+						//type = "http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704";
+						var type0 = res[j].media[0]["original"];
+						type = type0.match(/^[img\.]\?$/);
+						/*var regExp = /\/([\da-z\._]*)\?/;
+                        var str = res[j].media[0]["original"];
+                        var type = str.match(regExp); */  
 					}else{								
-						image = "<td>"+res[j].content+"</td>";
-						type = "첨부파일 없음";
+						image = "<td><img src='../img/fileicon_etc.png' id='noimg'> "+res[j].content+"</td>";
+						type = "텍스트 포스트";
 					}
 					
 					
 					$("#kakaolist"+j).append(image
 							+"<td> </td>"
 							+"<td>"+res[j].created_at+"</td>"
-							+"<td>10Mb</td>"
+							+"<td>100KB</td>"
 							+"<td>"+type+"</td>"
 					);
 				}
