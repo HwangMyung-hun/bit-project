@@ -164,7 +164,7 @@ function dropboxfiletable(id) {
 	var thumnailobj;
 	var thumnailtag;
 	if(id != "/") {
-		thumnailobj = thumnailFind(dropArrayFind(id)[0].path, "path");
+		if(dropArrayFind(id)[0].path != undefined) thumnailobj = thumnailFind(dropArrayFind(id)[0].path, "path");
 		droptarget = id;
 	}
 	else if(id == "/"){
@@ -182,7 +182,7 @@ function dropboxfiletable(id) {
 			time = tablevalue[i].modified.split(" ");
 			time = time[3] + "-" + months[time[2]] + "-" + time[1];
 			if(thumnailobj.length != 0) {
-				if(thumnailFind(title[title.length - 1],"name")[0].thumnail == "undefined") {
+				if(thumnailFind(title[title.length - 1],"name").length == 0) {
 					thumnailtag = "";
 				} else {
 					thumnailtag = "<img src='"+ thumnailFind(title[title.length - 1] 
@@ -212,13 +212,32 @@ function dropboxfiletable(id) {
 		}
 	}
 	etcthumnail();
+	if(deleteofdrop) {
+	  alldirandfile = [];
+	  function againlist(path) {
+	    client.readdir(path, function (error, results, now, under) {
+	      if (error) {
+	        console.log(error);   
+	      }
+	      alldirandfile.push(now);
+	      if(under != undefined) {
+	    	  for(var i = 0; i < under.length; i++) {
+	    		  if(under[i].mimeType == "inode/directory") againlist(under[i].path);
+	    	  }
+	      }
+	    });
+	  }
+      deleteofdrop = false;
+	}
 }
 
 function etcthumnail() {
 	var td = $('#tbody tr td:nth-child(6)');
 	for (var i = 0; i < td.length; i++ ) {
 		if(td[i].innerText != "jpg" && td[i].innerText != "png") {
-			td[i].parentElement.childNodes[1].innerHTML += imghtmltag(td[i].innerText);
+			if(td[i].parentElement.childNodes[1].innerHTML == 
+				td[i].parentElement.childNodes[1].innerText)
+				td[i].parentElement.childNodes[1].innerHTML += imghtmltag(td[i].innerText);
 		}
 	}
 }
@@ -369,6 +388,7 @@ function dropupload(e) {
 		  }
 	  });
   }
+  etcthumnail();
 }
 
 $('.left img:nth-child(5)').click(function() {
@@ -387,6 +407,8 @@ $('.left img:nth-child(3)').click(function() {
 	}
 });
 
+var deleteofdrop = false;
+
 function dropdelete(path) {
 	var resultint = 0;
 	for(var i = 0; i < path.length; i++) {
@@ -394,6 +416,14 @@ function dropdelete(path) {
         if (error) {
           console.log('Error: ' + error);
         } else {
+          console.log(result);
+          for(var i in alldirandfile) {
+        	if (alldirandfile[i].path == result.path && alldirandfile[i].mimeType == "inode/directory") {
+        		$($("#" + alldirandfile[i].contentHash)[0].parentElement).remove();
+        		deleteofdrop = true;
+        		break;
+        	}
+          } 
           resultint++;
           if(resultint == path.length) {
 		    client.readdir((droptarget == "/") ? "/" : result.path.split("/" + result.name)[0],
@@ -428,6 +458,7 @@ $('.left img:nth-child(6)').click(function() {
 	  if(droptarget != "/") path = dropArrayFind(droptarget)[0].path + "/새 폴더";
 	  else path = "/새 폴더";
 	  client.mkdir(path, function (error, result) {
+		  var nowpath = result.path;
           if (error) {
             console.log('Error: ' + error);
           } else {
@@ -436,6 +467,21 @@ $('.left img:nth-child(6)').click(function() {
   		        if (error) {
   		          console.log(error);
   		        } else {
+  		        	client.readdir(nowpath, function (error2, results2, now2, under2) {
+  		        		var pre = $("#" + now.contentHash)[0].parentElement;
+  		        		var classname = $($(pre)[0].childNodes[2])[0].className.split('nav-')[1].split("-level")[0];
+  		        		var realorder;
+  		        		for (var i in order) {
+  		        			if(order[i] == classname) {
+  		        				realorder = i;
+  		        			}
+  		        		}
+  		        		$($($(pre)[0].childNodes[2])[0]).append("<li> <a id='" + now2.contentHash 
+  		        				+ "' onclick='dropboxfiletable(this.id)'>"+ now2.name 
+  		        				+"<span class='fa arrow'></span></a><ul class='nav nav-"
+  		        				+ order[realorder + 1] + "-level'></ul></li>");
+  		        		$('#side-menu').metisMenu();
+  		        	});
   		          alert("폴더를 생성하였습니다.");
   		          for(var i in alldirandfile) {
   		        	if (alldirandfile[i].path == now.path) {
@@ -449,6 +495,14 @@ $('.left img:nth-child(6)').click(function() {
   		          } 
   				  if(droptarget != "/") $('#' + droptarget).trigger('click');
   				  else $('.btn-dropbox').trigger('click');
+  				  var tr = $('#tbody tr');
+  				  for(var i in tr) {
+  					  if(tr[i].childNodes[1].innerText == "새 폴더") {
+  						tr[i].childNodes[0].childNodes[0].checked = true;
+  						$('.left img:nth-child(7)').trigger('click');
+  						break;
+  					  }
+  				  }
   		        }
   		     });
           }
@@ -471,6 +525,7 @@ $('.left img:nth-child(7)').click(function() {
 			  tr[i].checked = false;
 		  }
       }
+	  console.log(name);
 	  var titleTd = $(name.parentNode.parentNode.childNodes[1])[0];
 	  var mimeType = $(name.parentNode.parentNode.childNodes[5])[0].innerText;
 	  if(name.checked) {
@@ -480,7 +535,7 @@ $('.left img:nth-child(7)').click(function() {
 		  $('#dropin').click(function() {
 			  if(mimeType == "" || mimeType == "folder") {
 				  mimeType = "";
-				  dropRenameFile($('#dropnewtitle').val() + mimeType);
+				  dropRenameFile($('#dropnewtitle').val() + mimeType, contentHashFind(name.name));
 			  } else {
 				  dropRenameFile($('#dropnewtitle').val() + "." + mimeType);
 			  }
@@ -492,8 +547,13 @@ $('.left img:nth-child(7)').click(function() {
 	}
 });
 
-function dropRenameFile(name) {
-	console.log(name);
+function contentHashFind(path) {
+	return alldirandfile.filter(function( obj ) {
+		return obj.path == path;
+	});
+}
+
+function dropRenameFile(name, contentHash) {
 	var input = $("#tbody input:checked");
 	path = input[0].name.split("/");
 	path = input[0].name.split(path[path.length - 1])[0];
@@ -502,6 +562,22 @@ function dropRenameFile(name) {
 		if(!error) {
 			droprefresh(result);
 			console.log(result);
+			if(result.mimeType == "inode/directory") {
+				var pre = $("#" + contentHash[0].contentHash)[0].parentElement;
+				var classname = $($(pre)[0].parentElement)[0].className.split('nav-')[1].split("-level")[0];
+				var realorder;
+				for (var i in order) {
+					if(order[i] == classname) {
+						realorder = i;
+					}
+				}
+				$($(pre)[0].parentElement).append("<li> <a id='" + result.contentHash 
+						+ "' onclick='dropboxfiletable(this.id)'>"+ result.name 
+						+"<span class='fa arrow'></span></a><ul class='nav nav-"
+						+ order[realorder + 1] + "-level'></ul></li>");
+				$(pre).remove();
+				$('#side-menu').metisMenu();
+			}
 		} else {
 			alert("같은 이름이 존재합니다");
 		}
