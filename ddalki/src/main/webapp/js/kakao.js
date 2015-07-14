@@ -1,3 +1,4 @@
+
 // 사용할 앱의 Javascript 키를 설정해 주세요.
 Kakao.init('da71339ba6568c0984f01908db866f23');
 var kakaologin = false;
@@ -41,7 +42,6 @@ function kakaoListInit(){
 		Kakao.API.request({
 			url: '/v1/api/story/mystories'
 		}).then(function (res) {
-			$('#loadingBar').remove();
 			$('#tbody>tr').remove();
 			var resLen = res.length
 			for(j = 0; j < resLen ; j++) {
@@ -90,17 +90,13 @@ function kakaoListInit(){
 			console.log(err);
 		};
 	}else{
-		function killLoader(){
-			$('#loadingBar').remove();	
-		}
-		if (document.onLoad) {
-			killLoader();
+		if ($(window).load) {
 			alert("로그인하시기 바랍니다.");
+			//console.log("로딩완료");
 		}else{
-			$('.panel').append(
-					"<div id='kakaoLoading'>페이지를 로딩중입니다. 잠시 후 다시 시도해  주시기 바랍니다.</div>"
-					);
-			setTimeout("killLoader()", 1000);
+			//console.log("로딩중");
+			alert("로딩중입니다.");
+			//pageLoading();
 		}
 	}
 }
@@ -159,3 +155,16 @@ function kakaoPhotoUp() {
 };
 //사진 업로드 API 끝
 
+function pageLoading(){
+	$('.panel').append(
+			"<div id='loadingBar'>페이지를 로딩중입니다. 잠시 후 다시 시도해  주시기 바랍니다.</div>"
+	);
+	setTimeout("killLoader()", 1000);
+}
+pageLoading();
+
+function killLoader(){
+			$('#loadingBar').remove();	
+		}
+
+$(document).ready(function(){killLoader()}); 
