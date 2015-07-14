@@ -41,10 +41,11 @@ function kakaoListInit(){
 		Kakao.API.request({
 			url: '/v1/api/story/mystories'
 		}).then(function (res) {
-			//console.log(res.0.media_type);
+			$('#loadingBar').remove();
 			$('#tbody>tr').remove();
-			for(j = 0; j < 17 ; j++) {
-			//console.log(res[j][content]);
+			var resLen = res.length
+			for(j = 0; j < resLen ; j++) {
+				
 /*			for(var i in res) {
 				console.log(res[i]);
 				for(var j in res[i]) {
@@ -53,70 +54,59 @@ function kakaoListInit(){
 				
 				var createtr = newtr.appendChild(document.createElement("TR"));
 				createtr.id = "kakaolist" + j;
-
-				//var td = createtr.appendChild(document.createElement("TD")).innerHTML="추가내용";
 				var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
 				td.type = 'checkbox';
 				td.id = 'kakaocheck' + j;
 				//td.className = 'testclass';
 
-				function imagexit(){
-					var image;
+				function makeTdCont(){
+					var kakaoImage;
 					var type;
+					var kb;
 					if(res[j].media != undefined){
-						image ="<td><a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' id='image1'></a> "+res[j].content+"</td>";
-						//type = "http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704";
-						var type0 = res[j].media[0]["original"];
-						type = type0.match(/^[img\.]\?$/);
-						/*var regExp = /\/([\da-z\._]*)\?/;
-                        var str = res[j].media[0]["original"];
-                        var type = str.match(regExp); */  
+						kakaoImage ="<td><a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' id='image1'></a> "+res[j].content+"</td>";
+						var imgUrl = res[j].media[0]["original"];
+                        kakaoType = ((imgUrl.match(/img.[a-z]*/))[0]).replace(/img./,"");  
+                        kb = j*27+12;
 					}else{								
-						image = "<td><img src='../img/fileicon_etc.png' id='noimg'> "+res[j].content+"</td>";
-						type = "텍스트 포스트";
+						kakaoImage = "<td><img src='../img/fileicon_etc.png' id='noimg'> "+res[j].content+"</td>";
+						kakaoType = "텍스트 포스트";
+						kb = 0;
 					}
+					kakaoDate = res[j].created_at;
 					
-					
-					$("#kakaolist"+j).append(image
-							+"<td> </td>"
-							+"<td>"+res[j].created_at+"</td>"
-							+"<td>100KB</td>"
-							+"<td>"+type+"</td>"
+					$("#kakaolist"+j).append(kakaoImage
+							+"<td></td>"
+							+"<td>"+kakaoDate+"</td>"
+							+"<td>"+kb+"KB</td>"
+							+"<td>"+kakaoType+"</td>"
 					);
 				}
 				
-				imagexit();
-/*				$("#kakaolist"+j).append("<td><img src='"+"http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704"+"' style='height:30px;width:30px'> </td>");
-				var td1 = createtr.appendChild(document.createElement("TD"));
-				var td2 = createtr.appendChild(document.createElement("TD"));
-				var td3 = createtr.appendChild(document.createElement("TD"));
-				var td4 = createtr.appendChild(document.createElement("TD"));
-				var td5 = createtr.appendChild(document.createElement("TD"));
-				
-				td1.innerHTML = res[j].content;
-				td1.appendChild(document.createElement("img"));
-				//td1.img.src=res[j].media[0]["small"];
-				td1.img.setAttribute("src","http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704");
-				td2.innerHTML = ' ';
-				td3.innerHTML = res[j].created_at;
-				td4.innerHTML = res[j].media[0]["original"];
-				td5.innerHTML = res[j].media_type;
-				*/
-				/*var view = new Image();
-			//view.src = response.meta.images.image[j].thumbnailUrl;
-			view.src = res;
-			td1.innerHTML = res.;
-			img1 = td1.appendChild(view);
-			img1.id = "image1";*/
+				makeTdCont();
+
 			};
 		}), function(err) {
 			console.log(err);
 		};
 	}else{
-		alert("로그인하시기 바랍니다.")
+		function killLoader(){
+			$('#loadingBar').remove();	
+		}
+		if (document.onLoad) {
+			killLoader();
+			alert("로그인하시기 바랍니다.");
+		}else{
+			$('.panel').append(
+					"<div id='kakaoLoading'>페이지를 로딩중입니다. 잠시 후 다시 시도해  주시기 바랍니다.</div>"
+					);
+			setTimeout("killLoader()", 1000);
+		}
 	}
 }
 //리스트 뿌리기 끝
+
+
 
 $("#kakaoListshow").click(function(event) {
 	kakaoListInit();
@@ -169,7 +159,3 @@ function kakaoPhotoUp() {
 };
 //사진 업로드 API 끝
 
-/*
-$(function(){
-	kakaoListInit()
-});*/
