@@ -61,29 +61,13 @@ function kakaoListInit(){
 				td.id = 'kakaocheck' + j;
 				//td.className = 'testclass';
 
-/*				
-				var td1 = createtr.appendChild(document.createElement("TD"));
-				var td2 = createtr.appendChild(document.createElement("TD"));
-				var td3 = createtr.appendChild(document.createElement("TD"));
-				var td4 = createtr.appendChild(document.createElement("TD"));
-				var td5 = createtr.appendChild(document.createElement("TD"));
-				
-				td1.innerHTML = res[j].content;
-				td1.appendChild(document.createElement("img"));
-				//td1.img.src=res[j].media[0]["small"];
-				td1.img.setAttribute("src","http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704;");
-				td2.innerHTML = ' ';
-				td3.innerHTML = res[j].created_at;
-				td4.innerHTML = res[j].media[0]["original"];
-				td5.innerHTML = res[j].media_type;
-*/
-				console.log();
+				//console.log();
 				$("#kakaolist"+j).append(
                   "<td>"+res[j].content+" <a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' style='height:30px;width:30px'></a></td>"
-                  +"<td>2</td>"
-                  +"<td>3</td>"
-                  +"<td>4</td>"
-                  +"<td>5</td>"
+                  +"<td> </td>"
+                  +"<td>"+res[j].created_at+"</td>"
+                  +"<td>10Mb</td>"
+                  +"<td>jpg</td>"
                 );
                 
 /*				$("#kakaolist"+j).append("<td><img src='"+"http://dn-xl1-story.kakao.co.kr/dn//pissD/hyfKp4EiIz/O2SiK84BZLTX1KCtvQ3g71/img.jpg?width=699&height=704"+"' style='height:30px;width:30px'> </td>");
