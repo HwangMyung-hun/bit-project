@@ -90,13 +90,14 @@ function kakaoListInit(){
 			console.log(err);
 		};
 	}else{
-		if ($(window).load) {
-			alert("로그인하시기 바랍니다.");
-			//console.log("로딩완료");
-		}else{
-			//console.log("로딩중");
-			alert("로딩중입니다.");
-			//pageLoading();
+		if (document.load) {
+			killLoader()
+			$('.panel').append(
+					"<div id='loginBar'>로그인하시기 바랍니다.</div>"
+			);
+			setTimeout("killLoader()", 1000);
+		}else{			
+			pageLoading();
 		}
 	}
 }
@@ -165,6 +166,7 @@ pageLoading();
 
 function killLoader(){
 			$('#loadingBar').remove();	
+			$('#loginBar').remove();	
 		}
 
 $(document).ready(function(){killLoader()}); 
