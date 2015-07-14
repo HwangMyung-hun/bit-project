@@ -48,6 +48,15 @@ function signinCallback(authResult) {
 
 function googleactive() {
 	//존재하면서 활성화
+	checkAuth(function(){
+		var request = gapi.client.drive.about.get();
+		  request.execute(function(resp) {
+		    googleVolume[0] = resp.quotaBytesTotal;
+		    googleVolume[1] = resp.quotaBytesUsed;
+		    console.log(googleVolume[0]+","+googleVolume[1]);
+		    VolumeBar();
+		});
+	});
 }
 
 function googleunactive() {
@@ -137,7 +146,6 @@ function handleClientLoad() {
 var auth_callback = function(){};
 
 function checkAuth(callback) {
-  console.log(gapi.auth.authorize);
   gapi.auth.authorize(
 		  {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
 		  handleAuthResult);
@@ -167,6 +175,8 @@ function googlelogin() {
 //google list 가져오는 부분
 var driveResult = null;
 var order = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth'];
+
+
 function fileList() {
 	checkAuth(function(){
 		var request = gapi.client.drive.files.list();
@@ -242,6 +252,7 @@ function filetable(id) {
                     + "<td class='center'>"+ driveResult[i].fileExtension +"</td></tr>");
 		} else if (driveResult[i].parents[0].id == id && 
 				(driveResult[i].mimeType == "application/vnd.google-apps.folder")){
+			console.log("됨");
 			$("#tbody").append(
 					"<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
                     + "<td>"+ driveResult[i].title +"</td>"
@@ -313,6 +324,8 @@ $("#addcloud").click(function() {
 });
 
 $(".btn-google-plus").click(function(event) {
+  console.log(driveResult);
+  console.log(alldirandfile);
   foldertargets = true;
   googlenewfolder = true;
   if(driveResult == null) fileList();
@@ -664,7 +677,8 @@ function folderlistreset(fileId) {
 			realorder = i;
 		}
 	}
-	$('#' + parentid + '+ul').append("<li> <a id='" + fileId 
+	$('#' + parentid + '+ul').append(
+			"<li> <a id='" + fileId 
 			+ "' onclick='filetable(this.id)'>"+ title 
 			+"<span class='fa arrow'></span></a><ul class='nav nav-"
 			+ order[realorder + 1] + "-level'></ul></li>");
@@ -688,7 +702,7 @@ $('.left img:nth-child(7)').click(function() {
 		}
       }
 	  var titleTd = $("input:checkbox[id='" + ids + "']")[0].parentNode.parentNode.childNodes[1];
-	  $("#tbody input").click(function(e) {
+/*	  $("#tbody input").click(function(e) {
 		  if(e.target.id == ids){
 			  $("#" + foldertargetid).trigger('click');
 			  folderdeletereset(ids);
@@ -699,7 +713,7 @@ $('.left img:nth-child(7)').click(function() {
 					} 
 				}
 		  } 
-	  });
+	  });*/
 	  if($("input:checkbox[id='" + ids + "']")[0].checked) {
 		  titleTd.innerText = '';
 		  titleTd.innerHTML = '<span><input id="googlenewtitle" type="text"/><button id="imin">등록</button>' 

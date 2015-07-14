@@ -47,6 +47,13 @@ client.authenticate({ interactive: false }, function (error, client) {
 
 function dropboxactive() {
 	//존재하면서 활성화
+	client.getAccountInfo({}, function (error, results, now) {
+		if(!error) {
+			dbxVolume[0] = now.quota_info.quota;
+			dbxVolume[1] = now.quota_info.normal + now.quota_info.shared;
+			VolumeBar();
+		}
+	});
 }
 
 function dropboxunactive() {
