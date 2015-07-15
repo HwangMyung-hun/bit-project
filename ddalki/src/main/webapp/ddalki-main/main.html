@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>딸기 클라우드 - 김범준</title>
+    <title id='title'></title>
 	
 	<!-- 구글 로그인 js/ 윗줄 import -->
 	<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
@@ -464,7 +464,7 @@ $('#side-menu').click(function(m) {
 	whoisparent($(m.target));
 });
 function whoisparent(child) {
-	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive') {
+	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive' || child[0].innerText == 'KAKAO Story') {
 		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
 	}
 	if (child.parent().parent().parent().children()[0].innerText != 'Facebook' && 
