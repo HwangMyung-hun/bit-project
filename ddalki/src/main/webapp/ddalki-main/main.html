@@ -530,31 +530,113 @@ function VolumeBar() {
 	    document.getElementById('usableVolume').innerHTML = "<span class='sr-only'>" + useVol + "% Complete (success)</span> usable (" + useVol.toFixed(0) + "%)";
 }
 
+
+function goo_drop_col(google, dropbox) {
+   console.log(driveResult);
+   var obj;
+   for(var i in driveResult) {
+   	if(driveResult[i].mimeType != "application/vnd.google-apps.folder") {
+	   	obj = {};
+	   	obj.size = driveResult[i].fileSize;
+	   	obj.name = driveResult[i].originalFilename;
+	   	obj.drive = "google";
+	   	filefind.push(obj);
+   	}
+   }
+   for(var i in alldirandfile) {
+   	for(var j in alldirandfile[i]._json.contents) {
+	   	if(!alldirandfile[i]._json.contents[j].is_dir) {
+		   	 obj = {};
+	         obj.size = alldirandfile[i]._json.contents[j].bytes;
+	         obj.name = alldirandfile[i]._json.contents[j].path.split("/")[alldirandfile[i]
+	                    ._json.contents[j].path.split("/").length - 1];
+	         obj.drive = "dropbox";
+	         filefind.push(obj);
+	   	}
+   	}
+   }
+}
+
 $('#findbtn').click(function(event) {
 	$('.nav-pills > li ').remove();
 	$("#tbody > tr").remove();
-	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>중복검사</li>");
-	for (i = 0; i < onedrivefind.length ; i++){
-		for (j = 0; j < Tcloudfind.length; j++) {
-			if (onedrivefind[i][0] == Tcloudfind[j][0] && onedrivefind[i][1] == Tcloudfind[j][1]) {
-				console.log(onedrivefind[i][0]);
-				console.log(Tcloudfind[j][1]);
-				$("#tbody").append("<tr><td><input type='checkbox'></td>"
-						+ "<td>"+ onedrivefind[i][0] +"</td>"
-						+ "<td>OneDrive</td>"
-						+ "<td></td>"
-						+ "<td class='center'></td>"
-						+ "<td class='center'></td></tr>");
-				$("#tbody").append("<tr><td><input type='checkbox'></td>"
-						+ "<td>"+ Tcloudfind[j][0] +"</td>"
-						+ "<td>Tcloud</td>"
-						+ "<td></td>"
-						+ "<td class='center'></td>"
-						+ "<td class='center'></td></tr>");
-			}
-		}
+	//$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>중복검사</li>");
+	goo_drop_col();
+	var filebackup = [];
+	for(var i in filefind) {
+		filebackup.push(filefind[i]);
 	}
+	//1차 중복 제거
+	duplication(filebackup, 0);
+	var siki = [];
+	for(var i in filebackup) {
+		siki.push(filebackup[i]);
+	}
+	//2차 중복 제거
+	var unique = duplication(siki, 1);
+	var finalfile = duplicationdatail(unique, filebackup);
+	//그리기
+	for (i = 0; i < finalfile.length; i++) {
+		for(j = 0; j < finalfile[i].length; j++) {
+			$("#tbody").append("<tr><td><input type='checkbox'></td>"
+					+ "<td>"+ finalfile[i][0].name +"</td>"
+					+ "<td>" + finalfile[i][j].drive + "</td>"
+					+ "<td></td>"
+					+ "<td class='center'>" + finalfile[i][j].size + "</td>" 
+					+ "<td class='center'></td></tr>");
+		}
+		$("#tbody").append("<tr style='background-color: Lavender;'><td></td>"
+				+ "<td></td>"
+				+ "<td></td>"
+				+ "<td></td>"
+				+ "<td class='center'></td>" 
+				+ "<td class='center'></td></tr>");
+	}
+	siki = [];
+	filebackup = [];
 });
+  
+function duplicationdatail(unique, drive) {
+	var realvalue = [];
+	var real;
+	for(var i in unique) {
+		real = [];
+		for(var j in drive) {
+		  if(unique[i].name == drive[j].name && unique[i].size == drive[j].size) {
+			  real.push(drive[j]);
+		  } 
+		}
+		if (real.length != 1) realvalue.push(real);
+	}
+	return realvalue;
+}
+  
+function duplication(trash, inteager) {
+	if (inteager == 0) {
+		for (var i = 0; i < trash.length; i++) {
+		 for (var j = i + 1; j < trash.length; j++) {
+		   if(trash[i].name == trash[j].name && trash[i].size == trash[j].size && trash[i].drive == trash[j].drive) {
+		     trash.splice(j , 1);
+		     duplication(trash, 0);
+		     break;
+		   }
+		 }
+		}
+		return trash;
+	} else {
+		for (var i = 0; i < trash.length; i++) {
+		 for (var j = i + 1; j < trash.length; j++) {
+		   if(trash[i].name == trash[j].name && trash[i].size == trash[j].size) {
+		     trash.splice(j , 1);
+		     duplication(trash, 1);
+		     break;
+		   }
+		 }
+		}
+		return trash;
+	}
+}
+  
   
   $(document).ready(function() {
       $('#dataTables-example').DataTable({
