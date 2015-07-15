@@ -12,9 +12,10 @@ client.authenticate({ interactive: false }, function (error, client) {
 	        method: 'POST',
 	        dataType: 'json',
 	        data: {
-	          email: "aa",
+	          email: $.session.get('useremail'),
 	          cloudtype: "dropbox",
-	          cloudid: "allow"
+	          cloudid: "allow",
+	          active: 'Y'
 	        },
 	        success: function(result) {
 	        	dropboxactive();
@@ -47,6 +48,7 @@ client.authenticate({ interactive: false }, function (error, client) {
 
 function dropboxactive() {
 	//존재하면서 활성화
+	$('#dropboxactive').css('opacity', '1');
 	client.getAccountInfo({}, function (error, results, now) {
 		if(!error) {
 			dbxVolume[0] = now.quota_info.quota;
@@ -63,13 +65,15 @@ function dropboxunactive() {
 	    method: 'POST',
 	    dataType: 'json',
 	    data: {
-	      email: "aa",
-	      cloudtype: "dropbox",
-	      cloudid: "allow"
+	          email: $.session.get('useremail'),
+	          cloudtype: "dropbox",
+	          cloudid: "allow",
+	          active: 'Y'
 	    },
 	    success: function(result) {
 	    	if(result.cloud == "exist") {
 	    		// 있으면서 비활성화
+	    		$('#dropboxactive').css('opacity', '0.1');
 	    	} else {
 	    		// 존재조차 안함
 	    	}
@@ -82,6 +86,11 @@ function dropboxunactive() {
 	  });
 }
 
+$(".btn-dropbox").click(function() {
+	if(!client.isAuthenticated()) {
+		$("#drop-in-btn").trigger("click");
+	}
+});
 
 if (client.isAuthenticated()) {
   function againlist(path) {
