@@ -59,7 +59,8 @@ function kakaoListInit(){
 					var type;
 					var kb;
 					if(res[j].media != undefined){
-						kakaoImage = '<td onclick="window.open(\''+res[j].url+'\')" style="cursor:pointer"><!--a href="'+res[j].media[0]['original']+'" target="_blank"--><img src="'+res[j].media[0]['small']+'" id="image1"><!--/a--> '+res[j].content+'</td>';
+						kakaoImage = '<td>+'\')" style="cursor:pointer"><!--a href="'+res[j].media[0]['original']+'" target="_blank"--><img src="'+res[j].media[0]['small']+'" id="image1"><!--/a--> '+res[j].content+'</td>';
+						//kakaoImage = '<td onclick="window.open(\''+res[j].url+'\')" style="cursor:pointer"><!--a href="'+res[j].media[0]['original']+'" target="_blank"--><img src="'+res[j].media[0]['small']+'" id="image1"><!--/a--> '+res[j].content+'</td>';
 						var imgUrl = res[j].media[0]['original'];
                         kakaoType = ((imgUrl.match(/img.[a-z]*/))[0]).replace(/img./,'');  
                         kb = j*(Math.floor(Math.random()*100))+12;
