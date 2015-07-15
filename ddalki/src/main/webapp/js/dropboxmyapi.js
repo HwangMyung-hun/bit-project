@@ -313,7 +313,7 @@ function imghtmltag(type) {
 		return "<img src='../img/fileicon_bmp.png' id='image1'>";
 		break;
 	default:
-		return "<img src='../img/quest.jpg' id='image1'>";
+		return "<img src='../img/fileicon_etc.jpg' id='image1'>";
 	}
 }
 
