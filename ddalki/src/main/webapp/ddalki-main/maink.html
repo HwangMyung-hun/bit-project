@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>딸기 클라우드 - 김범준</title>
+    <title id='title'></title>
 	
 	<!-- 구글 로그인 js/ 윗줄 import -->
 	<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
@@ -57,14 +57,37 @@
       display: none;
       border : 1px solid red;
     }
-    /* #facebookactive, #Tcloudactive{
+   #facebookactive, #googleactive, #Tcloudactive, #dropboxactive, #onedriveactive{
       display: none;
-    } */
+    } 
     </style>
 </head>
 
 <body id="wow">
 
+	<!-- upload Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+	      </div>
+	      <div class="modal-body">	      
+	        <form>
+	        <input id="googleInsertInput" type="file" accept="*/*" onchange="insertFile(event)" style="display: block;">
+	        <input id="ondriveupload" type="file" onchange="ODupload(event)" style="display: block;">
+	        <input type="file" name="upload" id="tcloudfile" style="display: block;">
+	        <input id="dropupbtn" type="file" accept="*/*" onchange="dropupload(event)" style="display: block;"><br>
+	        
+	            <button>Upload</button>
+	          </form>
+	        </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- upload Modal end -->
+	
 	<div id="wrapper">
 		<top>
 		<div class="top" align="center">
@@ -76,27 +99,34 @@
 			<nav>
 				<div class="margin center padding" style="padding-left: 250px;">
 					<div class="left">
-						<img class="relative zindex" alt="복사"
+						<img class="relative zindex" alt="복사" 
 							src="../img/topmenu_copy.png" onmouseover="MouseOverCopy(this)"
 							onmouseout="MouseOutCopy(this)"
-							style="margin-right: 10px; cursor: pointer;"> 
-						<img class="relative zindex" alt="붙여넣기" src="../img/topmenu_paste.png"
-						onmouseover="MouseOverPaste(this)" onmouseout="MouseOutPaste(this)"
-						style="margin-right: 10px; cursor: pointer;"> 
-						<img class="relative zindex" alt="삭제" src="../img/topmenu_del_off.png"
-						id="deletebtn" onmouseover="MouseOverDelete(this)" onmouseout="MouseOutDelete(this);"
-						style="margin-right: 10px; cursor: pointer;"> 
-						<img class="relative zindex" alt="다운로드" src="../img/topmenu_down.png"
-						id="downloadbtn" onmouseover="MouseOverDown(this)" onmouseout="MouseOutDown(this)"
-						style="margin-right: 10px; cursor: pointer;"> 
-						<img class="relative zindex" alt="업로드" src="../img/topmenu_up.png "
-						id="uploadbtn" onmouseover="MouseOverUpload(this)" onmouseout="MouseOutUpload(this)"
-						style="margin-right: 10px; cursor: pointer;" onClick="kakaoPhotoUp()"> 
-						<img class="relative zindex" alt="새 폴더" src="../img/topmenu_new.png " 
-						id="newfolderbtn" onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)"
-						style="margin-right: 10px; cursor: pointer;"> 
-						<img class="relative zindex" alt="이름 변경" src="../img/topmenu_rename.png" id="renamebtn"
-						onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)" style="cursor: pointer;">
+							style="margin-right: 10px; cursor: pointer;"> <img
+							class="relative zindex" alt="붙여넣기" src="../img/topmenu_paste.png"
+							onmouseover="MouseOverPaste(this)"
+							onmouseout="MouseOutPaste(this)"
+							style="margin-right: 10px; cursor: pointer;"> <img
+							class="relative zindex" alt="삭제" src="../img/topmenu_del_off.png"
+							id="deletebtn" onmouseover="MouseOverDelete(this)"
+							onmouseout="MouseOutDelete(this);"
+							style="margin-right: 10px; cursor: pointer;"> <img
+							class="relative zindex" alt="다운로드" src="../img/topmenu_down.png"
+							id="downloadbtn" onmouseover="MouseOverDown(this)"
+							onmouseout="MouseOutDown(this)"
+							style="margin-right: 10px; cursor: pointer;"> <img
+							class="relative zindex uploadBtn" alt="업로드" src="../img/topmenu_up.png "
+							id="uploadbtn" onmouseover="MouseOverUpload(this)"
+							onmouseout="MouseOutUpload(this)"
+							style="margin-right: 10px; cursor: pointer;"
+							onClick="kakaoPhotoUp()"> <img class="relative zindex"
+							alt="새 폴더" src="../img/topmenu_new.png " id="newfolderbtn"
+							onmouseover="MouseOverNew(this)" onmouseout="MouseOutNew(this)"
+							style="margin-right: 10px; cursor: pointer;"> <img
+							class="relative zindex" alt="이름 변경"
+							src="../img/topmenu_rename.png" id="renamebtn"
+							onmouseover="MouseOverRe(this)" onmouseout="MouseOutRe(this)"
+							style="cursor: pointer;">
 
 						<!-- 				          <form class="navbar-form right" role="search" style="margin-right: 15em;">
 				            <div class="form-group">
@@ -147,23 +177,19 @@
 							<ul class="nav nav-second-level" id="facebooklist">
 
 							</ul> <!-- /.nav-second-level --></li>
-						<li><a class="btn-block btn-social btn-google-plus"
+						<li id="googleactive"><a class="btn-block btn-social btn-google-plus" 
 							onclick="rootlist();"><i class="fa fa-google-plus"></i> <span
 								class="social-text">google</span><span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="googlelist">
 
 							</ul> <!-- /.nav-second-level --></li>
-						<li id="Tcloudactive"><a
+						<li id="Tcloudactive" class=""><a
 							class="btn-block btn-social btn-instagram"><i
 								class="fa fa-instagram"></i> <span class="social-text">Tcloud</span><span
 								class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="Tcloudlist">
-								<li><a id="tcloudimages">images</a></li>
-								<li><a id="tcloudmovies">movies</a></li>
-								<li><a id="tcloudmusic">music</a></li>
-								<li><a id="tclouddocuments">documents</a></li>
 							</ul> <!-- /.nav-second-level --></li>
-						<li><a class="btn-block btn-social btn-dropbox"
+						<li id="dropboxactive"><a class="btn-block btn-social btn-dropbox"
 							id="dbxsidelist"><i class="fa fa-facebook"></i> <span
 								class="social-text">Dropbox</span><span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="dbxsidelist2">
@@ -184,7 +210,7 @@
                         <li id="kakaoactive">
                             <a class="btn-block btn-social btn-kakao" id="kakaoListshow"><img style="margin-top: 5px;" alt="kakao story" src="../img/kakaostory.png"/>
                             <span class="social-text">KAKAO Story</span><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level" id=kakaodrivelist">
                            </ul>
                         </li>
 						<li><a id="addcloud"><span
@@ -204,7 +230,7 @@
 			<div class="row">
 				<!--  -->
 				<div class="panel-body">
-					<ul class="nav nav-pills">
+					<ul class="nav nav-pills" style='float: left;'>
 						<li id="arrow-on"><a href="#home-pills" data-toggle="tab">home</a></li>
 					</ul>
 					<!-- <ul class="nav nav-pills" id="lnb">
@@ -212,6 +238,9 @@
                         <li> <a href="#home-pills"> images > </a></li>
                         <li> <a href="#home-pills"> mobile > </a> </li>
                     </ul> -->
+                    <div style='float: right;'>
+						<input id='searchinput' type='text'><button id='searchbtn'>검색</button>                    
+                    </div>
 				</div>
 
 				<div class="col-lg-12">
@@ -264,16 +293,16 @@
 								<input type="file" name="upload" id="tcloudfile" /> <input
 									type="button" id="uploadbutton" value="등록" />
 							</form>
-							<div id="upload2">
+							<!-- <div id="upload2">
 								<form action="fileUpload.do" method="post"
 									enctype="multipart/form-data">
 									<input id="fbfile" type="file" name="fbfile">
 									<textarea id="fbtext" placeholder="내용을 입력하세요" cols=80 rows=10></textarea>
 									<button id="fbuploadbtn">등록</button>
 								</form>
-							</div>
-							<input id="ondriveupload" type="file" onchange="ODupload(event)"
-								style="display: none;">
+							</div> -->
+							<!-- <input id="ondriveupload" type="file" onchange="ODupload(event)"
+								style="display: none;"> -->
 							<div class="cloudicon ">
 								<!-- <div class="cloudbtns "> -->
 
@@ -281,7 +310,7 @@
 								<div id="fb-root">
 									<img src="../img/introicon_facebook.png" id="facebooklogin">
 									<br />
-									<button class="logoutbtn" onclick=")">연결해제</button>
+									<button class="logoutbtn" onclick="FB.logout()">연결해제</button>
 								</div>
 								<!-- 	<img src="../img/introicon_tcloud.png" id="tcloudlogin"
 									onclick="PlanetX.login()"> -->
@@ -313,7 +342,7 @@
 									<div id="od-json" class="od-pagecol"></div>
 								</div>
 								<div>
-									<img src="../img/introicon_google.png" id="googlecloud"
+									<img src="../img/introicon_google.png" id="googlecloud" class="googlecloudclass"
 										style="cursor: pointer" onclick="googlelogin()"> <span
 										id="signinButton"> <span style="display: none">
 											<span class="g-signin" data-callback="signinCallback"
@@ -378,7 +407,7 @@
 				</div>
 				<div class="button relrative" style="margin-right: 50px;">
 					<button type="submit" class="btn relative center height radius"
-						onclick="location.href='./duplication.html'">중복검사</button>
+						id="findbtn">중복검사</button>
 				</div>
 			</div>
 	</div>
@@ -458,15 +487,14 @@ $('#side-menu').click(function(m) {
 	whoisparent($(m.target));
 });
 function whoisparent(child) {
-	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive'|| child[0].innerText == 'KAKAO Story') {
+	if (child[0].innerText == 'Facebook' || child[0].innerText == 'google' || child[0].innerText == 'Tcloud' || child[0].innerText == 'Dropbox' || child[0].innerText == 'Onedrive' || child[0].innerText == 'KAKAO Story') {
 		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child[0].innerText + "</li>");
 	}
 	if (child.parent().parent().parent().children()[0].innerText != 'Facebook' && 
 			child.parent().parent().parent().children()[0].innerText != 'google' && 
 			child.parent().parent().parent().children()[0].innerText != 'Tcloud' && 
 			child.parent().parent().parent().children()[0].innerText != 'Dropbox' && 
-			child.parent().parent().parent().children()[0].innerText != 'Onedrive' &&
-			child.parent().parent().parent().children()[0].innerText != 'KAKAO Story') {
+			child.parent().parent().parent().children()[0].innerText != 'Onedrive') {
 		whoisparent(child.parent().parent().parent().children())
 	} else {
 		$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + child.parent().parent().parent().children()[0].innerText + "</li>");		
@@ -508,7 +536,6 @@ var googleVolume = [0, 0];
 var dbxVolume = [0, 0];
 
 function VolumeBar() {
-	if (onevolok == 'ok' && tcloudvolok == 'ok') {
 		var totalVolume = Number(oneVolume[0]) + Number(TcloudVolume[0]) + Number(googleVolume[0]) + Number(dbxVolume[0]); 
 		var oneVol =  	 ( Number(oneVolume[1])    / totalVolume ) * 100;
 		var TcloudVol =  ( Number(TcloudVolume[1]) / totalVolume ) * 100;
@@ -527,8 +554,214 @@ function VolumeBar() {
 	    document.getElementById('dropboxVolume').innerHTML = "<span class='sr-only'>" + dbxVol + "% Complete (success)</span> Dropbox (" + dbxVol.toFixed(0) + "%)";
 	    document.getElementById('onedriveVolume').innerHTML = "<span class='sr-only'>" + oneVol + "% Complete (success)</span> One Drive (" + oneVol.toFixed(0) + "%)";
 	    document.getElementById('usableVolume').innerHTML = "<span class='sr-only'>" + useVol + "% Complete (success)</span> usable (" + useVol.toFixed(0) + "%)";
+}
+
+var goo_drop_col_allow = true;
+function goo_drop_col() {
+   if(goo_drop_col_allow) {
+	   console.log(driveResult);
+	   var obj;
+	   for(var i in driveResult) {
+	   	if(driveResult[i].mimeType != "application/vnd.google-apps.folder") {
+		   	obj = {};
+		   	obj.size = driveResult[i].fileSize;
+		   	obj.name = driveResult[i].originalFilename;
+		   	obj.drive = "google";
+		   	filefind.push(obj);
+	   	}
+	   }
+	   for(var i in alldirandfile) {
+	   	for(var j in alldirandfile[i]._json.contents) {
+		   	if(!alldirandfile[i]._json.contents[j].is_dir) {
+			   	 obj = {};
+		         obj.size = alldirandfile[i]._json.contents[j].bytes;
+		         obj.name = alldirandfile[i]._json.contents[j].path.split("/")[alldirandfile[i]
+		                    ._json.contents[j].path.split("/").length - 1];
+		         obj.drive = "dropbox";
+		         filefind.push(obj);
+		   	}
+	   	}
+	   }
+	   goo_drop_col_allow = false;
+   }
+}
+
+$('#findbtn').click(function(event) {
+	$('.nav-pills > li ').remove();
+	$("#tbody > tr").remove();
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>중복검사</li>");
+	goo_drop_col();
+	var filebackup = [];
+	for(var i in filefind) {
+		filebackup.push(filefind[i]);
+	}
+	//1차 중복 제거
+	duplication(filebackup, 0);
+	var siki = [];
+	for(var i in filebackup) {
+		siki.push(filebackup[i]);
+	}
+	//2차 중복 제거
+	var unique = duplication(siki, 1);
+	var finalfile = duplicationdatail(unique, filebackup);
+	//그리기
+	for (i = 0; i < finalfile.length; i++) {
+		for(j = 0; j < finalfile[i].length; j++) {
+			$("#tbody").append("<tr><td><input type='checkbox'></td>"
+					+ "<td>"+ finalfile[i][0].name +"</td>"
+					+ "<td>" + finalfile[i][j].drive + "</td>"
+					+ "<td></td>"
+					+ "<td class='center'>" + fileSizeRename(finalfile[i][j].size) + "</td>" 
+					+ "<td class='center'></td></tr>");
+		}
+		$("#tbody").append("<tr style='background-color: Lavender;'><td></td>"
+				+ "<td></td>"
+				+ "<td></td>"
+				+ "<td></td>"
+				+ "<td class='center'></td>" 
+				+ "<td class='center'></td></tr>");
+	}
+	siki = [];
+	filebackup = [];
+});
+  
+function duplicationdatail(unique, drive) {
+	var realvalue = [];
+	var real;
+	for(var i in unique) {
+		real = [];
+		for(var j in drive) {
+		  if(unique[i].name == drive[j].name && unique[i].size == drive[j].size) {
+			  real.push(drive[j]);
+		  } 
+		}
+		if (real.length != 1) realvalue.push(real);
+	}
+	return realvalue;
+}
+  
+function duplication(trash, inteager) {
+	if (inteager == 0) {
+		for (var i = 0; i < trash.length; i++) {
+		 for (var j = i + 1; j < trash.length; j++) {
+		   if(trash[i].name == trash[j].name && trash[i].size == trash[j].size && trash[i].drive == trash[j].drive) {
+		     trash.splice(j , 1);
+		     duplication(trash, 0);
+		     break;
+		   }
+		 }
+		}
+		return trash;
+	} else {
+		for (var i = 0; i < trash.length; i++) {
+		 for (var j = i + 1; j < trash.length; j++) {
+		   if(trash[i].name == trash[j].name && trash[i].size == trash[j].size) {
+		     trash.splice(j , 1);
+		     duplication(trash, 1);
+		     break;
+		   }
+		 }
+		}
+		return trash;
 	}
 }
+  
+$(function (){
+	  $.ajax('http://' + ip + directoryLocation + '/active.do', {
+	        method: 'POST',
+	        dataType: 'json',
+	        data: {
+	          email: $.session.get('useremail'),
+	        },
+	        success: function(result) {
+      	  console.log("result.idfind.length : " + result.idfind.length);
+	          for(i=0; i < result.idfind.length ; i++) {
+	        	  if (result.idfind[i].cloudtype == "facebook") {
+	        	    console.log("facebook");
+	        		  document.getElementById('facebookactive').style.display = "block";
+	        	  } else if (result.idfind[i].cloudtype == "google") {
+	        	    console.log("google");
+              document.getElementById('googleactive').style.display = "block";
+            } else if (result.idfind[i].cloudtype == "tcloud") {
+              console.log("tcloud");
+              document.getElementById('Tcloudactive').style.display = "block";
+            } else if (result.idfind[i].cloudtype == "dropbox") {
+              console.log("dropbox");
+              var dbx = document.getElementById('dropboxactive').style.display = "block";
+            } else if (result.idfind[i].cloudtype == "onedrive") {
+              console.log("onedrive");
+              document.getElementById('onedriveactive').style.display = "block";
+            }
+	          }
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('active로딩중 문제 발생.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+	        }
+	      }); 
+	});   
+function startactive() {
+	$.ajax('http://' + ip + directoryLocation + '/active.do', {
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          email: $.session.get('useremail'),
+        },
+        success: function(result) {
+  	  console.log("result.idfind.length : " + result.idfind.length);
+          for(i=0; i < result.idfind.length ; i++) {
+        	  if (result.idfind[i].cloudtype == "facebook") {
+        	    console.log("facebook");
+        		  document.getElementById('facebookactive').style.display = "block";
+        	  } else if (result.idfind[i].cloudtype == "google") {
+        	    console.log("google");
+		          document.getElementById('googleactive').style.display = "block";
+		        } else if (result.idfind[i].cloudtype == "tcloud") {
+		          console.log("tcloud");
+		          document.getElementById('Tcloudactive').style.display = "block";
+		        } else if (result.idfind[i].cloudtype == "dropbox") {
+		          console.log("dropbox");
+		          var dbx = document.getElementById('dropboxactive').style.display = "block";
+		        } else if (result.idfind[i].cloudtype == "onedrive") {
+		          console.log("onedrive");
+		          document.getElementById('onedriveactive').style.display = "block";
+		        }
+		          }
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('active로딩중 문제 발생.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+	        }
+      }); 
+} 
+
+$('#searchbtn').click(function() {
+	var searchnum = 0;
+	if (searchnum == 0 ){
+		goo_drop_col();
+	}
+	searchnum++;
+	$('.nav-pills > li ').remove();
+	$("#tbody > tr").remove();
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>검색결과</li>");
+	console.log(filefind);
+	for (i = 0 ; i < filefind.length ; i++){
+		if (filefind[i].name != null) {
+			var finishfind = filefind[i].name.indexOf($('#searchinput').val());
+			if (finishfind != -1) {
+				console.log(filefind[i].name);
+				$("#tbody").append("<tr><td><input type='checkbox'></td>"
+						+ "<td>"+ filefind[i].name +"</td>"
+						+ "<td>" + filefind[i].drive + "</td>"
+						+ "<td></td>"
+						+ "<td class='center'>" + fileSizeRename(filefind[i].size) + "</td>" 
+						+ "<td class='center'></td></tr>");
+			}
+		}
+	}
+});
   
   $(document).ready(function() {
       $('#dataTables-example').DataTable({
@@ -606,6 +839,7 @@ function MouseOutRe(MyImage) {
 		$('#dataTables-example > thead > tr :first-child').removeAttr('class')
 		.removeAttr('tabindex').removeAttr('aria-controls').removeAttr('rowspan').removeAttr('colspan').removeAttr('aria-label').removeAttr('aria-sort');
 	});
+	
 </script>
 
 </body>
