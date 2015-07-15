@@ -87,7 +87,7 @@ function kakaoListInit(){
 			$('.panel').append(
 					'<div id="loginBar">로그인하시기 바랍니다.</div>'
 			);
-			setTimeout("killLoader()", 2000);
+			
 		}else{			
 			pageLoading();
 		}
