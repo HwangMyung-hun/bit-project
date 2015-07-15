@@ -57,9 +57,9 @@
       display: none;
       border : 1px solid red;
     }
-    /* #facebookactive, #Tcloudactive{
+   #facebookactive, #googleactive, #Tcloudactive, #dropboxactive, #onedriveactive{
       display: none;
-    } */
+    } 
     </style>
 </head>
 
@@ -154,7 +154,7 @@
 							<ul class="nav nav-second-level" id="facebooklist">
 
 							</ul> <!-- /.nav-second-level --></li>
-						<li><a class="btn-block btn-social btn-google-plus"
+						<li id="googleactive"><a class="btn-block btn-social btn-google-plus" 
 							onclick="rootlist();"><i class="fa fa-google-plus"></i> <span
 								class="social-text">google</span><span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="googlelist">
@@ -166,7 +166,7 @@
 								class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="Tcloudlist">
 							</ul> <!-- /.nav-second-level --></li>
-						<li><a class="btn-block btn-social btn-dropbox"
+						<li id="dropboxactive"><a class="btn-block btn-social btn-dropbox"
 							id="dbxsidelist"><i class="fa fa-facebook"></i> <span
 								class="social-text">Dropbox</span><span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level" id="dbxsidelist2">
@@ -207,7 +207,7 @@
 			<div class="row">
 				<!--  -->
 				<div class="panel-body">
-					<ul class="nav nav-pills">
+					<ul class="nav nav-pills" style='float: left;'>
 						<li id="arrow-on"><a href="#home-pills" data-toggle="tab">home</a></li>
 					</ul>
 					<!-- <ul class="nav nav-pills" id="lnb">
@@ -215,6 +215,9 @@
                         <li> <a href="#home-pills"> images > </a></li>
                         <li> <a href="#home-pills"> mobile > </a> </li>
                     </ul> -->
+                    <div style='float: right;'>
+						<input id='searchinput' type='text'><button id='searchbtn'>검색</button>                    
+                    </div>
 				</div>
 
 				<div class="col-lg-12">
@@ -267,16 +270,16 @@
 								<input type="file" name="upload" id="tcloudfile" /> <input
 									type="button" id="uploadbutton" value="등록" />
 							</form>
-							<div id="upload2">
+							<!-- <div id="upload2">
 								<form action="fileUpload.do" method="post"
 									enctype="multipart/form-data">
 									<input id="fbfile" type="file" name="fbfile">
 									<textarea id="fbtext" placeholder="내용을 입력하세요" cols=80 rows=10></textarea>
 									<button id="fbuploadbtn">등록</button>
 								</form>
-							</div>
-							<input id="ondriveupload" type="file" onchange="ODupload(event)"
-								style="display: none;">
+							</div> -->
+							<!-- <input id="ondriveupload" type="file" onchange="ODupload(event)"
+								style="display: none;"> -->
 							<div class="cloudicon ">
 								<!-- <div class="cloudbtns "> -->
 
@@ -284,7 +287,7 @@
 								<div id="fb-root">
 									<img src="../img/introicon_facebook.png" id="facebooklogin">
 									<br />
-									<button class="logoutbtn" onclick=")">연결해제</button>
+									<button class="logoutbtn" onclick="FB.logout()">연결해제</button>
 								</div>
 								<!-- 	<img src="../img/introicon_tcloud.png" id="tcloudlogin"
 									onclick="PlanetX.login()"> -->
@@ -530,37 +533,40 @@ function VolumeBar() {
 	    document.getElementById('usableVolume').innerHTML = "<span class='sr-only'>" + useVol + "% Complete (success)</span> usable (" + useVol.toFixed(0) + "%)";
 }
 
-
-function goo_drop_col(google, dropbox) {
-   console.log(driveResult);
-   var obj;
-   for(var i in driveResult) {
-   	if(driveResult[i].mimeType != "application/vnd.google-apps.folder") {
-	   	obj = {};
-	   	obj.size = driveResult[i].fileSize;
-	   	obj.name = driveResult[i].originalFilename;
-	   	obj.drive = "google";
-	   	filefind.push(obj);
-   	}
-   }
-   for(var i in alldirandfile) {
-   	for(var j in alldirandfile[i]._json.contents) {
-	   	if(!alldirandfile[i]._json.contents[j].is_dir) {
-		   	 obj = {};
-	         obj.size = alldirandfile[i]._json.contents[j].bytes;
-	         obj.name = alldirandfile[i]._json.contents[j].path.split("/")[alldirandfile[i]
-	                    ._json.contents[j].path.split("/").length - 1];
-	         obj.drive = "dropbox";
-	         filefind.push(obj);
+var goo_drop_col_allow = true;
+function goo_drop_col() {
+   if(goo_drop_col_allow) {
+	   console.log(driveResult);
+	   var obj;
+	   for(var i in driveResult) {
+	   	if(driveResult[i].mimeType != "application/vnd.google-apps.folder") {
+		   	obj = {};
+		   	obj.size = driveResult[i].fileSize;
+		   	obj.name = driveResult[i].originalFilename;
+		   	obj.drive = "google";
+		   	filefind.push(obj);
 	   	}
-   	}
+	   }
+	   for(var i in alldirandfile) {
+	   	for(var j in alldirandfile[i]._json.contents) {
+		   	if(!alldirandfile[i]._json.contents[j].is_dir) {
+			   	 obj = {};
+		         obj.size = alldirandfile[i]._json.contents[j].bytes;
+		         obj.name = alldirandfile[i]._json.contents[j].path.split("/")[alldirandfile[i]
+		                    ._json.contents[j].path.split("/").length - 1];
+		         obj.drive = "dropbox";
+		         filefind.push(obj);
+		   	}
+	   	}
+	   }
+	   goo_drop_col_allow = false;
    }
 }
 
 $('#findbtn').click(function(event) {
 	$('.nav-pills > li ').remove();
 	$("#tbody > tr").remove();
-	//$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>중복검사</li>");
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>중복검사</li>");
 	goo_drop_col();
 	var filebackup = [];
 	for(var i in filefind) {
@@ -582,7 +588,7 @@ $('#findbtn').click(function(event) {
 					+ "<td>"+ finalfile[i][0].name +"</td>"
 					+ "<td>" + finalfile[i][j].drive + "</td>"
 					+ "<td></td>"
-					+ "<td class='center'>" + finalfile[i][j].size + "</td>" 
+					+ "<td class='center'>" + fileSizeRename(finalfile[i][j].size) + "</td>" 
 					+ "<td class='center'></td></tr>");
 		}
 		$("#tbody").append("<tr style='background-color: Lavender;'><td></td>"
@@ -637,6 +643,102 @@ function duplication(trash, inteager) {
 	}
 }
   
+$(function (){
+	  $.ajax('http://' + ip + directoryLocation + '/active.do', {
+	        method: 'POST',
+	        dataType: 'json',
+	        data: {
+	          email: $.session.get('useremail'),
+	        },
+	        success: function(result) {
+      	  console.log("result.idfind.length : " + result.idfind.length);
+	          for(i=0; i < result.idfind.length ; i++) {
+	        	  if (result.idfind[i].cloudtype == "facebook") {
+	        	    console.log("facebook");
+	        		  document.getElementById('facebookactive').style.display = "block";
+	        	  } else if (result.idfind[i].cloudtype == "google") {
+	        	    console.log("google");
+              document.getElementById('googleactive').style.display = "block";
+            } else if (result.idfind[i].cloudtype == "tcloud") {
+              console.log("tcloud");
+              document.getElementById('Tcloudactive').style.display = "block";
+            } else if (result.idfind[i].cloudtype == "dropbox") {
+              console.log("dropbox");
+              var dbx = document.getElementById('dropboxactive').style.display = "block";
+            } else if (result.idfind[i].cloudtype == "onedrive") {
+              console.log("onedrive");
+              document.getElementById('onedriveactive').style.display = "block";
+            }
+	          }
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('active로딩중 문제 발생.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+	        }
+	      }); 
+	});   
+function startactive() {
+	$.ajax('http://' + ip + directoryLocation + '/active.do', {
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          email: $.session.get('useremail'),
+        },
+        success: function(result) {
+  	  console.log("result.idfind.length : " + result.idfind.length);
+          for(i=0; i < result.idfind.length ; i++) {
+        	  if (result.idfind[i].cloudtype == "facebook") {
+        	    console.log("facebook");
+        		  document.getElementById('facebookactive').style.display = "block";
+        	  } else if (result.idfind[i].cloudtype == "google") {
+        	    console.log("google");
+		          document.getElementById('googleactive').style.display = "block";
+		        } else if (result.idfind[i].cloudtype == "tcloud") {
+		          console.log("tcloud");
+		          document.getElementById('Tcloudactive').style.display = "block";
+		        } else if (result.idfind[i].cloudtype == "dropbox") {
+		          console.log("dropbox");
+		          var dbx = document.getElementById('dropboxactive').style.display = "block";
+		        } else if (result.idfind[i].cloudtype == "onedrive") {
+		          console.log("onedrive");
+		          document.getElementById('onedriveactive').style.display = "block";
+		        }
+		          }
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	          alert('active로딩중 문제 발생.\n' + 
+	              '잠시 후 다시 시도하세요.\n' +
+	          '계속 창이 뜬다면, 관리자에 문의하세요.(사내번호:2)');
+	        }
+      }); 
+} 
+
+$('#searchbtn').click(function() {
+	var searchnum = 0;
+	if (searchnum == 0 ){
+		goo_drop_col();
+	}
+	searchnum++;
+	$('.nav-pills > li ').remove();
+	$("#tbody > tr").remove();
+	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>검색결과</li>");
+	console.log(filefind);
+	for (i = 0 ; i < filefind.length ; i++){
+		if (filefind[i].name != null) {
+			var finishfind = filefind[i].name.indexOf($('#searchinput').val());
+			if (finishfind != -1) {
+				console.log(filefind[i].name);
+				$("#tbody").append("<tr><td><input type='checkbox'></td>"
+						+ "<td>"+ filefind[i].name +"</td>"
+						+ "<td>" + filefind[i].drive + "</td>"
+						+ "<td></td>"
+						+ "<td class='center'>" + fileSizeRename(filefind[i].size) + "</td>" 
+						+ "<td class='center'></td></tr>");
+			}
+		}
+	}
+});
   
   $(document).ready(function() {
       $('#dataTables-example').DataTable({
