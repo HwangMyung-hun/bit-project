@@ -152,7 +152,6 @@ function pageLoading(){
 	setTimeout('killLoader()', 2000);
 }
 
-
 function killLoader(){
 	$('#loadingBar').remove();
 	$('#loginBar').remove();
