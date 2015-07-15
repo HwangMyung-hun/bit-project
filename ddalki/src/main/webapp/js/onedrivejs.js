@@ -8,11 +8,12 @@ var onedriveactive = null;
 var oneVolume = [0, 0];
 var onevolok;
 var onedriveID;
-var onedrivefind = new Array();
+var filefind = new Array();
 
 $(function(){
 	odtoken = getTokenFromCookie();
 	if(odtoken) {
+		$('#onedriveactive').css('opacity', '1');
 		console.log(odtoken);
 		$.ajax({
 			url: "https://api.onedrive.com/v1.0/drive?access_token=" + odtoken,
@@ -46,6 +47,7 @@ $(function(){
 			        		    },
 			        		    success: function(result) {
 			        		       alert('onedrive 등록이 완료되었습니다.');
+			        		       startactive();
 			        		    },
 			        		    error: function(xhr, textStatus, errorThrown) {
 			        		      alert('DB저장 실패.\n' + 
@@ -76,6 +78,10 @@ $(function(){
 			}
 		});
 	} else {
+		$('#onedriveactive').css('opacity', '0.1');
+		$('#onedriveactive').click(function() {
+			$('#onedrivelogin').trigger('click');
+		})
 		onevolok = 'ok';
 		VolumeBar();
 	}
@@ -84,30 +90,6 @@ $(function(){
 function onedrivelogout() {
 	location.href='https://login.live.com/oauth20_logout.srf?client_id=' + onedrive_id + '&redirect_uri=' + onedrive_redirect + '';
 }
-
-$('#findbtn').click(function(event) {
-	$("#tbody > tr").remove();
-	for (i = 0; i < onedrivefind.length ; i++){
-		for (j = 0; j < Tcloudfind.length; j++) {
-			if (onedrivefind[i][0] == Tcloudfind[j][0] && onedrivefind[i][1] == Tcloudfind[j][1]) {
-				console.log(onedrivefind[i][0]);
-				console.log(Tcloudfind[j][1]);
-				$("#tbody").append("<tr><td><input type='checkbox'></td>"
-						+ "<td>"+ onedrivefind[i][0] +"</td>"
-						+ "<td>OneDrive</td>"
-						+ "<td></td>"
-						+ "<td class='center'></td>"
-						+ "<td class='center'></td></tr>");
-				$("#tbody").append("<tr><td><input type='checkbox'></td>"
-						+ "<td>"+ Tcloudfind[j][0] +"</td>"
-						+ "<td>Tcloud</td>"
-						+ "<td></td>"
-						+ "<td class='center'></td>"
-						+ "<td class='center'></td></tr>");
-			}
-		}
-	}
-});
 
 function findfile(data) {
 	for (i = 0; i < data.value.length; i++) {
@@ -119,8 +101,12 @@ function findfile(data) {
 				}
 			});
 		} else {
-			onedrivefind.push([data.value[i].name, data.value[i].size])
-			console.log(onedrivefind);
+			var onedriveobj = {};
+			onedriveobj.name = data.value[i].name;
+			onedriveobj.size = data.value[i].size;
+			onedriveobj.drive = 'onedrive';
+			filefind.push(onedriveobj);
+			/*onedrivefind.push([data.value[i].name, data.value[i].size]);*/
 		}
 	}
 }
@@ -264,7 +250,12 @@ function onAuthenticated(odtoken2, authWindow) {
 var level = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth'];
 var ODlist = null;
 var ondriveallow = 0;
-$('#onedrivefolder').click(function() {
+$('#onedriveactive').click(function() {
+	$('#deletebtn').css('opacity','1');
+	$('#downloadbtn').css('opacity','1');
+	$('#uploadbtn').css('opacity','0.1');
+	$('#newfolderbtn').css('opacity','1');
+	$('#renamebtn').css('opacity','1');
 	$("#tbody > tr").remove();
 	ondriveallow++;
 	/*console.log($('.nav-pills > li > a')[0]);
@@ -291,21 +282,21 @@ $('#onedrivefolder').click(function() {
 								+ "<td>"+ data.value[j].name +"<img src='" + data.value[j].thumbnails[0].smallSquare.url + "' id='image1'></td>"
 								+ "<td></td>"
 								+ "<td>"+ data.value[j].lastModifiedDateTime.split("T")[0] +"</td>"
-								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
+								+ "<td class='center'>"+ fileSizeRename(data.value[j].size) + "byte" +"</td>"
 								+ "<td class='center'>"+ data.value[j].name.split(".")[1] +"</td></tr>");
 					} else if (data.value[j].folder) {
 						$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
 								+ "<td>"+ data.value[j].name +"<img src='../img/fileicon_folder.png' id='image1'></td>"
 								+ "<td></td>"
 								+ "<td>"+ data.value[j].lastModifiedDateTime.split("T")[0] +"</td>"
-								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
+								+ "<td class='center'>"+ fileSizeRename(data.value[j].size) + "byte" +"</td>"
 								+ "<td class='center'>folder</td></tr>");
 					} else {
 						$("#tbody").append("<tr><td><input id='" + data.value[j].id + "' type='checkbox'></td>"
 								+ "<td>"+ data.value[j].name +"</td>"
 								+ "<td></td>"
 								+ "<td>"+ data.value[j].lastModifiedDateTime.split("T")[0] +"</td>"
-								+ "<td class='center'>"+ data.value[j].size + "byte" +"</td>"
+								+ "<td class='center'>"+ fileSizeRename(data.value[j].size) + "byte" +"</td>"
 								+ "<td class='center'>"+ data.value[j].name.split(".")[1] +"</td></tr>");
 					}
 				}
@@ -344,20 +335,18 @@ var odfolder;
 function innerfile(folderid, name) {
 	odfolder = folderid;
 	$("#tbody > tr").remove();
-	console.log(name);
 	/*$('.nav-pills > li:nth-child(2)').remove();
 	$('.nav-pills').append("<li id='arrow-on'><a href='#home-pills' data-toggle='tab'>" + name + "</li>");*/
 	$.ajax({
 		url: "https://api.onedrive.com/v1.0/drive/items/" + folderid + "/children?expand=thumbnails,children(expand=thumbnails(select=smallSquare,c200x150_Crop))&access_token=" + odtoken,
 		success: function(data) {
-			console.log(data);
 			for (i = 0 ; i < data.value.length ; i++) {
 				if(data.value[i].thumbnails.length){
 					$("#tbody").append("<tr><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
 							+ "<td>"+ data.value[i].name +"<img src='" + data.value[i].thumbnails[0].smallSquare.url + "' id='image1' onclick=window.open('" + data.value[i].webUrl + "')></td>"
 							+ "<td></td>"
 							+ "<td>"+ data.value[i].lastModifiedDateTime.split("T")[0] +"</td>"
-							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
+							+ "<td class='center'>"+ fileSizeRename(data.value[i].size) + "byte" +"</td>"
 							+ "<td class='center'>"+ data.value[i].name.split('.')[1] +"</td></tr>");
 					/*(function(m) {
 						$('#image1').click(function() {
@@ -369,14 +358,14 @@ function innerfile(folderid, name) {
 							+ "<td>"+ data.value[i].name +"<img src='../img/fileicon_folder.png' id='image1'></td>"
 							+ "<td></td>"
 							+ "<td>"+ data.value[i].lastModifiedDateTime.split('T')[0] +"</td>"
-							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
+							+ "<td class='center'>"+ fileSizeRename(data.value[i].size) + "byte" +"</td>"
 							+ "<td class='center'>folder</td></tr>");
 				} else {
 					$("#tbody").append("<tr><td><input id='" + data.value[i].id + "' type='checkbox'></td>"
 							+ "<td>"+ data.value[i].name +"</td>"
 							+ "<td></td>"
 							+ "<td>"+ data.value[i].lastModifiedDateTime.split('T')[0] +"</td>"
-							+ "<td class='center'>"+ data.value[i].size + "byte" +"</td>"
+							+ "<td class='center'>"+ fileSizeRename(data.value[i].size) + "byte" +"</td>"
 							+ "<td class='center'>"+ data.value[i].name.split('.')[1] +"</td></tr>");
 				}
 			}

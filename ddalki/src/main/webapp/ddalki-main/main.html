@@ -79,12 +79,12 @@
 						<img class="relative zindex" alt="복사" 
 							src="../img/topmenu_copy.png" onmouseover="MouseOverCopy(this)"
 							onmouseout="MouseOutCopy(this)"
-							style="margin-right: 10px; cursor: pointer;"> <img
+							style="margin-right: 10px; cursor: pointer; display: none;"> <img
 							class="relative zindex" alt="붙여넣기" src="../img/topmenu_paste.png"
 							onmouseover="MouseOverPaste(this)"
 							onmouseout="MouseOutPaste(this)"
-							style="margin-right: 10px; cursor: pointer;"> <img
-							class="relative zindex" alt="삭제" src="../img/topmenu_del_off.png"
+							style="margin-right: 10px; cursor: pointer; display: none;"> <img
+							class="relative zindex" alt="삭제" src="../img/topmenu_del.png"
 							id="deletebtn" onmouseover="MouseOverDelete(this)"
 							onmouseout="MouseOutDelete(this);"
 							style="margin-right: 10px; cursor: pointer;"> <img
@@ -440,7 +440,9 @@ $('#logout').click(function(event) {
 </script>
 <script>
 $('#tbody').click(function(e) {
-	if($(e.target).parent()[0].children[0].children[0].checked) $(e.target).parent()[0].children[0].children[0].checked = false;
+	if((typeof $(e.target).parent()[0].children[0].children[0].checked) != "undefined"
+			&& $(e.target).parent()[0].children[0].children[0].checked) 
+				$(e.target).parent()[0].children[0].children[0].checked = false;
 	else $(e.target).parent()[0].children[0].children[0].checked = true;
 	if($(e.target).parent()[0].children[5].innerText == 'folder'){
 		for(i = 0; i < $('#side-menu a').length; i++){

@@ -266,7 +266,6 @@ function direcAdd(id, inteager) {
 }
 
 var crefolder = false;
-
 function filetable(id) {
 	foldertargetid = id;
 	foldertargets = true;
@@ -284,7 +283,6 @@ function filetable(id) {
                     + "<td class='center'>"+ driveResult[i].fileExtension +"</td></tr>");
 		} else if (driveResult[i].parents[0].id == id && 
 				(driveResult[i].mimeType == "application/vnd.google-apps.folder")){
-			console.log("됨");
 			$("#tbody").append(
 					"<tr><td><input id='" + driveResult[i].id + "' type='checkbox'></td>"
                     + "<td>"+ driveResult[i].title +"</td>"
@@ -296,16 +294,23 @@ function filetable(id) {
 	}
 	etcthumnail();
 	gdTumbnailInsert();
+
 	if(crefolder) {
-		$("#tbody input")[0].checked = true;
-		$('.left img:nth-child(7)').trigger("click");
-		crefolder = 11;
-	}
-	///
-	///
-	///
-	if(crefolder == 11) {
 		crefolder = false;
+		//$("#tbody input")[0].checked = true;
+		var selthis = $("#tbody input")[0].parentElement.parentElement.childNodes[1].innerHTML;
+		var innerHTML = '<span><input id="googlenewtitle2" type="text"/><button id="imin2">등록</button>' 
+			  + '<button id="getoutofhere2">취소</button></span>';
+		$("#tbody input")[0].parentElement.parentElement.childNodes[1].innerHTML = innerHTML;
+		$("#imin2").click(function () {
+			if($("#googlenewtitle2").val() != "") {
+				renameFile($("#tbody input")[0].id, $("#googlenewtitle2").val());
+			}
+		});
+		$("#getoutofhere2").click(function () {
+			$("#tbody input")[0].parentElement.parentElement.childNodes[1].innerHTML = selthis;
+		});
+		//$('.left img:nth-child(7)').trigger("click");
 	}
 }
 
@@ -356,6 +361,11 @@ $("#addcloud").click(function() {
 });
 
 $(".btn-google-plus").click(function(event) {
+  $('#deletebtn').css('opacity','1');
+  $('#downloadbtn').css('opacity','1');
+  $('#uploadbtn').css('opacity','1');
+  $('#newfolderbtn').css('opacity','1');
+  $('#renamebtn').css('opacity','1');
   console.log(driveResult);
   console.log(alldirandfile);
   foldertargets = true;
@@ -596,6 +606,7 @@ function folderdeletereset(fileId, del) {
 							break;
 						} else {
 							folderlistreset(fileId);
+							$("#" + foldertargetid).trigger("click");
 							break;
 						}
 					}

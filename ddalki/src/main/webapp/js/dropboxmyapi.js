@@ -87,11 +87,15 @@ function dropboxunactive() {
 }
 
 $(".btn-dropbox").click(function() {
-	if(!client.isAuthenticated()) {
-		$("#drop-in-btn").trigger("click");
-	}
+  $('#deletebtn').css('opacity','1');
+  $('#downloadbtn').css('opacity','1');
+  $('#uploadbtn').css('opacity','1');
+  $('#newfolderbtn').css('opacity','1');
+  $('#renamebtn').css('opacity','1');
+  if(!client.isAuthenticated()) {
+    $("#drop-in-btn").trigger("click");
+  }
 });
-
 if (client.isAuthenticated()) {
   function againlist(path) {
     client.readdir(path, function (error, results, now, under) {

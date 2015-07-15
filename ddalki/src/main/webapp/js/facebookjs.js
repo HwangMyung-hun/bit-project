@@ -29,6 +29,7 @@ window.fbAsyncInit = function() {
 		var newLI = document.createElement("LI");
 		
 			if (response.status === 'connected') {
+				  $('#facebookactive').css('opacity', '1');
 				token = response.authResponse.accessToken;
 				console.log(response.authResponse.accessToken);
 		    console.log(response.authResponse.userID);
@@ -128,9 +129,15 @@ window.fbAsyncInit = function() {
 		      });
 		    
 		    } else if (response.status === 'not_authorized') {
-		    	  
+		    	  $('#facebookactive').css('opacity', '0.1');
+		    	  $('#facebookactive').click(function() {
+					  	$('#facebooklogin').trigger('click');
+					});
 		    } else {
-
+		    	$('#facebookactive').css('opacity', '0.1');
+		    	 $('#facebookactive').click(function() {
+					  	$('#facebooklogin').trigger('click');
+					});
 		    }
 		}, {
 			scope : 'publish_actions, user_photos',
@@ -148,6 +155,7 @@ window.fbAsyncInit = function() {
 	function statusChangeCallback(response) {
 
 		if (response.status === 'connected') {
+			  $('#facebookactive').css('opacity', '1');
 			var album3;
 			FB.api('/me', function(response) {
 				  
@@ -274,9 +282,15 @@ window.fbAsyncInit = function() {
 			testAPI(response.authResponse.userID);
 			
 		} else if (response.status === 'not_authorized') {
-
+			  $('#facebookactive').css('opacity', '0.1');
+			  $('#facebookactive').click(function() {
+				  	$('#facebooklogin').trigger('click');
+				});
 		} else {
-
+			$('#facebookactive').css('opacity', '0.1');
+			$('#facebookactive').click(function() {
+					$('#facebooklogin').trigger('click');
+			});
 		}
 	}
 	
@@ -287,7 +301,13 @@ window.fbAsyncInit = function() {
 	        console.log(response.name); */
 	      });
 	    }
-	
+$('#facebookactive').click(function() {
+	$('#deletebtn').css('opacity','0.1');
+	$('#downloadbtn').css('opacity','0.1');
+	$('#uploadbtn').css('opacity','0.1');
+	$('#newfolderbtn').css('opacity','0.1');
+	$('#renamebtn').css('opacity','0.1');
+});
 	
 	
  
