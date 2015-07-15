@@ -37,7 +37,7 @@ function logoutWithKakao() {
 //리스트 뿌리기
 var newtr = document.getElementById("tbody");
 function kakaoListInit(){
-	$('#loadingBar').remove();
+	killLoader()
 	if (kakaologin == true) {
 //		console.log('리스트 뿌릴 준비 완료');
 		Kakao.API.request({
@@ -75,8 +75,7 @@ function kakaoListInit(){
 							+'<td>'+kb+'KB</td>'
 							+'<td>'+kakaoType+'</td>'
 					);
-				}
-				
+				}				
 				makeTdCont();
 
 			};
@@ -85,6 +84,7 @@ function kakaoListInit(){
 		};
 	}else{
 		if (document.load) {
+			killLoader();
 			$('.panel').append(
 					'<div id="loginBar">로그인하시기 바랍니다.</div>'
 			);
@@ -145,7 +145,7 @@ function kakaoPhotoUp() {
 //사진 업로드 API 끝
 
 function pageLoading(){
-	$('#loadingBar').remove();
+	killLoader()
 	$('.panel').append(
 			'<div id="loadingBar">페이지를 로딩중입니다. 잠시 후 다시 시도해  주시기 바랍니다.</div>'
 	);
@@ -154,12 +154,12 @@ function pageLoading(){
 
 
 function killLoader(){
+	$('#loadingBar').remove();
+	$('#loginBar').remove();
 	//$('#loadingBar').animate({opacity: "0"}, 2000);
-	$('#loadingBar')$('#loadingBar').animate({opacity: "0"}, 2000);
 	/*for (var op = 1; op > 0; op=op-0.01) {
 		$('#loadingBar').css('opacity',op);	
 		//$('#loginBar').style.opacity=op;		
 	}*/
-	$('#loadingBar').remove();
 }
 
