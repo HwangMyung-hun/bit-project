@@ -11,9 +11,10 @@ function signinCallback(authResult) {
 	        method: 'POST',
 	        dataType: 'json',
 	        data: {
-	          email: "aa",
+	          email: $.session.get('useremail'),
 	          cloudtype: "google",
-	          cloudid: "allow"
+	          cloudid: "allow",
+	          active: 'Y'
 	        },
 	        success: function(result) {
 	        	googleactive();
@@ -46,8 +47,26 @@ function signinCallback(authResult) {
   }
 }
 
+$(".btn-google-plus").click(function() {
+	if(accessToken == undefined) {
+		$("#googlecloud").trigger("click");
+	} else {
+		checkAuth(function(){
+			var request = gapi.client.drive.about.get();
+			request.execute(function(resp) {
+				if(resp.error != undefined) {
+					console.log(resp);
+					$(".googlecloudclass").trigger("click");
+				}
+			}); 
+		});
+	}
+});
+
+
 function googleactive() {
 	//존재하면서 활성화
+	$('#googleactive').css('opacity', '1');
 	checkAuth(function(){
 		var request = gapi.client.drive.about.get();
 		  request.execute(function(resp) {
@@ -77,13 +96,15 @@ function googleunactive() {
     method: 'POST',
     dataType: 'json',
     data: {
-      email: "aa",
+      email: $.session.get('useremail'),
       cloudtype: "google",
-      cloudid: "allow"
+      cloudid: "allow",
+      active: 'Y'
     },
     success: function(result) {
     	if(result.cloud == "exist") {
     		// 있으면서 비활성화
+    		$('#googleactive').css('opacity', '0.1');
     	} else {
     		// 존재조차 안함
     	}
@@ -335,6 +356,8 @@ $("#addcloud").click(function() {
 });
 
 $(".btn-google-plus").click(function(event) {
+  console.log(driveResult);
+  console.log(alldirandfile);
   foldertargets = true;
   googlenewfolder = true;
   if(driveResult == null) fileList();
@@ -762,8 +785,3 @@ function gdTumbnailInsert() {
 		}
 	}
 }
-
-
-
-
-  
