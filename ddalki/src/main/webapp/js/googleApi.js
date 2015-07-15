@@ -297,7 +297,6 @@ function filetable(id) {
 
 	if(crefolder) {
 		crefolder = false;
-		//$("#tbody input")[0].checked = true;
 		var selthis = $("#tbody input")[0].parentElement.parentElement.childNodes[1].innerHTML;
 		var innerHTML = '<span><input id="googlenewtitle2" type="text"/><button id="imin2">등록</button>' 
 			  + '<button id="getoutofhere2">취소</button></span>';
@@ -310,7 +309,6 @@ function filetable(id) {
 		$("#getoutofhere2").click(function () {
 			$("#tbody input")[0].parentElement.parentElement.childNodes[1].innerHTML = selthis;
 		});
-		//$('.left img:nth-child(7)').trigger("click");
 	}
 }
 
@@ -367,7 +365,6 @@ $(".btn-google-plus").click(function(event) {
   $('#newfolderbtn').css('opacity','1');
   $('#renamebtn').css('opacity','1');
   console.log(driveResult);
-  console.log(alldirandfile);
   foldertargets = true;
   googlenewfolder = true;
   if(driveResult == null) fileList();
@@ -376,7 +373,7 @@ $(".btn-google-plus").click(function(event) {
   $("#tbody").show();
   $(".cloudicon").hide();
   rootlistfile();
-  $("#googleInsertInput").hide();
+  $('#googleInsertInput').remove();
 });
 
 $(".btn-facebook, .btn-instagram, .btn-dropbox, .btn-twitter").click(function(event) {
@@ -385,12 +382,13 @@ $(".btn-facebook, .btn-instagram, .btn-dropbox, .btn-twitter").click(function(ev
   $(".dataTable_wrapper").show();
   $("#tbody").show();
   $(".cloudicon").hide();
-  $("#googleInsertInput").hide();
+  $('#googleInsertInput').remove();
 });
 
 var foldertargets = false;
 $('.left img:nth-child(5)').click(function() {
-	if(foldertargets) $("#googleInsertInput").show();
+	if(foldertargets) $('.dataTable_wrapper').append('<input id="googleInsertInput" ' 
+		       + ' type="file" accept="*/*" onchange="insertFile(event)">');
 });
 
 //google download
@@ -504,10 +502,11 @@ function insertFile(event) {
 	  }
 	  reader.readAsBinaryString(fileData);
 	});
-	$("#googleInsertInput").hide();
+	$('#googleInsertInput').remove();
+	
 }
 
-$("#googleInsertInput").hide();
+$('#googleInsertInput').remove();
 
 function actionRefresh() {
 	filetable(foldertarget());
