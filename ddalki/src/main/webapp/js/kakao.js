@@ -43,15 +43,9 @@ function kakaoListInit(){
 			url: '/v1/api/story/mystories'
 		}).then(function (res) {
 			$('#tbody>tr').remove();
-			var resLen = res.length
-			for(j = 0; j < resLen ; j++) {
-				
-/*			for(var i in res) {
-				console.log(res[i]);
-				for(var j in res[i]) {
-					console.log(res[j].media[0]["original"])
-				}*/
-				
+//			var resLen = res.length
+//			for(j = 0; j < resLen ; j++) {
+			for(var j in res) {
 				var createtr = newtr.appendChild(document.createElement("TR"));
 				createtr.id = "kakaolist" + j;
 				var td = createtr.appendChild(document.createElement("TD")).appendChild(document.createElement("input"));
@@ -67,7 +61,7 @@ function kakaoListInit(){
 						kakaoImage ="<td><a href='"+res[j].media[0]["original"]+"' target='_blank'><img src='"+res[j].media[0]["small"]+"' id='image1'></a> "+res[j].content+"</td>";
 						var imgUrl = res[j].media[0]["original"];
                         kakaoType = ((imgUrl.match(/img.[a-z]*/))[0]).replace(/img./,"");  
-                        kb = j*27+12;
+                        kb = j*(Math.floor(Math.random()*100))+12;
 					}else{								
 						kakaoImage = "<td><img src='../img/fileicon_etc.png' id='noimg'> "+res[j].content+"</td>";
 						kakaoType = "텍스트 포스트";
@@ -169,4 +163,4 @@ function killLoader(){
 			$('#loginBar').remove();	
 		}
 
-$(document).ready(function(){killLoader()}); 
+$(document).ready(killLoader()); 
