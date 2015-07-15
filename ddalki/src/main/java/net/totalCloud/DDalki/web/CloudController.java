@@ -58,13 +58,14 @@ public class CloudController {
   }
   
   @RequestMapping("/hasCloud")
-  public Object hasCloud(String email, String cloudtype, String cloudid) 
+  public Object hasCloud(String email, String cloudtype, String cloudid, String active) 
 		  throws Exception {
 
     HashMap<String, Object> sqlParams = new HashMap<String, Object>();
     sqlParams.put("email", email);
     sqlParams.put("cloudtype", cloudtype);
     sqlParams.put("cloudid", cloudid);
+    sqlParams.put("active", active);
 
     HashMap<String, Object> responseData = new HashMap<String, Object>();
     if(cloudDao.alreadyExistsCloud(sqlParams) == null) {
@@ -75,9 +76,7 @@ public class CloudController {
     	responseData.put("status", "success");
     	responseData.put("cloud", "exist");
     }
-
     return responseData;
-
   }
 
 }
