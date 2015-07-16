@@ -37,7 +37,7 @@ function logoutWithKakao() {
 //리스트 뿌리기
 var newtr = document.getElementById("tbody");
 function kakaoListInit(){
-	killLoader()7
+	killLoader()
 	if (kakaologin == true) {
 //		console.log('리스트 뿌릴 준비 완료');
 		Kakao.API.request({
@@ -59,8 +59,7 @@ function kakaoListInit(){
 					var type;
 					var kb;
 					if(res[j].media != undefined){
-						kakaoImage = '<td>+'\')" style="cursor:pointer"><!--a href="'+res[j].media[0]['original']+'" target="_blank"--><img src="'+res[j].media[0]['small']+'" id="image1"><!--/a--> '+res[j].content+'</td>';
-						//kakaoImage = '<td onclick="window.open(\''+res[j].url+'\')" style="cursor:pointer"><!--a href="'+res[j].media[0]['original']+'" target="_blank"--><img src="'+res[j].media[0]['small']+'" id="image1"><!--/a--> '+res[j].content+'</td>';
+						kakaoImage = '<td onclick="window.open(\''+res[j].url+'\')" style="cursor:pointer"><!--a href="'+res[j].media[0]['original']+'" target="_blank"--><img src="'+res[j].media[0]['small']+'" id="image1"><!--/a--> '+res[j].content+'</td>';
 						var imgUrl = res[j].media[0]['original'];
                         kakaoType = ((imgUrl.match(/img.[a-z]*/))[0]).replace(/img./,'');  
                         kb = j*(Math.floor(Math.random()*100))+12;
@@ -152,6 +151,7 @@ function pageLoading(){
 	);
 	setTimeout('killLoader()', 2000);
 }
+
 
 function killLoader(){
 	$('#loadingBar').remove();
