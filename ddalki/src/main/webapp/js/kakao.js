@@ -37,7 +37,7 @@ function logoutWithKakao() {
 //리스트 뿌리기
 var newtr = document.getElementById("tbody");
 function kakaoListInit(){
-	killLoader()
+	killLoader()7
 	if (kakaologin == true) {
 //		console.log('리스트 뿌릴 준비 완료');
 		Kakao.API.request({
