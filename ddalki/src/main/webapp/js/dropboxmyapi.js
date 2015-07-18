@@ -41,7 +41,7 @@ client.authenticate({ interactive: false }, function (error, client) {
 	        }
 	      });
 	  } else {
-		  dropboxunactive();
+		  //dropboxunactive();
 	  }
   }
 });
@@ -294,6 +294,9 @@ function imghtmltag(type) {
 	case "text":
 		return "<img src='../img/fileicon_text.png' id='image1'>";
 		break;
+	case "txt":
+		return "<img src='../img/fileicon_text.png' id='image1'>";
+		break;
 	case "wav":
 		return "<img src='../img/fileicon_wav.png' id='image1'>";
 		break;
@@ -313,7 +316,7 @@ function imghtmltag(type) {
 		return "<img src='../img/fileicon_bmp.png' id='image1'>";
 		break;
 	default:
-		return "<img src='../img/fileicon_etc.jpg' id='image1'>";
+		return "<img src='../img/fileicon_etc.png' id='image1'>";
 	}
 }
 
