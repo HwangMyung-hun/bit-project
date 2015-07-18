@@ -60,6 +60,10 @@
    #facebookactive, #googleactive, #Tcloudactive, #dropboxactive, #onedriveactive{
       display: none;
     } 
+    
+    .dataTable_wrapper{
+      width : 98% ;
+    }
     </style>
 </head>
 
@@ -308,7 +312,7 @@
 								</div>
 								<div>
 									<a href="javascript:loginWithKakao()" id="custom-login-btn"><img
-										src="../img/introicon_kakao.png"></a> <br />
+										id="kakaofake" src="../img/introicon_kakao.png"></a> <br />
 									<button class="logoutbtn" onClick="logoutWithKakao();">연결해제</button>
 								</div>
 								<div id="content"></div>
@@ -384,7 +388,7 @@
 				</div>
 				<div class="button relrative" style="margin-right: 50px;">
 					<button type="submit" class="btn relative center height radius"
-						id="findbtn">중복검사</button>
+						id="findbtn1">중복검사</button>
 				</div>
 			</div>
 	</div>
@@ -819,6 +823,97 @@ function MouseOutRe(MyImage) {
 		.removeAttr('tabindex').removeAttr('aria-controls').removeAttr('rowspan').removeAttr('colspan').removeAttr('aria-label').removeAttr('aria-sort');
 	});
 	
+	$("#kakaofake").click(function() {
+		$("#kakaoactive").show();
+	});
+	
+	$("#findbtn1").click(function() {
+		$("#downloadbtn").css("opacity","0.1");
+		$("#uploadbtn").css("opacity","0.1");
+		$("#newfolderbtn").css("opacity","0.1");
+		$("#renamebtn").css("opacity","0.1");
+		$("#date")[0].innerText = "Directory Location";
+		$("#tbody tr").remove();
+		goo_drop_col();
+	  var filebackup = [];
+	  for(var i in filefind) {
+	    filebackup.push(filefind[i]);
+	  }
+	  //1차 중복 제거
+	  duplication(filebackup, 0);
+	  var siki = [];
+	  for(var i in filebackup) {
+	    siki.push(filebackup[i]);
+	  }
+	  //2차 중복 제거
+	  var unique = duplication(siki, 1);
+	  var finalfile = duplicationdatail(unique, filebackup);
+	  //그리기
+	  for (i = 0; i < finalfile.length; i++) {
+	    for(j = 0; j < finalfile[i].length; j++) {
+	      $("#tbody").append("<tr><td><input id='yonom"+i+"' type='checkbox'></td>"
+	          + "<td>"+ finalfile[i][0].name +"</td>"
+	          + "<td>" + finalfile[i][j].drive + "</td>"
+	          + "<td>"+judgeyonom(finalfile[i][0].name, finalfile[i][j].drive, 0)+"</td>"
+	          + "<td class='center'>" + fileSizeRename(finalfile[i][j].size) + "</td>" 
+	          + "<td class='center'>"+ judgeyonom(finalfile[i][0].name, null, 1) +"</td></tr>");
+	    }
+	    $("#tbody").append("<tr style='background-color: Lavender;'><td></td>"
+	        + "<td></td>"
+	        + "<td></td>"
+	        + "<td></td>"
+	        + "<td class='center'></td>" 
+	        + "<td class='center'></td></tr>");
+	  }
+	  siki = [];
+	  filebackup = [];
+	  
+	  $("#deletebtn").click(function() {
+		  var siki = $("#tbody input:checked");
+		  for(var i in siki) {
+			  $(siki[i].parentElement.parentElement).remove();
+		  }
+	  });
+	});
+	 function judgeyonom(name, drive, judge) {
+		var type = "";
+		var result = "";
+		for(var i = name.length - 1; -1 < i; i--) {
+			if(name[i] == ".") break;
+			type =  name[i] + type;
+		}
+		if(judge == 1) return type;
+		if (drive == "tcloud") {
+			if(type == "JPG" || type == "jpg" || type == "png") {
+				result = "/images";
+			} else if(type == "exe") {
+				result = "/documents";
+			} else if(type == "iso") {
+				result = "/documents";
+			} else if(type == "pdf") {
+				result = "/documents";
+			}
+		} else if(drive == "onedrive") {
+	     if(type =="JPG" || type == "jpg" || type == "png") {
+         result = "/이미지/특수자료";
+       } else if(type =="pptx") {
+         result = "/문서/비트문서";
+       } else if(type == "pdf") {
+         result = "/문서/pdf";
+       } 
+		} else if(drive == "google") {
+       if(type =="JPG" || type == "jpg" || type == "png") {
+         result = "/이미지";
+       } else if(type =="exe") {
+         result = "/기타/실행파일";
+       } else if(type == "iso") {
+         result = "/기타/유틸";
+       } else if(type == "pptx") {
+         result = "/문서자료/파일";
+       } 
+	  } 
+		return result;
+	} 
 </script>
 
 </body>
