@@ -1,38 +1,38 @@
 $("#loginbtn").mouseover(function(){
-	  this.src="./img/intro_login_on.jpg";
+	  this.src="./img/intro_login_on.png";
 });
  $("#loginbtn").mouseout(function(){
-	 this.src="./img/intro_login.jpg";
+	 this.src="./img/intro_login.png";
 });
  $("#joinbtn").mouseover(function(){
-	    this.src="./img/intro_join_on.jpg";
+	    this.src="./img/intro_join_on.png";
 });
 $("#joinbtn").mouseout(function(){
-	   this.src="./img/intro_join.jpg";
+	   this.src="./img/intro_join.png";
 });
 $("#findidbtn").mouseover(function(){
-    this.src="./img/intro_idfind_on.jpg";
+    this.src="./img/intro_idfind_on.png";
 });
 $("#findidbtn").mouseout(function(){
    this.src="./img/intro_idfind.jpg";
 });
 $("#pwdfind").mouseover(function(){
-    this.src="./img/intro_pwfind_on.jpg";
+    this.src="./img/intro_pwfind_on.png";
 });
 $("#pwdfind").mouseout(function(){
    this.src="./img/intro_pwfind.jpg";
 });
 $("#canclebtn").mouseover(function(){
-	  this.src="./img/join_cancel_on.jpg";
+	  this.src="./img/join_cancel_on.png";
 });
 $("#canclebtn").mouseout(function(){
-	 this.src="./img/join_cancel.jpg";
+	 this.src="./img/join_cancel.png";
 });
 $("#enterbtn").mouseover(function(){
-	    this.src="./img/join_join_on.jpg";
+	    this.src="./img/join_join_on.png";
 });
 $("#enterbtn").mouseout(function(){
-	   this.src="./img/join_join.jpg";
+	   this.src="./img/join_join.png";
 });
 
 
