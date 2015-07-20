@@ -415,7 +415,7 @@ function dropupload(e) {
 }
 
 $('.left img:nth-child(5)').click(function() {
-	if(dropboxallow) $('.dataTable_wrapper').append('<input id="dropupbtn" ' 
+	if(dropboxallow) $('.modal-body').append('<input id="dropupbtn" ' 
 			       + ' type="file" accept="*/*" onchange="dropupload(event)">');
 });
 
