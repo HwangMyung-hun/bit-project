@@ -231,7 +231,7 @@ $('#Tcloudactive').click(function() {
 	}
 });
 
-$('.btn-facebook, .btn-google-plus, .btn-dropbo, .btn-twitter').click(function() {
+$('.btn-facebook, .btn-google-plus, .btn-dropbox, .btn-twitter, .btn-kakao').click(function() {
 	tactive = false;
 	console.log(tactive);
 	$('#frm').hide();
@@ -241,6 +241,8 @@ $('#uploadbtn').click(function(event) {
 	if (tactive == true) {
 		$('#frm').show();
 		PlanetX.api( "get", "https://apis.skplanetx.com/tcloud/token","JSON", {"version" :1} , tcloud_update );
+	} else if (tactive == false) {
+		$('#frm').hide();
 	}
 });
 var newtr = document.getElementById("tbody");
