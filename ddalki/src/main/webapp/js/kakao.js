@@ -84,17 +84,22 @@ function kakaoListInit(){
 			console.log(err);
 		};
 	}else{
-		if (document.load) {
-			killLoader();
+		if(kakaologin==true){			
+			killLoader()
 			$('.panel').append(
-					'<div id="loginBar">로그인하시기 바랍니다.</div>'
+					'<div id="loadingBar">페이지를 로딩중입니다. 잠시 후 다시 시도해  주시기 바랍니다.</div>'
 			);
-		}else{			
-			pageLoading();
+			setTimeout('killLoader()', 2000);
+		}else{
+			killLoader();
+			$('.panel').append('<div id="loginBar">로그인하시기 바랍니다.</div>');
+			setTimeout('killLoader()', 2000);
 		}
+			
 	}
 }
 //리스트 뿌리기 끝
+var kakaoallow = false;
 
 $("#kakaoListshow").click(function(event) {
 	kakaoListInit();
@@ -111,15 +116,15 @@ $(".btn-facebook, .btn-google-plus, .btn-instagram, .btn-dropbox, .btn-twitter")
 //사진 업로드 API-
 $('#kakaoPreviewClose').click(function(event) {
 	document.getElementById('kakaoUpPopup').style.display ="none";
-	document.location.reload();
+	//document.location.reload();
 });
-
 
 function kakaoPhotoUp() {
 	Kakao.Auth.getStatus(function(statusObj) {
 		if (statusObj.status == "not_connected") {
 			alert('업로드 하시려면 로그인하십시오.');
 		} else {
+			console.log('kakaoPhotoUp작동');
 			document.getElementById('file-input-wrapper').style.display = "block";
 			document.getElementById('file-input').onchange = function (event) {
 				// API를 호출합니다.
@@ -152,8 +157,15 @@ function kakaoPhotoUp() {
 	});
 };
 
-var kakaoallow = false;
+
+/*if(kakaoallow) $('#uploadbtn').click(function(event) {
+	kakaoPhotoUp();
+})*/
+
 //사진 업로드 API 끝
+
+
+
 
 function pageLoading(){
 	killLoader()
