@@ -99,13 +99,21 @@ function kakaoListInit(){
 $("#kakaoListshow").click(function(event) {
 	kakaoListInit();
 	console.log(event);
+	kakaoallow = true;
+	if(kakaoallow) $("#updiv").show()
+});
+
+$(".btn-facebook, .btn-google-plus, .btn-instagram, .btn-dropbox, .btn-twitter").click(function(event) {
+	kakaoallow = false;
+	if(!kakaoallow) $("#updiv").hide()
 });
 
 //사진 업로드 API-
 $('#kakaoPreviewClose').click(function(event) {
 	document.getElementById('kakaoUpPopup').style.display ="none";
 	document.location.reload();
-	});
+});
+
 
 function kakaoPhotoUp() {
 	Kakao.Auth.getStatus(function(statusObj) {
@@ -143,6 +151,8 @@ function kakaoPhotoUp() {
 		}
 	});
 };
+
+var kakaoallow = false;
 //사진 업로드 API 끝
 
 function pageLoading(){
