@@ -4,19 +4,47 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <html>
 <head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>ddalki 비밀번호 변경</title>
+<style type="text/css">
+body{width: 100%; background : url('http://www.waldegraves.co.uk/wp-content/themes/waldegraves/images/sky-bg.jpg') repeat-x;}
+</style>
 </head>
 <body>
-<div>
-email : ${email}<br>
-비밀번호 : <input id="pwd" type="password" name="pwd" onkeyup="ajaxSendPWD()"><br>
-비밀번호 확인 : <input id="pwd2" type="password" name="pwd2" onkeyup="ajaxSendPWD2()"><br>
-<button id="enterbtn">확인</button>
-<input id="email" type="hidden" name="email" value="${email}"><br>
-</div>
+<a href=""><img src="http://localhost:9999/ddalki/img/top_logo.png" alt="딸기 소프트"></a>
+<div style="position: absolute;left: 50%;margin-left: -260px;">
+<div class="navbar navbar-default" style="width: 460px;margin: 30px">
+<h3 style="margin:20px 0 0 50px" class="navbar-text"><span class="label label-default">email</span><span style="margin: 37px">${email}</span></h3><br><br>
+<form class="form-horizontal" style="width: 690px;margin: 30px">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">비밀번호</label>
+    <div class="col-sm-10"><!-- id="inputEmail3"  -->
+      <input style="width: 250px" id="pwd" class="form-control" type="password" name="pwd" onkeyup="ajaxSendPWD()" class="form-control" placeholder="비밀번호">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">비밀번호 확인</label>
+    <div class="col-sm-10"><!-- id="inputPassword3" -->
+      <input style="width: 250px" id="pwd2" class="form-control" type="password" name="pwd2" onkeyup="ajaxSendPWD2()"  placeholder="비밀번호 확인">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button style="margin: 0 0 0 195px" id="enterbtn" class="btn btn-default">확인</button>
+    </div>
+  </div>
 <div id ="results">
 </div>
+</form>
+</div>
+</div>
+<input id="email" type="hidden" name="email" value="${email}">
 </body>
 <script
   src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
